@@ -1,4 +1,4 @@
-                                                                 # Frodo Barber Management System
+                                                                 ## Frodo Barber Management System
 
 Frodo Barber Management System to aplikacja webowa wspierająca zarządzanie salonem barberskim mojego brata.  
 Klienci mogą założyć konto, przeglądać dostępne usługi i umawiać wizyty, a barberzy oraz administratorzy mają własne panele do zarządzania terminarzem i obsługą salonu.
