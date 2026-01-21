@@ -1,12 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>TEST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frodo Barber Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
+          rel="stylesheet">
 </head>
 <body>
 
-<h2> TEST APLIKACJI </h2>
+<!-- Nav bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <div class="logo">
+                <img th:src="@{/images/logo.jpg}" alt="logo" class="img-fluid rounded shadow">
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#services">Usługi</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#gallery">Galeria</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="/login">Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Section "Hero" -->
+<header id="home" class="hero-section text-center text-white d-flex align-items-center">
+    <div class="container">
+        <h1 class="display-2 fw-bold">Barber Shop - Oborniki Śląskie</h1>
+        <p class="lead mb-4">Strzyżenie włosów i brody. Rezerwuj wizytę póki jeszcze jest miejsce ;]</p>
+        <a href="#services" style="background: grey" class="btn btn-primary btn-lg px-5">Usługi</a>
+    </div>
+</header>
+
+<!-- Services -->
+<section id="services" class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="mb-5 section-title">Usługi</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="service-icon mb-3"></div>
+                    <h3>Strzyżenie włosów</h3>
+                    <p>Modne i klasyczne modele dopasowane do kształtu twarzy i preferencji.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="service-icon mb-3"></div>
+                    <h3>Strzyżenie brody</h3>
+                    <p>Precyzyjne wykonane przycinanie i modelowanie, aby twoja broda wyglądała elegancko.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="service-icon mb-3"></div>
+                    <h3>Combo - (włosy + broda)</h3>
+                    <p>Cała twarz ogarnięta, żebyś był gotowy wyjść z domu i pokazać się ludziom.</p> <!-- takie 4fun potem sie zmieni -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 section-title">Galeria</h2>
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-6">
+                <div class="photo-box">
+                    <img th:src="@{/images/barber1.jpg}" alt="Barber Shop" class="img-fluid rounded shadow">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="photo-box">
+                    <img th:src="@{/images/barber2.jpg}" alt="Haircut" class="img-fluid rounded shadow">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="photo-box">
+                    <img th:src="@{/images/barber3.jpg}" alt="Beard" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2024 Frodo Barber Management System. All rights reserved.</p>
+    </div>
+</footer>
 
 </body>
 </html>
