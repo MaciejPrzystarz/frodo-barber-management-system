@@ -1,0 +1,67 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+h1, h2, h3, .navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+.hero-section {
+    height: 80vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); /* narazie takie z neta, bedzie do zmiany na inne */
+    background-size: cover;
+    background-position: center;
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #0d6efd; /* Bootstrap primary color */
+}
+
+.service-icon {
+    font-size: 3rem;
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.logo img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.photo-box img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.photo-box img:hover {
+    opacity: 0.9;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
