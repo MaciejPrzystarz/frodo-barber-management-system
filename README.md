@@ -1,4 +1,4 @@
-                                                                 ## Frodo Barber Management System
+# Frodo Barber Management System
 
 Frodo Barber Management System to aplikacja webowa wspierająca zarządzanie salonem barberskim mojego brata.  
 Klienci mogą założyć konto, przeglądać dostępne usługi i umawiać wizyty, a barberzy oraz administratorzy mają własne panele do zarządzania terminarzem i obsługą salonu.
@@ -52,7 +52,7 @@ frodo-barber-management-system
 │   │   │           └── frodobarber
 │   │   │               ├── controller      # kontrolery MVC (AuthController, ServiceController itd.)
 │   │   │               ├── dto             # obiekty DTO do komunikacji z widokami
-│   │   │               ├── entity          # encje JPA (User, Service, Appointment...)
+│   │   │               ├── model           # encje JPA (User, Service, Appointment...)
 │   │   │               ├── repository      # interfejsy JPA Repository
 │   │   │               ├── security        # konfiguracja Spring Security
 │   │   │               ├── service         # logika biznesowa (UserService, AppointmentService...)

@@ -7,6 +7,16 @@ h1, h2, h3, .navbar-brand {
     font-family: 'Playfair Display', serif;
 }
 
+.navbar .nav-hover {
+    transition: all 0.25s ease;
+}
+
+.navbar .nav-hover:hover {
+    background-color: #c59d5f;
+    color: #000;
+    border-color: #c59d5f;
+}
+
 .hero-section {
     height: 80vh;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),

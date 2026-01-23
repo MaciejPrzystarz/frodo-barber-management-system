@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
     <title>Frodo Barber Shop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -25,14 +28,33 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#services">Usługi</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#gallery">Galeria</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover" href="#services">Usługi</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover" href="#gallery">Galeria</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <form th:action="@{/login}" method="post">
+                        <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Zaloguj</button>
+                    </form>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                       <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Wyloguj</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
-
+<nav> <!-- potem dodac do navbaru - wazne ze dziala -->
+    <div sec:authorize="hasRole('CLIENT')">
+        <a th:href="@{/client/dashboard}">Panel klienta</a>
+    </div>
+    <div sec:authorize="hasRole('BARBER')">
+        <a th:href="@{/barber/dashboard}">Panel barbera</a>
+    </div>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/dashboard}">Panel admina</a>
+    </div>
+</nav>
 <!-- Section "Hero" -->
 <header id="home" class="hero-section text-center text-white d-flex align-items-center">
     <div class="container">
@@ -41,6 +63,12 @@
         <a href="#services" style="background: grey" class="btn btn-primary btn-lg px-5">Usługi</a>
     </div>
 </header>
+
+<div>
+    <p>Zalogowany?: <span sec:authorize="isAuthenticated()">tak</span><span sec:authorize="!isAuthenticated()">nie</span></p>
+    <p>email: <b sec:authentication="name"></b></p>
+    <p>authority: <b sec:authentication="principal.authorities"></b></p>
+</div>
 
 <!-- Services -->
 <section id="services" class="py-5 bg-light">
@@ -65,7 +93,8 @@
                 <div class="card h-100 border-0 shadow-sm p-4">
                     <div class="service-icon mb-3"></div>
                     <h3>Combo - (włosy + broda)</h3>
-                    <p>Cała twarz ogarnięta, żebyś był gotowy wyjść z domu i pokazać się ludziom.</p> <!-- takie 4fun potem sie zmieni -->
+                    <p>Cała twarz ogarnięta, żebyś był gotowy wyjść z domu i pokazać się ludziom.</p>
+                    <!-- takie 4fun potem sie zmieni -->
                 </div>
             </div>
         </div>
