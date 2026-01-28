@@ -2,6 +2,9 @@ package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,8 +25,13 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/h2-console/**")
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**").permitAll()
+                        .requestMatchers("/").authenticated()
+                        .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        // role access
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/barber/**").hasRole("BARBER")
+                        .requestMatchers("/client/**").hasRole("CLIENT")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
@@ -38,4 +46,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    RoleHierarchy roleHierarchy() {
+        return RoleHierarchyImpl.withDefaultRolePrefix()
+                .role("ADMIN").implies("BARBER")
+                .role("BARBER").implies("CLIENT").build();
+    }
 }
