@@ -28,8 +28,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover" href="#services">Usługi</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover" href="#gallery">Galeria</a></li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')"><a
+                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                        th:href="@{/client/dashboard}">Panel Klienta</a></li>
+                <li class="nav-item" sec:authorize="hasRole('BARBER')"><a
+                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                        th:href="@{/client/dashboard}">Panel Barbera</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a
+                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                        th:href="@{/client/dashboard}">Panel Admina</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                                        href="#services">Usługi</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                                        href="#gallery">Galeria</a></li>
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <form th:action="@{/login}" method="post">
                         <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Zaloguj</button>
@@ -37,24 +48,14 @@
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post">
-                       <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Wyloguj</button>
+                        <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Wyloguj</button>
                     </form>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-<nav> <!-- potem dodac do navbaru - wazne ze dziala -->
-    <div sec:authorize="hasRole('CLIENT')">
-        <a th:href="@{/client/dashboard}">Panel klienta</a>
-    </div>
-    <div sec:authorize="hasRole('BARBER')">
-        <a th:href="@{/barber/dashboard}">Panel barbera</a>
-    </div>
-    <div sec:authorize="hasRole('ADMIN')">
-        <a th:href="@{/admin/dashboard}">Panel admina</a>
-    </div>
-</nav>
+
 <!-- Section "Hero" -->
 <header id="home" class="hero-section text-center text-white d-flex align-items-center">
     <div class="container">
@@ -64,11 +65,11 @@
     </div>
 </header>
 
-<div>
-    <p>Zalogowany?: <span sec:authorize="isAuthenticated()">tak</span><span sec:authorize="!isAuthenticated()">nie</span></p>
-    <p>email: <b sec:authentication="name"></b></p>
-    <p>authority: <b sec:authentication="principal.authorities"></b></p>
-</div>
+<!--<div>-->
+<!--    <p>Zalogowany?: <span sec:authorize="isAuthenticated()">tak</span><span sec:authorize="!isAuthenticated()">nie</span></p>-->
+<!--    <p>email: <b sec:authentication="name"></b></p>-->
+<!--    <p>authority: <b sec:authentication="principal.authorities"></b></p>-->
+<!--</div>-->
 
 <!-- Services -->
 <section id="services" class="py-5 bg-light">
