@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Panel klienta</title>
 </head>
 <body>
 
-<p>Tu będą Twoje wizyty, rezerwacje itd.</p>
+<h2>Wybierz datę i godzinę</h2>
+
+<p th:if="${barberName}">
+    <b th:text="${barberName}"></b>
+</p>
+
+<form method="get" th:action="@{/client/dashboard}">
+    <label>Data:</label>
+    <input type="date" name="date" th:value="${selectedDate}">
+    <button type="submit">Pokaż wolne godziny</button>
+</form>
+
+<hr>
+<h3>Wolne godziny</h3>
+
+<div th:if="${#lists.isEmpty(availableSlots)}">
+    <p>Brak wolnych terminów.</p>
+</div>
+
+<ul th:if="${!#lists.isEmpty(availableSlots)}">
+    <li th:each="slots : ${availableSlots}">
+        <span th:text="${slots}"></span>
+    </li>
+</ul>
+
 <a th:href="@{/}">Strona główna</a>
 
 </body>
