@@ -31,10 +31,15 @@ public class ClientController {
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
 
-        User barber = userRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElse(null);
+        List<User> allUsers = userRepository.findAll();
+        User barber = new User();
+
+        for (User allUser : allUsers) {
+            if (allUser.getRole().name().equals("BARBER")) {
+                barber = allUser;
+            }
+        }
+
 
         model.addAttribute("selectedDate", selectedDate);
 
