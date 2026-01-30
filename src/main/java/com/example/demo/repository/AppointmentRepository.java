@@ -12,4 +12,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findByBarberAndStatusAndStartTimeBetween(
             User barber, AppointmentStatus status, LocalDateTime startTimeAfter, LocalDateTime startTimeBefore);
+
+    boolean existsByBarberAndStatusAndStartTime(User barber, AppointmentStatus status, LocalDateTime startTime);
+
 }

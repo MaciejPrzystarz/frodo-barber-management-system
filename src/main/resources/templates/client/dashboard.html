@@ -22,12 +22,22 @@
 <h3>Wolne godziny</h3>
 
 <div th:if="${#lists.isEmpty(availableSlots)}">
-    <p>Brak wolnych terminów.</p>
+    <p>Brak wolnych terminów na ten dzień.</p>
 </div>
 
 <ul th:if="${!#lists.isEmpty(availableSlots)}">
-    <li th:each="slots : ${availableSlots}">
-        <span th:text="${slots}"></span>
+    <li th:each="time : ${availableSlots}">
+        <b th:text="${time}"></b>
+
+        <form method="post" th:action="@{/client/book}" style="display:inline;">
+            <input type="hidden" name="date" th:value="${selectedDate}">
+            <input type="hidden" name="time" th:value="${time}">
+
+            <!-- CSRF token wymagany przez Spring Security !@#!@#!-->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <button type="submit">Zarezerwuj</button>
+        </form>
     </li>
 </ul>
 
