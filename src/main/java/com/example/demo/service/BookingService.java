@@ -49,6 +49,11 @@ public class BookingService {
         allSlots.removeAll(takenSlots);
         return allSlots;
     }
+
+    public boolean isSlotFree(User barber, LocalDateTime startTime) {
+        return !appointmentRepository.existsByBarberAndStatusAndStartTime(barber, AppointmentStatus.BOOKED, startTime);
+    }
+
 }
 
 
