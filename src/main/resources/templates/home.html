@@ -28,15 +28,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item" sec:authorize="hasRole('CLIENT')"><a
-                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/client/dashboard}">Panel Klienta</a></li>
-                <li class="nav-item" sec:authorize="hasRole('BARBER')"><a
-                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/client/dashboard}">Panel Barbera</a></li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a
                         class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/client/dashboard}">Panel Admina</a></li>
+                        th:href="@{/admin/dashboard}">Panel Admina</a></li>
+                <li class="nav-item" sec:authorize="hasRole('BARBER')"><a
+                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                        th:href="@{/barber/dashboard}">Panel Barbera</a></li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')"><a
+                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
+                        th:href="@{/client/dashboard}">Umów wizytę</a></li>
                 <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
                                         href="#services">Usługi</a></li>
                 <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"

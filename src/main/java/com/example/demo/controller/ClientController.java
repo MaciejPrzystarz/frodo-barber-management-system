@@ -8,6 +8,7 @@ import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,20 +67,24 @@ public class ClientController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam(required = false) String date, Model model) {
+    public String dashboard(@RequestParam(required = false) String date, Model model, Authentication authentication) {
+
+        String email = authentication.getName();
+        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
+        List<Appointment> appointments = appointmentRepository.findAppointmentByClient(client);
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
 
         // jedyny barber FRODO, zmieniam tutaj tez w takim razie
         User barber = userRepository.findByRole(Role.BARBER);
 
-        model.addAttribute("selectedDate", selectedDate);
-
         List<LocalTime> availableSlots = bookingService.getAvailableSlotsForTheWholeDay(barber, selectedDate);
 
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("barberName", barber.getFullName());
         model.addAttribute("availableSlots", availableSlots);
 
         return "client/dashboard";
     }
- }
+}
