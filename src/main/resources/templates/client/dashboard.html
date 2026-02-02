@@ -8,7 +8,7 @@
 
 <h2>Wybierz datę i godzinę</h2>
 
-<p th:if="${barberName}">
+<p th:if="${barberName}">Zapisujesz się do:
     <b th:text="${barberName}"></b>
 </p>
 
@@ -40,6 +40,27 @@
         </form>
     </li>
 </ul>
+
+<h3>Moje wizyty:</h3>
+
+<div th:if="${#lists.isEmpty(appointments)}">
+    <p>Nie masz jeszcze żadnych wizyt.</p>
+</div>
+
+<table th:if="${!#lists.isEmpty(appointments)}">
+    <thead>
+    <tr>
+        <th>Data</th>
+        <th>Barber</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="appointment : ${appointments}">
+        <td th:text="${#temporals.format(appointment.startTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${appointment.barber.fullName}"></td>
+    </tr>
+    </tbody>
+</table>
 
 <a th:href="@{/}">Strona główna</a>
 
