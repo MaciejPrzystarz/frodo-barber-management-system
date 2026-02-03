@@ -19,24 +19,31 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .headers(h -> h.frameOptions(f -> f.disable())
-                )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").authenticated()
-                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/error").permitAll()
+                        .requestMatchers("/css/**", "/images/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        // role access
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/barber/**").hasRole("BARBER")
                         .requestMatchers("/client/**").hasRole("CLIENT")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/", true).permitAll())
-                .logout(Customizer.withDefaults());
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                )
+
+                .headers(h -> h.frameOptions(f -> f.disable()))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
 
         return http.build();
     }
