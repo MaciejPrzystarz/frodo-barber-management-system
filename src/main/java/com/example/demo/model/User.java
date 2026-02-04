@@ -15,7 +15,7 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(length = 9)
+    @Column(nullable = false, length = 9)
     private String phoneNumber;
 
     @Column(nullable = false, unique = true)

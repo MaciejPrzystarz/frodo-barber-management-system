@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -32,5 +31,4 @@ public class UserFormDto {
     @NotBlank(message = "Pole nie może byc puste")
     private String confirmPassword;
 
-    private Role role = Role.CLIENT;
 }
