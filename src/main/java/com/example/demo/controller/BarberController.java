@@ -29,7 +29,7 @@ public class BarberController {
 
         String email = authentication.getName();
         User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera"));
-        List<Appointment> appointments = appointmentRepository.findAppointmentByBarber(barber);
+        List<Appointment> appointments = appointmentRepository.findAppointmentByBarberOrderByStartTimeAsc(barber);
 
         model.addAttribute("appointments", appointments);
 

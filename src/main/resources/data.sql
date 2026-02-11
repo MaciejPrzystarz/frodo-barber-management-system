@@ -18,3 +18,11 @@ INSERT INTO users (full_name, phone_number, email, password, role) VALUES
 INSERT INTO users (full_name, phone_number, email, password, role) VALUES
     ('Client Third', '567891234', 'client3@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW', 'CLIENT');
 
+INSERT INTO appointments (client_id, barber_id, start_time, status)
+VALUES (3, 2, '2026-04-05T15:00:00', 'BOOKED');
+
+INSERT INTO appointments (client_id, barber_id, start_time, status)
+VALUES (4, 2, '2026-04-05T12:00:00', 'BOOKED');
+
+INSERT INTO appointments (client_id, barber_id, start_time, status)
+VALUES (5, 2, '2026-04-06T14:00:00', 'BOOKED');

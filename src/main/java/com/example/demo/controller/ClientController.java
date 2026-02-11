@@ -71,7 +71,7 @@ public class ClientController {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
-        List<Appointment> appointments = appointmentRepository.findAppointmentByClient(client);
+        List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
 

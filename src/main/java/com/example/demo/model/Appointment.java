@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "appointments")
 @Getter @Setter
 public class Appointment {
 
@@ -19,7 +20,7 @@ public class Appointment {
     @ManyToOne(optional = false)
     private User barber;
 
-    @Column(nullable = false)
+    @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
     @Enumerated(EnumType.STRING)
