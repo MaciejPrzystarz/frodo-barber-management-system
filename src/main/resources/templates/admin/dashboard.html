@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,34 @@
 </head>
 <body>
 
-<p>Tu będzie zarządzanie usługami, użytkownikami itd.</p>
+<h3>Lista wszystkich zarejestrowanych użytkowników:</h3>
+<div>
+    <table th:if="${!#lists.isEmpty(allUsers)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Imie Nazwisko</th>
+            <th>Numer telefonu</th>
+            <th>Email</th>
+            <th>Rola</th>
+            <th>Edycja</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${allUsers}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.fullName}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td ><a class="btn btn-sm btn-outline-warning"
+                    th:href="@{/admin/users/{id}/edit(id=${user.id})}">Edytuj</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <a th:href="@{/}">Strona główna</a>
 
 </body>
