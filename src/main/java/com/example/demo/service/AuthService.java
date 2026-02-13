@@ -44,13 +44,13 @@ public class AuthService {
         return dto;
     }
 
-    public void updateUser(AdminUserEditDto dto){
+    public void updateUser(AdminUserEditDto dto) {
         User user = userRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("Nie ma użytkownika o takim id"));
 
         Optional<User> userByEmail = userRepository.findByEmail(dto.getEmail());
 
-            if (userByEmail.isPresent() && !userByEmail.get().getId().equals(dto.getId())) {
-                throw new IllegalStateException("Podany email jest już zajęty");
+        if (userByEmail.isPresent() && !userByEmail.get().getId().equals(dto.getId())) {
+            throw new IllegalStateException("Podany email jest już zajęty");
         }
 
         user.setFullName(dto.getFullName());

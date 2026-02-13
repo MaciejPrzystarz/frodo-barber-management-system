@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AdminUserEditDto;
+import com.example.demo.model.Appointment;
 import com.example.demo.model.User;
+import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import jakarta.validation.Valid;
@@ -18,10 +20,22 @@ public class AdminController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    public AdminController(AuthService authService, UserRepository userRepository) {
+    public AdminController(AuthService authService, UserRepository userRepository, AppointmentRepository appointmentRepository) {
         this.authService = authService;
         this.userRepository = userRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        List<User> allUsers = userRepository.findAll();
+        List<Appointment> allAppointments = appointmentRepository.findAll();
+
+        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("allAppointments", allAppointments);
+        return "admin/dashboard";
     }
 
     @GetMapping("/users/{id}/edit")
@@ -32,8 +46,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/edit")
-    public String editUserForm(@Valid @ModelAttribute("userForm") AdminUserEditDto adminUserEditDto,
-                               BindingResult bindingResult) {
+    public String editUserForm(@Valid @ModelAttribute("userForm") AdminUserEditDto adminUserEditDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "/admin/user-edit";
@@ -42,16 +55,9 @@ public class AdminController {
             authService.updateUser(adminUserEditDto);
         } catch (IllegalStateException e) {
             bindingResult.rejectValue("email", "email.taken", e.getMessage());
+            return "/admin/user-edit";
         }
 
         return "redirect:/admin/dashboard";
-    }
-
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        List<User> allUsers = userRepository.findAll();
-
-        model.addAttribute("allUsers", allUsers);
-        return "admin/dashboard";
     }
 }
