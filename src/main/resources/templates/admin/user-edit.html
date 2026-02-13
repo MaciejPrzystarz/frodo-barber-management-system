@@ -27,23 +27,18 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="phoneNumber">Numer telefonu</label>
-                <input id="phoneNumber" type="text" class="form-control" placeholder="456789123"
-                       th:field="*{phoneNumber}">
-                <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}"
-                     th:errors="*{phoneNumber}"></div>
+                <input id="phoneNumber" type="text" class="form-control" placeholder="456789123" th:field="*{phoneNumber}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
-                <input id="email" type="text" class="form-control" placeholder="jan.kowalski@gmail.com"
-                       th:field="*{email}">
+                <input id="email" type="text" class="form-control" placeholder="jan.kowalski@gmail.com" th:field="*{email}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password">Hasło</label>
-                <input id="password" type="password" class="form-control" placeholder="Zmień na nowe hasło"
-                       th:field="*{newPassword}">
-                <div class="text-danger small" th:if="${#fields.hasErrors('newPassword')}"
-                     th:errors="*{newPassword}"></div>
+                <input id="password" type="password" class="form-control" placeholder="Zmień na nowe hasło" th:field="*{newPassword}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></div>
             </div>
 
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
