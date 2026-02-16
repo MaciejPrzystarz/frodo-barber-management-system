@@ -9,69 +9,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
           rel="stylesheet">
 </head>
-<body>
+<body class="admin-page">
 
-<!-- Wszyscy użytkownicy w bazie danych -->
+<div class="container py-4">
+    <div class="admin-grid">
 
-<h3>Lista wszystkich zarejestrowanych użytkowników:</h3>
-<div>
-    <table th:if="${!#lists.isEmpty(allUsers)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Imie Nazwisko</th>
-            <th>Numer telefonu</th>
-            <th>Email</th>
-            <th>Rola</th>
-            <th>Edycja</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user : ${allUsers}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.fullName}"></td>
-            <td th:text="'+48 ' + ${user.phoneNumber}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.role}"></td>
-            <td ><a class="btn btn-sm btn-outline-warning"
-                    th:href="@{/admin/users/{id}/edit(id=${user.id})}">Edytuj</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <!-- Użytkownicy -->
+        <div class="admin-card">
+            <h3 class="admin-title">Lista wszystkich zarejestrowanych użytkowników</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped"
+                       th:if="${!#lists.isEmpty(allUsers)}">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imię Nazwisko</th>
+                        <th>Numer telefonu</th>
+                        <th>Email</th>
+                        <th>Rola</th>
+                        <th>Edycja</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${allUsers}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.fullName}"></td>
+                        <td th:text="'+48 ' + ${user.phoneNumber}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-warning"
+                               th:href="@{/admin/users/{id}/edit(id=${user.id})}">
+                                Edytuj
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Wizyty -->
+        <div class="admin-card">
+            <h3 class="admin-title">Lista wszystkich wizyt</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped"
+                       th:if="${!#lists.isEmpty(allAppointments)}">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Barber</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="appointment : ${allAppointments}">
+                        <td th:text="${appointment.id}"></td>
+                        <td th:text="${appointment.client.fullName}"></td>
+                        <td th:text="${appointment.barber.fullName}"></td>
+                        <td th:text="${#temporals.format(appointment.startTime,'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${appointment.status}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-outline-light" th:href="@{/}">Strona główna</a>
+    </div>
 </div>
-
-<!-- Wszystkie usługi w bazie danych -->
-
-<h3>Lista wszystkich wizyt:</h3>
-<div>
-    <table th:if="${!#lists.isEmpty(allAppointments)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Client</th>
-            <th>Barber</th>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Edycja</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="appointment : ${allAppointments}">
-            <td th:text="${appointment.id}"></td>
-            <td th:text="${appointment.client.fullName}"></td>
-            <td th:text="${appointment.barber.fullName}"></td>
-            <td th:text="${#temporals.format(appointment.startTime,'(dd.MM.yyyy), HH:mm EEEE')}"></td>
-            <td th:text="${appointment.status}"></td>
-            <td ><a class="btn btn-sm btn-outline-warning"
-                    th:href="@{/admin/appointment/{id}/edit(id=${appointment.id})}">Edytuj</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<a th:href="@{/}">Strona główna</a>
 
 </body>
 </html>
