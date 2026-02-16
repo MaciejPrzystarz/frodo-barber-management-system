@@ -23,6 +23,12 @@ public class Appointment {
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
+    @Column(name = "end_time", nullable = false)
+    private LocalDateTime endTime;
+
+    @ManyToOne(optional = false)
+    private ServiceItem services;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppointmentStatus status = AppointmentStatus.BOOKED;
