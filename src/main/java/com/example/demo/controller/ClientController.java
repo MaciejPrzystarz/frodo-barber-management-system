@@ -1,14 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Appointment;
-import com.example.demo.model.AppointmentStatus;
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.repository.AppointmentRepository;
+import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingService;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,46 +26,37 @@ public class ClientController {
     private final UserRepository userRepository;
     private final BookingService bookingService;
     private final AppointmentRepository appointmentRepository;
+    private final ServiceRepository serviceRepository;
 
-    public ClientController(UserRepository userRepository, BookingService bookingService, AppointmentRepository appointmentRepository) {
+    public ClientController(UserRepository userRepository, BookingService bookingService,
+                            AppointmentRepository appointmentRepository, ServiceRepository serviceRepository) {
         this.userRepository = userRepository;
         this.bookingService = bookingService;
         this.appointmentRepository = appointmentRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     @PostMapping("/book")
-    public String book(@RequestParam String date, @RequestParam String time, Authentication authentication) {
+    public String book(@RequestParam String date, @RequestParam String time, @RequestParam Long serviceId,
+                       Authentication authentication) {
         LocalDate selectedDate = LocalDate.parse(date);
         LocalTime selectedTime = LocalTime.parse(time);
-
         LocalDateTime startTime = selectedDate.atTime(selectedTime);
 
-        // klient
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie znaleziono takiego klienta."));
-
-        // jedyny barber FRODO - aplikacja tylko dla brata wiec nie bedzie nigdy wiecej barberów
         User barber = userRepository.findByRole(Role.BARBER);
 
-        // na wszelki wypadek jakby 2 razy praktycznie w tym samym czasie ktos kliklnal
-        if (!bookingService.isSlotFree(barber, startTime)) {
-            return "redirect:/client/dashboard?date=" + selectedDate + "&error=TAKEN";
-        }
+        ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi"));
 
-        // zapis wizyty
-        Appointment appointment = new Appointment();
-        appointment.setClient(client);
-        appointment.setBarber(barber);
-        appointment.setStartTime(startTime);
-        appointment.setStatus(AppointmentStatus.BOOKED);
-
-        appointmentRepository.save(appointment);
+        bookingService.saveAppointment(barber, client, startTime, serviceItem);
 
         return "redirect:/client/dashboard?date=" + selectedDate;
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam(required = false) String date, Model model, Authentication authentication) {
+    public String dashboard(@RequestParam(required = false) String date, @RequestParam(required = false) Long serviceId,
+                            Model model, Authentication authentication) {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
@@ -75,14 +64,22 @@ public class ClientController {
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
 
-        // jedyny barber FRODO, zmieniam tutaj tez w takim razie
         User barber = userRepository.findByRole(Role.BARBER);
 
-        List<LocalTime> availableSlots = bookingService.getAvailableSlotsForTheWholeDay(barber, selectedDate);
+        List<ServiceItem> services = serviceRepository.findAll();
+
+        ServiceItem selectedService = (serviceId == null) ? services.getFirst()
+                : serviceRepository.findById(serviceId).orElse(services.getFirst());
+
+        List<LocalTime> availableSlots = bookingService.getAvailableSlotsForTheWholeDay
+                (barber, selectedDate, selectedService.getDurationMinutes());
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("barberName", barber.getFullName());
+
+        model.addAttribute("services", services);
+        model.addAttribute("selectedServiceId", selectedService.getId());
         model.addAttribute("availableSlots", availableSlots);
 
         return "client/dashboard";

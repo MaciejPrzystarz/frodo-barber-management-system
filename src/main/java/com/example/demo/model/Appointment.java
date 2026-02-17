@@ -27,7 +27,7 @@ public class Appointment {
     private LocalDateTime endTime;
 
     @ManyToOne(optional = false)
-    private ServiceItem services;
+    private ServiceItem service;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

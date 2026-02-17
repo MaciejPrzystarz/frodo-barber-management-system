@@ -30,17 +30,32 @@
     <p>Brak wolnych terminów na ten dzień.</p>
 </div>
 
+<form method="get" th:action="@{/client/dashboard}" class="mb-3">
+    <label>Data:</label>
+    <input type="date" name="date" th:value="${selectedDate}">
+
+    <label class="mb-3">Usługa:</label>
+    <select name="serviceId">
+        <option th:each="service : ${services}"
+                th:value="${service.id}"
+                th:selected="${service.id == selectedServiceId}"
+                th:text="${service.name + ' - ' + service.price + 'zł (' + service.durationMinutes} + 'min)'">
+        </option>
+    </select>
+
+    <button type="submit" class="ms-2">Pokaż wolne godziny</button>
+</form>
+
 <ul th:if="${!#lists.isEmpty(availableSlots)}">
     <li th:each="time : ${availableSlots}">
-        <b th:text="${time}"></b>
+        <span th:text="${time}"></span>
 
-        <form method="post" th:action="@{/client/book}" style="display:inline;">
+        <form method="post" th:action="@{/client/book}" style="display:inline">
             <input type="hidden" name="date" th:value="${selectedDate}">
             <input type="hidden" name="time" th:value="${time}">
+            <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
 
-            <!-- CSRF token wymagany przez Spring Security !@#!@#!-->
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
             <button type="submit">Zarezerwuj</button>
         </form>
     </li>
@@ -55,13 +70,19 @@
 <table th:if="${!#lists.isEmpty(appointments)}">
     <thead>
     <tr>
-        <th>Data</th>
+        <th>Data i godzina</th>
+        <th>Usługa</th>
+        <th>Koszt</th>
+        <th>Czas</th>
         <th>Barber</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="appointment : ${appointments}">
-        <td th:text="${#temporals.format(appointment.startTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${appointment.service.name}"></td>
+        <td th:text="${appointment.service.price} + 'zł'"></td>
+        <td th:text="${appointment.service.durationMinutes} + 'min'"></td>
         <td th:text="${appointment.barber.fullName}"></td>
     </tr>
     </tbody>
