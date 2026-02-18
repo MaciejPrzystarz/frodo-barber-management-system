@@ -248,3 +248,46 @@ h3,
     font-size: 1.5rem;
     letter-spacing: 2px;
 }
+
+/* ADMIN PANEL */
+
+.admin-page {
+    background: radial-gradient(circle at center, #0f1115, #050607);
+    min-height: 100vh;
+    color: #fff;
+}
+
+.admin-grid {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.admin-card {
+    flex: 1 1 500px;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 25px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.admin-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #c59d5f;
+}
+
+.admin-card table {
+    margin-bottom: 0;
+}
+
+.admin-card thead th {
+    color: #c59d5f;
+    font-weight: 500;
+}

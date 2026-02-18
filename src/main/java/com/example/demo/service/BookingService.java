@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Appointment;
 import com.example.demo.model.AppointmentStatus;
+import com.example.demo.model.ServiceItem;
 import com.example.demo.model.User;
 import com.example.demo.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
@@ -20,38 +22,58 @@ public class BookingService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date) {
+    public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
 
-        // 1. Ustawienie pracy 8:00-18:00
+        LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
+
+        Appointment appointment = new Appointment();
+        appointment.setClient(client);
+        appointment.setBarber(barber);
+        appointment.setService(service);
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
+        appointment.setStatus(AppointmentStatus.BOOKED);
+
+        appointmentRepository.save(appointment);
+    }
+
+    public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date, int durationMinutes) {
+
         LocalTime workStart = LocalTime.of(8, 0);
         LocalTime workEnd = LocalTime.of(18, 0);
-        int slotMinutes = 60;
-        LocalTime time;
+        int slotMinutes = 10;
 
-        // 2. Wygenerowanie wszysktich slotow
+        LocalDateTime from = date.atStartOfDay();
+        LocalDateTime to = date.plusDays(1).atStartOfDay();
+
         List<LocalTime> allSlots = new ArrayList<>();
-        for (time = workStart; // time = 8:00
-             time.isBefore(workEnd); // dopoki nie będzie 18:00
-             time = time.plusMinutes(slotMinutes)) // 1 slot = 60min na poczatek przynajmniej wiec tyle dodaje
-        {
-            allSlots.add(time); // czyli allSlots = {8:00, 9:00, 10:00..., 17:00}
+        List<Appointment> takenSlots = appointmentRepository.findByBarberAndStatusAndStartTimeBetween
+                (barber, AppointmentStatus.BOOKED, from, to);
+
+        for (LocalTime time = workStart; time.isBefore(workEnd); time = time.plusMinutes(slotMinutes)) {
+
+            LocalDateTime start = date.atTime(time);
+            LocalDateTime end = start.plusMinutes(durationMinutes);
+
+            if (end.toLocalTime().isAfter(workEnd))
+                continue;
+
+            boolean overlaps = isOverlapping(takenSlots, start, end);
+
+            if (!overlaps)
+                allSlots.add(time);
         }
 
-        // 3. Pobieram wszystkie zajete sloty
-        LocalDateTime from = date.atStartOfDay(); // aktualny dzień np. 2026-01-29 00:00
-        LocalDateTime to = date.plusDays(1).atStartOfDay(); // 2026-01-30 00:00 - czyli biore przedzial 24 godzin calego dnia
-        List<LocalTime> takenSlots = appointmentRepository.findByBarberAndStatusAndStartTimeBetween
-                        (barber, AppointmentStatus.BOOKED, from, to)
-                .stream()
-                .map(appointment -> appointment.getStartTime().toLocalTime())
-                .toList();
-
-        allSlots.removeAll(takenSlots);
         return allSlots;
     }
 
-    public boolean isSlotFree(User barber, LocalDateTime startTime) {
-        return !appointmentRepository.existsByBarberAndStatusAndStartTime(barber, AppointmentStatus.BOOKED, startTime);
+    private static boolean isOverlapping(List<Appointment> takenSlots, LocalDateTime start, LocalDateTime end) {
+        for (Appointment takenSlot : takenSlots) {
+            if (start.isBefore(takenSlot.getEndTime()) && end.isAfter(takenSlot.getStartTime())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
