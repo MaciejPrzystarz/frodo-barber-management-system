@@ -11,20 +11,13 @@
 </head>
 <body>
 
-<h2>Wybierz datę i godzinę</h2>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<h3>Wybierz datę i godzinę</h3>
 
 <p th:if="${barberName}">Zapisujesz się do:
     <b th:text="${barberName}"></b>
 </p>
-
-<form method="get" th:action="@{/client/dashboard}">
-    <label>Data:</label>
-    <input type="date" name="date" th:value="${selectedDate}">
-    <button type="submit">Pokaż wolne godziny</button>
-</form>
-
-<hr>
-<h3>Wolne godziny</h3>
 
 <div th:if="${#lists.isEmpty(availableSlots)}">
     <p>Brak wolnych terminów na ten dzień.</p>
@@ -89,6 +82,8 @@
 </table>
 
 <a th:href="@{/}">Strona główna</a>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

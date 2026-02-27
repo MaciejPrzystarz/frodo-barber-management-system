@@ -10,6 +10,9 @@
           rel="stylesheet">
 </head>
 <body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
 <h3>Moje wizyty:</h3>
 <div>
     <table th:if="${!#lists.isEmpty(appointments)}">
@@ -29,7 +32,10 @@
         </tbody>
     </table>
 </div>
+
 <a th:href="@{/}">Strona główna</a>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

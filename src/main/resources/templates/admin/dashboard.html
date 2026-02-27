@@ -11,6 +11,8 @@
 </head>
 <body class="admin-page">
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
 <div class="container py-4">
     <div class="admin-grid">
 
@@ -83,6 +85,8 @@
         <a class="btn btn-outline-light" th:href="@{/}">Strona główna</a>
     </div>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

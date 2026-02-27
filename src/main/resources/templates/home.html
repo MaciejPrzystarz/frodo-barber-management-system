@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,46 +13,7 @@
 </head>
 <body>
 
-<!-- Nav bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <div class="logo">
-                <img th:src="@{/images/logo-white.jpg}" alt="logo" class="img-fluid rounded shadow">
-            </div>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a
-                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/admin/dashboard}">Panel Admina</a></li>
-                <li class="nav-item" sec:authorize="hasRole('BARBER')"><a
-                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/barber/dashboard}">Panel Barbera</a></li>
-                <li class="nav-item" sec:authorize="hasRole('CLIENT')"><a
-                        class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                        th:href="@{/client/dashboard}">Umów wizytę</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                                        href="#services">Usługi</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 nav-hover"
-                                        href="#gallery">Galeria</a></li>
-                <li class="nav-item" sec:authorize="!isAuthenticated()">
-                    <form th:action="@{/login}">
-                        <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Zaloguj się</button>
-                    </form>
-                </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="nav-link btn btn-outline-light ms-lg-3 nav-hover">Wyloguj</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- Section "Hero" -->
 <header id="home" class="hero-section text-center text-white d-flex align-items-center">
@@ -119,14 +79,7 @@
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-    <div class="container text-center">
-        <p>&copy; 2026 Frodo Barber Management System. All rights reserved.</p>
-    </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

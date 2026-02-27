@@ -14,6 +14,8 @@
 
 <body class="login-page">
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
 <div class="login-shell">
     <section class="card-login">
         <h2 class="card-title">Edycja użytkownika</h2>
@@ -50,6 +52,7 @@
     </section>
 </div>
 
-</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
+</body>
 </html>
