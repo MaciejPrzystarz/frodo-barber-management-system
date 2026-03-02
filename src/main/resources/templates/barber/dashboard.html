@@ -14,27 +14,33 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
 
-<h3>Moje wizyty:</h3>
-<div class="dashboard-card">
-    <table th:if="${!#lists.isEmpty(appointments)}">
-        <thead>
-        <tr>
-            <th>Data</th>
-            <th>Barber</th>
-            <th>Numer telefonu</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="appointment : ${appointments}">
-            <td th:text="${#temporals.format(appointment.startTime, 'yyyy-MM-dd (HH:mm)')}"></td>
-            <td th:text="${appointment.client.fullName}"></td>
-            <td th:text="${appointment.client.phoneNumber}"></td>
-        </tr>
-        </tbody>
-    </table>
+<div class="container-fluid my-5 dashboard-wide">
+    <div class="row g-4 align-items-stretch">
+        <h3>Moje wizyty</h3>
+        <div class="dashboard-card">
+            <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(appointments)}">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Klient</th>
+                    <th>Numer telefonu</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="appointment : ${appointments}">
+                    <td th:text="${#temporals.format(appointment.startTime, '(dd.MM) - HH:mm')}"></td>
+                    <td th:text="${appointment.client.fullName}"></td>
+                    <td th:text="'+48 ' + ${appointment.client.phoneNumber}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<a th:href="@{/}">Strona główna</a>
+<div class="text-center mt-4">
+    <a class="btn btn-outline-light" th:href="@{/}">Strona główna</a>
+</div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
