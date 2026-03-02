@@ -13,8 +13,6 @@
 </head>
 <body class="login-page">
 
-<div th:replace="~{fragments/navbar :: navbar}"></div>
-
 <div class="login-shell">
     <section class="card-login" aria-label="Logowanie">
         <h2 class="card-title">Logowanie</h2>
@@ -50,14 +48,11 @@
             </button>
         </form>
 
-        <div class="links">
-            Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a>
-        </div>
+        <div class="links">Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a></div>
+        <div class="links" style="text-align: center"><a th:href="@{/}">Powrót na stronę główną</a></div>
 
     </section>
 </div>
-
-<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

@@ -11,6 +11,7 @@
 <body class="layout-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/flash :: flash}"></div>
 
 <main class="container mt-4">
     <h1 th:text="'Błąd ' + ${status}">Błąd</h1>

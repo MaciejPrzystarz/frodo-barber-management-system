@@ -9,12 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
           rel="stylesheet">
 </head>
-<body>
+<body class="dashboard-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/flash :: flash}"></div>
 
 <h3>Moje wizyty:</h3>
-<div>
+<div class="dashboard-card">
     <table th:if="${!#lists.isEmpty(appointments)}">
         <thead>
         <tr>
@@ -36,6 +37,8 @@
 <a th:href="@{/}">Strona główna</a>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

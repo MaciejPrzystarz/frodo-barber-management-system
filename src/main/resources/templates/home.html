@@ -14,6 +14,7 @@
 <body>
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/flash :: flash}"></div>
 
 <!-- Section "Hero" -->
 <header id="home" class="hero-section text-center text-white d-flex align-items-center">
@@ -80,6 +81,8 @@
 </section>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>
