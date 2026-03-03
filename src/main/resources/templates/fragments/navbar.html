@@ -16,6 +16,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link btn btn-outline-light ms-lg-3 nav-hover" th:href="@{/admin/dashboard}">Panel
                         Admina</a>

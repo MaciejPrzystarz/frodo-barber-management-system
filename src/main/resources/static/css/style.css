@@ -47,10 +47,6 @@ h3,
             linear-gradient(135deg, var(--ink), var(--ink-2) 48%, var(--ink));
 }
 
-.dashboard-shell {
-    padding-top: 28px;
-    padding-bottom: 44px;
-}
 
 .dashboard-page p,
 .dashboard-page label,
@@ -92,30 +88,8 @@ h3,
     word-break: break-word;
 }
 
-.dashboard-card::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: 19px;
-    pointer-events: none;
-    opacity: .95;
-}
-
 .dashboard-card > * {
     margin-left: 0;
-}
-
-.dashboard-title {
-    font-family: "Playfair Display", serif;
-    font-weight: 800;
-    letter-spacing: .02em;
-    color: rgba(246, 240, 228, .96);
-    margin-bottom: 8px;
-}
-
-.dashboard-subtitle {
-    color: rgba(233, 230, 223, .76);
-    font-weight: 300;
 }
 
 .dashboard-page .table {
@@ -399,4 +373,201 @@ h3,
 .navbar-brand {
     font-size: 1.5rem;
     letter-spacing: 2px;
+}
+
+.booking-card{
+    border-radius: 18px;
+    padding: 22px;
+    background:
+            radial-gradient(1200px 400px at 20% 0%, rgba(255, 255, 255, .06), transparent 55%),
+            linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02)),
+            linear-gradient(180deg, var(--card), var(--card-2));
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 55px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    backdrop-filter: blur(8px);
+}
+
+.booking-head{
+    margin-bottom: 14px;
+}
+
+.booking-title{
+    font-family: "Playfair Display", serif;
+    font-weight: 800;
+    letter-spacing: .02em;
+    color: rgba(246, 240, 228, .96);
+    margin: 0 0 6px 0;
+}
+
+.booking-sub{
+    margin: 0;
+    color: rgba(233, 230, 223, .78);
+}
+
+.booking-form{
+    margin-top: 10px;
+}
+
+.booking-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 240px;
+    gap: 14px;
+    align-items: end;
+}
+
+@media (max-width: 992px){
+    .booking-grid{
+        grid-template-columns: 1fr;
+    }
+}
+
+.booking-control{
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    background: rgba(10, 10, 12, .55);
+    color: #f6f0e4;
+    padding: 12px 12px;
+}
+
+.booking-control:focus{
+    border-color: rgba(199, 168, 107, .55);
+    box-shadow: 0 0 0 .25rem rgba(199, 168, 107, .18);
+    background: rgba(10, 10, 12, .62);
+    color: #f6f0e4;
+}
+
+.booking-alert{
+    margin-top: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255, 255, 255, .06);
+    color: rgba(246, 240, 228, .92);
+    backdrop-filter: blur(6px);
+}
+
+.slots{
+    margin-top: 16px;
+}
+
+.slots-title{
+    color: rgba(233, 230, 223, .82);
+    font-weight: 600;
+    letter-spacing: .02em;
+    margin-bottom: 10px;
+}
+
+.slots-grid{
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 1200px){
+    .slots-grid{ grid-template-columns: repeat(4, minmax(120px, 1fr)); }
+}
+@media (max-width: 768px){
+    .slots-grid{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+}
+
+.slot{
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.20);
+    box-shadow: 0 12px 30px rgba(0,0,0,.32);
+}
+
+.slot-time{
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    color: #151316;
+    background: linear-gradient(180deg, rgba(199,168,107,.95), rgba(176,141,79,.95));
+    border: 1px solid rgba(199,168,107,.55);
+    box-shadow: 0 10px 22px rgba(0,0,0,.28);
+    margin-bottom: 10px;
+}
+
+/* usuń domyślny wygląd */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* złota ikonka */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+
+    /* magia złota */
+    filter:
+            invert(75%)
+            sepia(35%)
+            saturate(600%)
+            hue-rotate(5deg)
+            brightness(150%);
+}
+
+.booking-control[type="date"]{
+    min-height: 46px;
+    padding-right: 44px;
+    color-scheme: dark;
+}
+
+.booking-control{
+    border: 1px solid rgba(199,168,107,.35) !important;
+    background: rgba(0,0,0,.28) !important;
+}
+
+.booking-control[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 1;
+}
+
+/* Klikany blok date picker */
+.pick-field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(199,168,107,.35);
+    background: rgba(0,0,0,.28);
+    cursor: pointer;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.pick-field:hover{
+    border-color: rgba(199,168,107,.65);
+    box-shadow: 0 0 0 3px rgba(199,168,107,.12);
+    transform: translateY(-1px);
+}
+
+.pick-label{
+    font-size: .85rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: rgba(233,230,223,.65);
+}
+
+/* input wygląda jak tekst w środku, ale nadal jest prawdziwym date inputem */
+.pick-input{
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+
+    color: rgba(246,240,228,.95);
+    font-weight: 700;
+    font-size: 1rem;
+
+    outline: none;
+    cursor: pointer;
+
+    /* ciemny datepicker w Chrome/Edge */
+    color-scheme: dark;
 }
