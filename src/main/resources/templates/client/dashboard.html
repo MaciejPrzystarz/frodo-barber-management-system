@@ -7,6 +7,9 @@
     <title>Panel Klienta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
           rel="stylesheet">
 </head>
@@ -61,27 +64,25 @@
             <div class="booking-grid">
 
                 <div class="booking-field">
-                    <label class="pick-label">Data</label>
-                    <div class="pick-field" id="dateField">
-                        <input id="dateInput"
-                               class="pick-input"
-                               type="date"
-                               name="date"
-                               th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}"
-                               placeholder="YYYY-MM-DD"/>
-                    </div>
+                    <label class="pick-label">Usługa</label>
+                    <select class="form-select booking-control" name="serviceId">
+                        <option th:each="service : ${services}"
+                                th:value="${service.id}"
+                                th:selected="${service.id == selectedServiceId}"
+                                th:text="${service.name + ' - ' + service.price + ' zł (' + service.durationMinutes + ' min)'}">
+                        </option>
+                    </select>
                 </div>
 
                 <div class="booking-field">
-                        <label class="pick-label">Usługa</label>
-                        <select class="form-select booking-control" name="serviceId">
-                            <option th:each="service : ${services}"
-                                    th:value="${service.id}"
-                                    th:selected="${service.id == selectedServiceId}"
-                                    th:text="${service.name + ' - ' + service.price + ' zł (' + service.durationMinutes + ' min)'}">
-                            </option>
-                        </select>
+                    <label class="pick-label" for="dateInput">Data</label>
+                    <input id="dateInput"
+                           class="form-control booking-control"
+                           type="date"
+                           name="date"
+                           th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
                 </div>
+
 
                 <div class="booking-actions">
                     <button type="submit" class="btn btn-gold w-100">Pokaż wolne godziny</button>

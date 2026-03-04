@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" th:href="@{/images/logo-white.jpg}">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
     <title>Rejestracja</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 </head>
 
 <body class="login-page">
@@ -17,7 +16,7 @@
 <div class="login-shell">
     <section class="card-login" aria-label="Rejestracja">
         <h2 class="card-title">Rejestracja</h2>
-        <p class="card-subtitle">Załóż konto i zacznij korzystać z systemu.</p>
+        <p class="card-subtitle">Załóż konto i umów pierwszą internetową wizytę.</p>
 
         <div th:if="${param.error}" class="alert-slim error">
             Nie udało się utworzyć konta. Sprawdź dane i spróbuj ponownie.
@@ -35,7 +34,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="phoneNumber">Numer telefonu</label>
-                <input id="phoneNumber" type="text" class="form-control" placeholder="456789123" th:field="*{phoneNumber}">
+                <input id="phoneNumber" type="text" class="form-control" placeholder="123456789" th:field="*{phoneNumber}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
             </div>
             <div class="mb-3">

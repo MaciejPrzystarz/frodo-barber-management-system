@@ -8,8 +8,10 @@
     <title>Frodo Barber</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
-          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body class="home-page">
 
@@ -21,11 +23,8 @@
         <div class="hero-shell text-center">
             <div class="hero-kicker">Oborniki Śląskie • Barber Shop</div>
             <div class="hero-logo"><img th:src="@{/images/logo.jpg}" alt="Frodo Barber"></div>
-            <p class="hero-lead">
-                Strzyżenie włosów i brody. Szybka rezerwacja i konkretna robota.
-
-            </p>
-            <p class="hero-lead">Wybierz usługę i zarezerwuj termin.</p>
+            <p class="hero-lead">Strzyżenie włosów i brody. Szybka rezerwacja i konkretna robota.</p>
+            <h2 class="hero-lead">Jeżeli chcesz umówić wizytę, najpierw musisz się zarejestrować.</h2>
 
             <div class="hero-actions justify-content-center">
                 <a class="btn btn-ghost" th:href="@{/client/dashboard}">Umów wizytę</a>
@@ -47,8 +46,8 @@
                     <thead>
                     <tr>
                         <th>Nazwa</th>
-                        <th>cena</th>
-                        <th>ilość minut</th>
+                        <th>Cena</th>
+                        <th>Ilość minut</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -78,6 +77,10 @@
                 <div class="col-12 col-lg-4">
                     <div class="about-photo">
                         <img class="img-fluid"
+                             loading="lazy"
+                             decoding="async"
+                             width="1200"
+                             height="800"
                              th:src="@{/images/barber-main-photo.jpg}"
                              alt="Barber">
                     </div>
@@ -107,11 +110,16 @@
         <div class="row g-3 gallery-grid">
             <div class="col-12 col-md-6 col-lg-4" th:each="i : ${#numbers.sequence(1,9)}">
                 <div class="photo-box">
-                    <img class="img-fluid" th:src="@{'/images/gallery' + ${i} + '.jpg'}" th:alt="${'gallery ' + i}">
+                    <img class="img-fluid"
+                         loading="lazy"
+                         decoding="async"
+                         width="1200"
+                         height="800"
+                         th:src="@{'/images/gallery' + ${i} + '.jpg'}"
+                         th:alt="${'gallery ' + i}">
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 
