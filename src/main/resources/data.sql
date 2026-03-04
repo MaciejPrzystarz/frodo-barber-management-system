@@ -5,7 +5,7 @@ VALUES ('Admin Maciej', '234567891', 'admin1@demo.pl', '$2b$10$415NvDFT7GwNFEL7X
 
 -- barber1@demo.pl barber123 --
 INSERT INTO users (full_name, phone_number, email, password, role)
-VALUES ('Barber Krzysztof', '123456789', 'barber1@demo.pl',
+VALUES ('FRODO Krzysztof', '123456789', 'barber1@demo.pl',
         '$2b$10$zHyrkS13NMJ.T818GhMgmu/M2TsDh9yMEU4ChU5MeEl5ltQaKZnJy', 'BARBER');
 
 -- client1@demo.pl client123 --

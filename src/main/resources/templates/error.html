@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
+    <title th:text="|Błąd ${status} Frodo Barber|">Błąd</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
+          rel="stylesheet">
+</head>
+<body class="home-page">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/flash :: flash}"></div>
+
+<main class="container mt-4">
+    <h1 th:text="'Błąd ' + ${status}">Błąd</h1>
+
+    <p th:if="${status == 500}">Błąd jest po naszej stronie, niedługo wrócimy.</p>
+    <p th:if="${status == 404}">Nie znaleziono strony.</p>
+    <p th:if="${status == 403}">Brak uprawnień do tej strony.</p>
+    <p th:if="${status == 401}">Musisz się zalogować.</p>
+    <p th:if="${status != 404 and status != 403 and status != 401}">
+        Coś poszło nie tak. Spróbuj ponownie.
+    </p>
+
+    <a class="btn btn-dark mt-3" th:href="@{/}">Wróć do strony głównej</a>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

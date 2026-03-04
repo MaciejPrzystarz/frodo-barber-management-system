@@ -30,6 +30,8 @@ public class SecurityConfig {
                         .requestMatchers("/client/**").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(e -> e.accessDeniedPage("/error")
+                )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
