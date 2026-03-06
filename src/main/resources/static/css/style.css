@@ -26,12 +26,12 @@ html, body {
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #333
 }
 
-h1, h2, h3, .navbar-brand {
-    font-family: 'Playfair Display', serif;
+h1, h2, h3, h4, h5 .navbar-brand {
+    font-family: 'Poppins', serif;
     font-weight: 800;
     letter-spacing: .02em;
     color: rgba(246, 240, 228, .96);
@@ -168,7 +168,6 @@ h1, h2, h3, .navbar-brand {
 .dashboard-card.glass, .booking-card.glass, .hero-shell.glass {
 }
 
-/* easiest: add class "glass" in HTML OR keep blur here: */
 .dashboard-card, .booking-card, .hero-shell {
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
@@ -276,7 +275,7 @@ h1, h2, h3, .navbar-brand {
 }
 
 .fb-footer-title {
-    font-family: "Playfair Display", serif;
+    font-family: "Poppins", serif;
     font-weight: 800;
     letter-spacing: .02em;
     color: rgba(246, 240, 228, .96);
@@ -371,9 +370,10 @@ h1, h2, h3, .navbar-brand {
     object-position: center top
 }
 
-@media (max-width: 992px) {
-    .about-photo img {
-        height: 320px
+@media (max-width: 768px){
+    .about-photo img{
+        height: auto;
+        object-fit: contain;
     }
 }
 
@@ -391,12 +391,18 @@ h1, h2, h3, .navbar-brand {
     background: rgba(0, 0, 0, .25);
 }
 
-.gallery-grid .photo-box img {
-    width: 100%;
-    height: 360px;
-    object-fit: cover;
-    transition: transform 220ms ease, opacity 220ms ease;
-    will-change: transform;
+.gallery-grid .photo-box img{
+    width:100%;
+    height:360px;
+    object-fit:cover;
+    object-position:center;
+    transition:transform 220ms ease, opacity 220ms ease;
+}
+
+@media (max-width:768px){
+    .gallery-grid .photo-box img{
+        height:220px;
+    }
 }
 
 .gallery-grid .photo-box:hover img {
@@ -497,8 +503,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     outline: none;
 }
 
+.fb-social-link-nav {
+    text-decoration: none !important;
+    outline: none;
+}
+
+.fb-social-link-nav i {
+    font-size: 20px;
+    color: var(--brass);
+}
+
 .fb-social-link i {
-    font-size: 40px;
+    font-size: 50px;
     color: var(--brass);
 }
 
@@ -515,7 +531,7 @@ body.login-page {
     --line: rgba(255, 255, 255, .10);
 
     min-height: 100vh;
-    font-family: "Roboto", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    font-family: "Poppins", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
     color: #e9e6df;
 
     background: radial-gradient(1200px 700px at 15% 20%, rgba(199, 168, 107, .25), transparent 55%),
@@ -632,4 +648,10 @@ body.login-page {
 .login-page .links a:hover {
     color: #f6f0e4;
     border-bottom-color: rgba(246, 240, 228, .65);
+}
+
+.phone-link{
+    color:inherit;
+    text-decoration:none;
+    font-weight:500;
 }
