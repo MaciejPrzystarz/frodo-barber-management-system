@@ -22,6 +22,16 @@ public class BookingService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    public AppointmentStatus changeStatus(String status) {
+        if ((status).equalsIgnoreCase("DONE")) {
+            return AppointmentStatus.DONE;
+        } else if ((status).equalsIgnoreCase("CANCELLED")){
+            return AppointmentStatus.CANCELLED;
+        }
+
+        throw new IllegalStateException("Nieprawidłowy status: " + status);
+    }
+
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
 
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
