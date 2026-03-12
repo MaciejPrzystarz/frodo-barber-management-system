@@ -6,13 +6,11 @@ import com.example.demo.model.User;
 import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -61,19 +59,20 @@ public class BarberController {
         return "redirect:/barber/dashboard";
     }
 
-
     @GetMapping("/dashboard")
-    public String home(Authentication authentication, Model model) {
+    public String home(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date,
+                       Authentication authentication, Model model) {
         String email = authentication.getName();
         User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera"));
-        LocalDate today = LocalDate.now();
-        LocalDateTime start = today.atStartOfDay();
-        LocalDateTime end = today.atTime(LocalTime.MAX);
+
+        LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
+        LocalDateTime start = selectedDate.atStartOfDay();
+        LocalDateTime end = selectedDate.atTime(LocalTime.MAX);
 
         List<Appointment> appointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
                 barber, start, end);
 
-        model.addAttribute("today", today);
+        model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("appointments", appointments);
 
         return "barber/dashboard";
