@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -63,8 +66,14 @@ public class BarberController {
     public String home(Authentication authentication, Model model) {
         String email = authentication.getName();
         User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera"));
-        List<Appointment> appointments = appointmentRepository.findAppointmentByBarberOrderByStartTimeAsc(barber);
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.atTime(LocalTime.MAX);
 
+        List<Appointment> appointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
+                barber, start, end);
+
+        model.addAttribute("today", today);
         model.addAttribute("appointments", appointments);
 
         return "barber/dashboard";
