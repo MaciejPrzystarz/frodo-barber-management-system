@@ -31,5 +31,5 @@ public class Appointment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AppointmentStatus status = AppointmentStatus.BOOKED;
+    private AppointmentStatus status;
 }

@@ -33,8 +33,8 @@ VALUES ('strzyżenie maszynką', 60, 40),
        ('combo v2 - (włosy shaverem + strzyżenie broda)', 75, 60);
 
 INSERT INTO appointments (client_id, barber_id, start_time, end_time, service_id, status)
-VALUES (3, 2, '2026-04-05T15:00:00', '2026-04-05T15:40:00', 1, 'BOOKED'),
+VALUES (3, 2, '2026-03-12T15:00:00', '2026-03-12T15:40:00', 1, 'BOOKED'),
        (5, 2, '2026-04-05T15:45:00', '2026-04-05T17:15:00', 6, 'BOOKED'),
        (4, 2, '2026-04-05T12:00:00', '2026-04-05T13:00:00', 2, 'BOOKED'),
-       (5, 2, '2026-04-05T11:10:00', '2026-04-05T11:50:00', 1, 'BOOKED'),
+       (5, 2, '2026-03-12T11:10:00', '2026-03-12T11:50:00', 1, 'BOOKED'),
        (5, 2, '2026-04-06T14:00:00', '2026-04-06T15:00:00', 7,'BOOKED');
