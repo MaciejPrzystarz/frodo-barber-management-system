@@ -6,6 +6,7 @@ import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingService;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,37 +58,54 @@ public class ClientController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam(required = false) String date, @RequestParam(required = false) Long serviceId,
-                            Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String dashboard(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                            @RequestParam(required = false) Long serviceId, Model model, Authentication authentication,
+                            RedirectAttributes redirectAttributes) {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
-        LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date); //04.05
-        LocalDate nowLocalDatePlus45Days = LocalDate.now().plusDays(45); //17.03
+        LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
 
-        if (selectedDate.isAfter(nowLocalDatePlus45Days)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od teraz.");
-            return "redirect:/client/dashboard";
+        if (date != null) {
+            for (Appointment appointment : appointments) {
+                LocalDate appointmentDate = appointment.getStartTime().toLocalDate();
+
+                if (!selectedDate.isBefore(appointmentDate.minusDays(10))
+                        && !selectedDate.isAfter(appointmentDate.plusDays((10)))) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciagu 10 dni");
+                    return "redirect:/client/dashboard";
+                }
+            }
+
+            LocalDate localDateNowPlus45Days = LocalDate.now().plusDays(45);
+            if (selectedDate.isAfter(localDateNowPlus45Days)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj");
+                return "redirect:/client/dashboard";
+            }
         }
 
         User barber = userRepository.findByRole(Role.BARBER);
-
         List<ServiceItem> services = serviceRepository.findAll();
 
-        ServiceItem selectedService = (serviceId == null) ? services.getFirst()
-                : serviceRepository.findById(serviceId).orElse(services.getFirst());
+        ServiceItem selectedService = null;
+        List<LocalTime> availableSlots = List.of();
 
-        List<LocalTime> availableSlots = bookingService.getAvailableSlotsForTheWholeDay
-                (barber, selectedDate, selectedService.getDurationMinutes());
+        if (serviceId != null) {
+            selectedService = serviceRepository.findById(serviceId).orElseThrow(
+                    () -> new IllegalArgumentException("Nie ma takiej usługi"));
+
+            availableSlots = bookingService.getAvailableSlotsForTheWholeDay
+                    (barber, selectedDate, selectedService.getDurationMinutes());
+        }
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("barberName", barber.getFullName());
 
         model.addAttribute("services", services);
-        model.addAttribute("selectedServiceId", selectedService.getId());
+        model.addAttribute("selectedServiceId", serviceId);
         model.addAttribute("availableSlots", availableSlots);
 
         return "client/dashboard";

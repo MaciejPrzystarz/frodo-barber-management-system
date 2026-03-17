@@ -57,7 +57,7 @@
     <div class="booking-card">
 
         <div class="booking-head">
-            <h1 style="text-align: center" class="booking-title">Wybierz usługę, date i godzinę</h1>
+            <h1 style="text-align: center" class="booking-title">Wybierz usługę i date</h1>
         </div>
 
         <form method="get" th:action="@{/client/dashboard}" class="booking-form">
@@ -66,6 +66,9 @@
                 <div class="booking-field">
                     <label class="pick-label">Usługa</label>
                     <select class="form-select booking-control" name="serviceId" required>
+                        <option value="" disabled hidden th:selected="${selectedServiceId == null}">
+                            Wybierz na jaką usługę chcesz się zapisać...
+                        </option>
                         <option th:each="service : ${services}"
                                 th:value="${service.id}"
                                 th:selected="${service.id == selectedServiceId}"
@@ -90,7 +93,8 @@
             </div>
         </form>
 
-        <div class="alert booking-alert" th:if="${#lists.isEmpty(availableSlots)}">Brak wolnych terminów na ten dzień.</div>
+        <div class="alert booking-alert" th:if="${selectedServiceId != null and #lists.isEmpty(availableSlots)}">
+            Brak wolnych terminów na ten dzień.</div>
 
         <div class="slots" th:if="${!#lists.isEmpty(availableSlots)}">
             <div class="slots-title">Dostępne godziny</div>
