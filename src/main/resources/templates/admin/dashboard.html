@@ -93,8 +93,8 @@
                     <tr th:each="serviceItem : ${allServices}">
                         <td th:text="${serviceItem.id}"></td>
                         <td th:text="${serviceItem.name}"></td>
-                        <td th:text="${serviceItem.price}"></td>
-                        <td th:text="${serviceItem.durationMinutes}"></td>
+                        <td th:text="${serviceItem.price} + 'zł'"></td>
+                        <td th:text="${serviceItem.durationMinutes} + 'min'"></td>
                     </tr>
                     </tbody>
                 </table>

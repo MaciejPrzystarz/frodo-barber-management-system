@@ -18,6 +18,10 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
 
+<div th:if="${errorMessage}" class="alert alert-danger text-center">
+    <span th:text="${errorMessage}"></span>
+</div>
+
 <div class="container-fluid my-5 dashboard-wide">
     <div class="row g-4 align-items-stretch">
         <h3 style="text-align: center">Moje wizyty</h3>
@@ -53,11 +57,7 @@
     <div class="booking-card">
 
         <div class="booking-head">
-            <h3 class="booking-title">Wybierz usługe, date i godzinę</h3>
-
-            <p class="booking-sub" th:if="${barberName}">
-                Zapisujesz się do: <b th:text="${barberName}"></b>
-            </p>
+            <h1 style="text-align: center" class="booking-title">Wybierz usługę, date i godzinę</h1>
         </div>
 
         <form method="get" th:action="@{/client/dashboard}" class="booking-form">
@@ -65,7 +65,7 @@
 
                 <div class="booking-field">
                     <label class="pick-label">Usługa</label>
-                    <select class="form-select booking-control" name="serviceId">
+                    <select class="form-select booking-control" name="serviceId" required>
                         <option th:each="service : ${services}"
                                 th:value="${service.id}"
                                 th:selected="${service.id == selectedServiceId}"
@@ -82,7 +82,6 @@
                            name="date"
                            th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
                 </div>
-
 
                 <div class="booking-actions">
                     <button type="submit" class="btn btn-gold w-100">Pokaż wolne godziny</button>

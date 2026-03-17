@@ -28,7 +28,7 @@ VALUES ('strzyżenie maszynką', 60, 40),
        ('strzyżenie nożyczkami', 60, 60),
        ('strzyżenie włosów shaverem', 30, 20),
        ('strzyżenie brody', 50, 30),
-       ('combo - (maszynka + broda)', 100, 75),
+       ('combo - (maszynką + broda)', 100, 75),
        ('combo v1 - (nożyczkami + broda)', 100, 90),
        ('combo v2 - (włosy shaverem + strzyżenie broda)', 75, 60);
 
