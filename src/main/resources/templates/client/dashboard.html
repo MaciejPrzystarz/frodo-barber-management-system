@@ -94,10 +94,11 @@
         </form>
 
         <div class="alert booking-alert" th:if="${selectedServiceId != null and #lists.isEmpty(availableSlots)}">
-            Brak wolnych terminów na ten dzień.</div>
+            Brak wolnych terminów na ten dzień.
+        </div>
 
         <div class="slots" th:if="${!#lists.isEmpty(availableSlots)}">
-            <div class="slots-title">Dostępne godziny</div>
+            <div style="text-align: center" class="slots-title">Dostępne godziny</div>
 
             <div class="slots-grid">
                 <div class="slot" th:each="time : ${availableSlots}">
@@ -109,9 +110,7 @@
                         <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-                        <button type="submit" class="btn btn-ink btn-sm w-100">
-                            Zarezerwuj
-                        </button>
+                        <button type="submit" class="btn btn-ink btn-sm w-100">Zarezerwuj</button>
                     </form>
                 </div>
             </div>

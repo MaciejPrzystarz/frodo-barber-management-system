@@ -41,7 +41,7 @@ public class ClientController {
 
     @PostMapping("/book")
     public String book(@RequestParam String date, @RequestParam String time, @RequestParam Long serviceId,
-                       Authentication authentication) {
+                       Authentication authentication, RedirectAttributes redirectAttributes) {
         LocalDate selectedDate = LocalDate.parse(date);
         LocalTime selectedTime = LocalTime.parse(time);
         LocalDateTime startTime = selectedDate.atTime(selectedTime);
@@ -51,6 +51,11 @@ public class ClientController {
         User barber = userRepository.findByRole(Role.BARBER);
 
         ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi"));
+
+        if (selectedTime.isBefore(LocalTime.now()) && selectedDate.equals(LocalDate.now())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówić wizyty z przeszłości:P");
+            return "redirect:/client/dashboard";
+        }
 
         bookingService.saveAppointment(barber, client, startTime, serviceItem);
 
@@ -84,6 +89,11 @@ public class ClientController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj");
                 return "redirect:/client/dashboard";
             }
+        }
+
+        if (selectedDate.isBefore(LocalDate.now())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówić wizyty z przeszłości");
+            return "redirect:/client/dashboard";
         }
 
         User barber = userRepository.findByRole(Role.BARBER);

@@ -1,5 +1,5 @@
 package com.example.demo.model;
 
 public enum AppointmentStatus {
-    BOOKED, CANCELLED, DONE
+    BOOKED, PENDING, CANCELLED, DONE
 }
