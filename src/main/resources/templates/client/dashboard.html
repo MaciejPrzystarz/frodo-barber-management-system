@@ -36,6 +36,7 @@
                     <th>Koszt</th>
                     <th>Czas</th>
                     <th>Barber</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,6 +47,7 @@
                     <td th:text="${appointment.service.price} + 'zł'"></td>
                     <td th:text="${appointment.service.durationMinutes} + 'min'"></td>
                     <td th:text="${appointment.barber.fullName}"></td>
+                    <td th:text="${appointment.status}"></td>
                 </tr>
                 </tbody>
             </table>

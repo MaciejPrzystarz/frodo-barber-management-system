@@ -22,7 +22,7 @@ VALUES ('Client One', '111111111', 'client1@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydD
 
 INSERT INTO services (name, price, duration_minutes)
 VALUES ('strzyżenie maszynką', 60, 40),
-       ('strzyżenie nożyczkami', 60, 60),
+       ('strzyżenie nożyczkami + maszynka', 60, 60),
        ('strzyżenie włosów shaverem', 30, 20),
        ('strzyżenie brody', 50, 30),
        ('combo - (maszynką + broda)', 100, 70),

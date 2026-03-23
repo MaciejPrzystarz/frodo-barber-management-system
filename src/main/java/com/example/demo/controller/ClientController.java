@@ -40,61 +40,36 @@ public class ClientController {
     }
 
     @PostMapping("/book")
-    public String book(@RequestParam String date, @RequestParam String time, @RequestParam Long serviceId,
+    public String book(@RequestParam LocalDate date, @RequestParam LocalTime time, @RequestParam Long serviceId,
                        Authentication authentication, RedirectAttributes redirectAttributes) {
-        LocalDate selectedDate = LocalDate.parse(date);
-        LocalTime selectedTime = LocalTime.parse(time);
-        LocalDateTime startTime = selectedDate.atTime(selectedTime);
+        LocalDateTime startTime = date.atTime(time);
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie znaleziono takiego klienta."));
         User barber = userRepository.findByRole(Role.BARBER);
 
-        ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi"));
+        ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi."));
 
-        if (selectedTime.isBefore(LocalTime.now()) && selectedDate.equals(LocalDate.now())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówić wizyty z przeszłości:P");
-            return "redirect:/client/dashboard";
+        String validationResult = bookingService.checkValidation(date, time, client, redirectAttributes);
+
+        if (validationResult != null) {
+            return validationResult;
         }
 
         bookingService.saveAppointment(barber, client, startTime, serviceItem);
 
-        return "redirect:/client/dashboard?date=" + selectedDate;
+        return "redirect:/client/dashboard?date=" + date;
     }
 
     @GetMapping("/dashboard")
     public String dashboard(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                            @RequestParam(required = false) Long serviceId, Model model, Authentication authentication,
-                            RedirectAttributes redirectAttributes) {
+                            @RequestParam(required = false) Long serviceId, Model model, Authentication authentication) {
 
         String email = authentication.getName();
-        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
+        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika."));
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
-
-        if (date != null) {
-            for (Appointment appointment : appointments) {
-                LocalDate appointmentDate = appointment.getStartTime().toLocalDate();
-
-                if (!selectedDate.isBefore(appointmentDate.minusDays(10))
-                        && !selectedDate.isAfter(appointmentDate.plusDays((10)))) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciagu 10 dni");
-                    return "redirect:/client/dashboard";
-                }
-            }
-
-            LocalDate localDateNowPlus45Days = LocalDate.now().plusDays(45);
-            if (selectedDate.isAfter(localDateNowPlus45Days)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj");
-                return "redirect:/client/dashboard";
-            }
-        }
-
-        if (selectedDate.isBefore(LocalDate.now())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówić wizyty z przeszłości");
-            return "redirect:/client/dashboard";
-        }
 
         User barber = userRepository.findByRole(Role.BARBER);
         List<ServiceItem> services = serviceRepository.findAll();
@@ -104,7 +79,7 @@ public class ClientController {
 
         if (serviceId != null) {
             selectedService = serviceRepository.findById(serviceId).orElseThrow(
-                    () -> new IllegalArgumentException("Nie ma takiej usługi"));
+                    () -> new IllegalArgumentException("Nie ma takiej usługi."));
 
             availableSlots = bookingService.getAvailableSlotsForTheWholeDay
                     (barber, selectedDate, selectedService.getDurationMinutes());
