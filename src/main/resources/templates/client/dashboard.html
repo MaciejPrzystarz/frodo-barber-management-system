@@ -18,6 +18,10 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
 
+<div th:if="${errorMessage}" class="alert alert-danger text-center">
+    <span th:text="${errorMessage}"></span>
+</div>
+
 <div class="container-fluid my-5 dashboard-wide">
     <div class="row g-4 align-items-stretch">
         <h3 style="text-align: center">Moje wizyty</h3>
@@ -32,6 +36,7 @@
                     <th>Koszt</th>
                     <th>Czas</th>
                     <th>Barber</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,6 +47,7 @@
                     <td th:text="${appointment.service.price} + 'zł'"></td>
                     <td th:text="${appointment.service.durationMinutes} + 'min'"></td>
                     <td th:text="${appointment.barber.fullName}"></td>
+                    <td th:text="${appointment.status}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -53,11 +59,7 @@
     <div class="booking-card">
 
         <div class="booking-head">
-            <h3 class="booking-title">Wybierz usługe, date i godzinę</h3>
-
-            <p class="booking-sub" th:if="${barberName}">
-                Zapisujesz się do: <b th:text="${barberName}"></b>
-            </p>
+            <h1 style="text-align: center" class="booking-title">Wybierz usługę i date</h1>
         </div>
 
         <form method="get" th:action="@{/client/dashboard}" class="booking-form">
@@ -65,7 +67,10 @@
 
                 <div class="booking-field">
                     <label class="pick-label">Usługa</label>
-                    <select class="form-select booking-control" name="serviceId">
+                    <select class="form-select booking-control" name="serviceId" required>
+                        <option value="" disabled hidden th:selected="${selectedServiceId == null}">
+                            Wybierz na jaką usługę chcesz się zapisać...
+                        </option>
                         <option th:each="service : ${services}"
                                 th:value="${service.id}"
                                 th:selected="${service.id == selectedServiceId}"
@@ -83,7 +88,6 @@
                            th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
                 </div>
 
-
                 <div class="booking-actions">
                     <button type="submit" class="btn btn-gold w-100">Pokaż wolne godziny</button>
                 </div>
@@ -91,10 +95,12 @@
             </div>
         </form>
 
-        <div class="alert booking-alert" th:if="${#lists.isEmpty(availableSlots)}">Brak wolnych terminów na ten dzień.</div>
+        <div class="alert booking-alert" th:if="${selectedServiceId != null and #lists.isEmpty(availableSlots)}">
+            Brak wolnych terminów na ten dzień.
+        </div>
 
         <div class="slots" th:if="${!#lists.isEmpty(availableSlots)}">
-            <div class="slots-title">Dostępne godziny</div>
+            <div style="text-align: center" class="slots-title">Dostępne godziny</div>
 
             <div class="slots-grid">
                 <div class="slot" th:each="time : ${availableSlots}">
@@ -106,9 +112,7 @@
                         <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-                        <button type="submit" class="btn btn-ink btn-sm w-100">
-                            Zarezerwuj
-                        </button>
+                        <button type="submit" class="btn btn-ink btn-sm w-100">Zarezerwuj</button>
                     </form>
                 </div>
             </div>

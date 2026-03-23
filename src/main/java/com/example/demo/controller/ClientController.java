@@ -6,6 +6,7 @@ import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingService;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.TemporalField;
 import java.util.List;
 
 @Controller
@@ -37,49 +40,57 @@ public class ClientController {
     }
 
     @PostMapping("/book")
-    public String book(@RequestParam String date, @RequestParam String time, @RequestParam Long serviceId,
-                       Authentication authentication) {
-        LocalDate selectedDate = LocalDate.parse(date);
-        LocalTime selectedTime = LocalTime.parse(time);
-        LocalDateTime startTime = selectedDate.atTime(selectedTime);
+    public String book(@RequestParam LocalDate date, @RequestParam LocalTime time, @RequestParam Long serviceId,
+                       Authentication authentication, RedirectAttributes redirectAttributes) {
+        LocalDateTime startTime = date.atTime(time);
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie znaleziono takiego klienta."));
         User barber = userRepository.findByRole(Role.BARBER);
 
-        ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi"));
+        ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi."));
+
+        String validationResult = bookingService.checkValidation(date, time, client, redirectAttributes);
+
+        if (validationResult != null) {
+            return validationResult;
+        }
 
         bookingService.saveAppointment(barber, client, startTime, serviceItem);
 
-        return "redirect:/client/dashboard?date=" + selectedDate;
+        return "redirect:/client/dashboard?date=" + date;
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam(required = false) String date, @RequestParam(required = false) Long serviceId,
-                            Model model, Authentication authentication) {
+    public String dashboard(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                            @RequestParam(required = false) Long serviceId, Model model, Authentication authentication) {
 
         String email = authentication.getName();
-        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
+        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika."));
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
-        LocalDate selectedDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
+        LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
 
         User barber = userRepository.findByRole(Role.BARBER);
-
         List<ServiceItem> services = serviceRepository.findAll();
 
-        ServiceItem selectedService = (serviceId == null) ? services.getFirst()
-                : serviceRepository.findById(serviceId).orElse(services.getFirst());
+        ServiceItem selectedService = null;
+        List<LocalTime> availableSlots = List.of();
 
-        List<LocalTime> availableSlots = bookingService.getAvailableSlotsForTheWholeDay
-                (barber, selectedDate, selectedService.getDurationMinutes());
+        if (serviceId != null) {
+            selectedService = serviceRepository.findById(serviceId).orElseThrow(
+                    () -> new IllegalArgumentException("Nie ma takiej usługi."));
+
+            availableSlots = bookingService.getAvailableSlotsForTheWholeDay
+                    (barber, selectedDate, selectedService.getDurationMinutes());
+        }
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("barberName", barber.getFullName());
 
         model.addAttribute("services", services);
-        model.addAttribute("selectedServiceId", selectedService.getId());
+        model.addAttribute("selectedServiceId", serviceId);
         model.addAttribute("availableSlots", availableSlots);
 
         return "client/dashboard";

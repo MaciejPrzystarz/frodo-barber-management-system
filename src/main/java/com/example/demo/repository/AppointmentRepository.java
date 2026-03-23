@@ -18,4 +18,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
             User barber, LocalDateTime start, LocalDateTime end);
 
+    List<Appointment> findAppointmentByClient(User client);
+
 }

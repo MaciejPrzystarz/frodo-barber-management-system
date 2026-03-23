@@ -6,6 +6,7 @@ import com.example.demo.model.ServiceItem;
 import com.example.demo.model.User;
 import com.example.demo.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,6 +33,56 @@ public class BookingService {
         throw new IllegalStateException("Nieprawidłowy status: " + status);
     }
 
+    public String checkValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
+
+        List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
+
+        if (appointments.size() >= 3) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie umówione 3 wizyty na raz.");
+            return "redirect:/client/dashboard";
+        }
+
+        for (Appointment appointment : appointments) {
+            LocalDate appointmentDate = appointment.getStartTime().toLocalDate();
+
+            if (appointment.getStatus().equals(AppointmentStatus.PENDING)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Poczekaj na zawtwierdzenie pierwszej wizyty, zanim umówisz kolejną.");
+                return "redirect:/client/dashboard";
+            }
+
+            if (!date.isBefore(appointmentDate.minusDays(10))
+                    && !date.isAfter(appointmentDate.plusDays((10)))) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciagu 10 dni.");
+                return "redirect:/client/dashboard";
+            }
+        }
+
+        LocalDate maximumAllowedDate = LocalDate.now().plusDays(45);
+        if (date.isAfter(maximumAllowedDate)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj.");
+            return "redirect:/client/dashboard";
+        }
+
+        if (date.isBefore(LocalDate.now())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówienia wizyty z przeszłości.");
+            return "redirect:/client/dashboard";
+        }
+
+        if (date.equals(LocalDate.now()) && time.isBefore(LocalTime.now())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówienia wizyty z przeszłości.");
+            return "redirect:/client/dashboard";
+        }
+
+        LocalDateTime requestedDateTime = date.atTime(time);
+        LocalDateTime minimumAllowedDateTime = LocalDateTime.now().plusMinutes(60);
+
+        if (requestedDateTime.isBefore(minimumAllowedDateTime)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę najwcześniej 60 minut od teraz.");
+            return "redirect:/client/dashboard";
+        }
+        return null;
+    }
+
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
 
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
@@ -43,6 +94,12 @@ public class BookingService {
         appointment.setStartTime(startTime);
         appointment.setEndTime(endTime);
         appointment.setStatus(AppointmentStatus.BOOKED);
+
+        List<Appointment> clientAppointments = appointmentRepository.findAppointmentByClient(client);
+
+        if (clientAppointments.isEmpty()) {
+            appointment.setStatus(AppointmentStatus.PENDING);
+        }
 
         appointmentRepository.save(appointment);
     }
