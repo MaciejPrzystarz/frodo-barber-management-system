@@ -17,7 +17,7 @@ Całość realizuję jako **projekt portfolio**, wykorzystując wiedzę zdobytą
 - **Spring MVC** – obsługa warstwy webowej
 - **Thymeleaf** – generowanie widoków po stronie serwera
 - **Spring Data JPA** – komunikacja z bazą danych
-- **MySQL / H2** – baza produkcyjna i baza developerska
+- **PostgreSQL / H2** – baza produkcyjna i baza developerska
 - **Spring Security** – logowanie, role i ochrona zasobów
 - **Lombok** – redukcja boilerplate’u
 - **Maven** – zarządzanie zależnościami
@@ -49,21 +49,26 @@ frodo-barber-management-system
 │   │   ├── java
 │   │   │   └── pl
 │   │   │       └── frodo
-│   │   │           └── frodobarber
+│   │   │           └── barber
 │   │   │               ├── controller      # kontrolery MVC (AuthController, ServiceController itd.)
 │   │   │               ├── dto             # obiekty DTO do komunikacji z widokami
 │   │   │               ├── model           # encje JPA (User, Service, Appointment...)
 │   │   │               ├── repository      # interfejsy JPA Repository
 │   │   │               ├── security        # konfiguracja Spring Security
-│   │   │               ├── service         # logika biznesowa (UserService, AppointmentService...)
+│   │   │               └── service         # logika biznesowa (UserService, AppointmentService...)
 │   │   ├── resources
-│   │   │   ├── static                      # CSS, JS, obrazki
+│   │   │   ├── static                      # CSS, obrazki
 │   │   │   ├── templates                   # widoki Thymeleaf (HTML)
 │   │   │   ├── application.properties      # profil główny
-│   │   │   ├── application-dev.properties  # profil dev (H2)
-│   │   │   └── application-prod.properties # profil prod (MySQL)
+│   │   │   ├── application-dev.properties  # profil dev (PostgreSQLa)
+│   │   │   ├── application-prod.properties # profil prod (MySQL)
+│   │   │   └── application-test.properties # profil dla testów
+│   │   │
 │   └── test
-│       └── java                            # testy jednostkowe i integracyjne
+│       └── pl
+│           └── frodo
+│               └── barber
+│                   └──java                 # testy jednostkowe i integracyjne
 │
 ├── pom.xml                                 # zależności Maven
 ├── README.md                               # opis projektu
