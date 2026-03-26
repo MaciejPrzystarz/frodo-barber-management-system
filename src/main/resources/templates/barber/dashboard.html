@@ -25,62 +25,52 @@
     <span th:text="${errorMessage}"></span>
 </div>
 
-<div class="container-fluid my-5 dashboard-wide">
-    <div class="row g-8 align-items-stretch">
+<div class="container mt-4">
+    <div class="dashboard-card p-4">
+        <div class="row g-3 text-center">
 
-        <div class="col-xl-8 col-lg-4 col-md-4">
-            <div class="dashboard-card">
-                <h4 style="text-align: center">Lista użytkowników oczekujących na potwierdzenie</h4>
-                <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(pendingAppointments)}">
-                    <thead>
-                    <tr>
-                        <th>Imię Nazwisko</th>
-                        <th>Email</th>
-                        <th>Numer telefonu</th>
-                        <th>Usługa</th>
-                        <th>Data</th>
-                        <th>Od</th>
-                        <th>Do</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="appointment : ${pendingAppointments}">
-                        <td th:text="${appointment.client.fullName}"></td>
-                        <td th:text="${appointment.client.email}"></td>
-                        <td th:text="${appointment.client.phoneNumber}"></td>
-                        <td th:text="${appointment.service.name}"></td>
-                        <td th:text="${#temporals.format(appointment.startTime, 'dd.MM')}"></td>
-                        <td th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></td>
-                        <td th:text="${#temporals.format(appointment.endTime, 'HH:mm')}"></td>
-                        <td>
-                            <div class="booking-field">
-                                <form th:action="@{'/barber/appointments/' + ${appointment.id}}" method="post">
-                                    <select class="form-select booking-control" name="status" required>
-                                        <option th:each="status : ${appointmentStatuses}"
-                                                th:value="${status}"
-                                                th:selected="${status == appointment.status}"
-                                                th:text="${status.plTranslation}">
-                                        </option>
-                                    </select>
-                                    <button type="submit" class="btn btn-gold mt-2">Zapisz</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="col-12 col-md-6 col-xl-3">
+                <a th:href="@{/barber/add-visit}" class="barber-tile-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Dodaj wizytę</span>
+                </a>
             </div>
+
+            <div class="col-12 col-md-6 col-xl-3">
+                <a th:href="@{/barber/my-week}" class="barber-tile-btn">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span>Mój tydzień</span>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3">
+                <a th:href="@{/barber/pending-appointments}" class="barber-tile-btn">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Oczekujące wizyty</span>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3">
+                <a th:href="@{/barber/vacation}" class="barber-tile-btn">
+                    <i class="fa-solid fa-umbrella-beach"></i>
+                    <span>Urlop</span>
+                </a>
+            </div>
+
         </div>
+    </div>
+</div>
 
-        <div class="col-xl-8 col-lg-4 col-md-4">
-            <div class="dashboard-card">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-12 col-lg-11 col-md-12">
+            <div class="dashboard-card text-center mx-auto">
                 <div class="d-flex align-items-center mb-4 position-relative">
-                    <h3 class="position-absolute start-50 translate-middle-x mb-0">Moje wizyty</h3>
-
+                    <h1 class="position-absolute start-50 translate-middle-x mb-0"
+                        th:text="|${#temporals.format(selectedDate, 'dd.MM')} - ${#temporals.dayOfWeekName(selectedDate)}|"></h1>
                     <div class="ms-auto">
                         <form method="get" th:action="@{/barber/dashboard}"
-                              class="d-flex align-items-center gap-2 flex-wrap">
+                              class="d-flex align-items-center gap-1 flex-wrap">
                             <div class="booking-field">
                                 <input id="date" class="form-control booking-control" type="date" name="date"
                                        th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
@@ -92,14 +82,12 @@
                 </div>
             </div>
 
-            <div class="alert booking-alert" th:if="${#lists.isEmpty(appointments)}">Nie ma żadnej wizyty umówionej
-                na ten dzień.
-            </div>
+            <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(appointments)}">
+                Nie ma żadnej wizyty umówionej na ten dzień.</div>
 
-            <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(appointments)}">
+            <table class="table table-dark table-sm text-center align-middle" th:if="${!#lists.isEmpty(appointments)}">
                 <thead>
                 <tr>
-                    <th>Data</th>
                     <th>Godzina</th>
                     <th>Klient</th>
                     <th>Numer telefonu</th>
@@ -111,7 +99,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="appointment : ${appointments}">
-                    <td th:text="|(${#temporals.format(selectedDate, 'dd.MM')} - ${#temporals.dayOfWeekName(selectedDate)})|"></td>
                     <td th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></td>
                     <td th:text="${appointment.client.fullName}"></td>
                     <td th:text="'+48 ' + ${appointment.client.phoneNumber}"></td>
@@ -120,15 +107,17 @@
                     <td th:text="${appointment.service.durationMinutes + 'min'}"></td>
                     <td>
                         <div class="booking-field">
-                            <form th:action="@{'/barber/appointments/' + ${appointment.id}}" method="post">
-                                <select class="form-select booking-control" name="status" required>
+                            <form th:action="@{'/barber/appointments/' + ${appointment.id}}" method="post"
+                                  class="d-flex align-items-center gap-2">
+                                <select class="form-select booking-control text-center fw-bold"
+                                        name="status" required style="max-width: 240px">
                                     <option th:each="status : ${appointmentStatuses}"
                                             th:value="${status}"
                                             th:selected="${status == appointment.status}"
-                                            th:text="${status}">
+                                            th:text="${status.plTranslation}">
                                     </option>
                                 </select>
-                                <button type="submit" class="btn btn-gold mt-2">Zapisz</button>
+                                <button type="submit" class="btn btn-gold">Zapisz</button>
                             </form>
                         </div>
                     </td>
