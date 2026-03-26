@@ -3,7 +3,7 @@
 Frodo Barber Management System to aplikacja webowa wspierająca zarządzanie salonem barberskim mojego brata.  
 Klienci mogą założyć konto, przeglądać dostępne usługi i umawiać wizyty, a barberzy oraz administratorzy mają własne panele do zarządzania terminarzem i obsługą salonu.
 
-Projekt działa w oparciu o **Spring Boot, Thymeleaf i MySQL**, czyli klasyczne podejście do aplikacji backendowych z widokami.  
+Projekt działa w oparciu o **Spring Boot, Thymeleaf i PostgreSQL**, czyli klasyczne podejście do aplikacji backendowych z widokami.  
 Logowanie i role użytkowników obsługuje **Spring Security**.
 
 Całość realizuję jako **projekt portfolio**, wykorzystując wiedzę zdobytą na studiach, kursach oraz z własnej pracy.
@@ -60,8 +60,8 @@ frodo-barber-management-system
 │   │   │   ├── static                      # CSS, obrazki
 │   │   │   ├── templates                   # widoki Thymeleaf (HTML)
 │   │   │   ├── application.properties      # profil główny
-│   │   │   ├── application-dev.properties  # profil dev (PostgreSQLa)
-│   │   │   ├── application-prod.properties # profil prod (MySQL)
+│   │   │   ├── application-dev.properties  # profil dev (H2)
+│   │   │   ├── application-prod.properties # profil prod (PostgreSQL)
 │   │   │   └── application-test.properties # profil dla testów
 │   │   │
 │   └── test

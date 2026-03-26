@@ -24,13 +24,11 @@ public class BookingService {
     }
 
     public AppointmentStatus changeStatus(String status) {
-        if (status.equalsIgnoreCase("DONE")) {
-            return AppointmentStatus.DONE;
-        } else if (status.equalsIgnoreCase("CANCELLED")) {
-            return AppointmentStatus.CANCELLED;
+        try {
+            return AppointmentStatus.valueOf(status.toUpperCase());
+        } catch (Exception e) {
+            throw new IllegalStateException("Nieprawidłowy status: " + status);
         }
-
-        throw new IllegalStateException("Nieprawidłowy status: " + status);
     }
 
     public String checkValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
