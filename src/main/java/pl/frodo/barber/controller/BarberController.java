@@ -36,8 +36,8 @@ public class BarberController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/appointments/{id}/{status}")
-    String changeStatus(@PathVariable Long id, @PathVariable String status,
+    @PostMapping("/appointments/{id}")
+    String changeStatus(@PathVariable Long id, @RequestParam String status,
                         Authentication authentication, RedirectAttributes redirectAttributes) {
         String email = authentication.getName();
         User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera"));
@@ -47,18 +47,22 @@ public class BarberController {
             redirectAttributes.addFlashAttribute("errorMessage", "Brak dostępu do tej wizyty.");
             return "redirect:/barber/dashboard";
         }
-
-        if (appointment.getStatus() != AppointmentStatus.BOOKED) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Można zmieniać tylko wizyty ze statusem BOOKED.");
+        if (appointment.getStatus() == AppointmentStatus.DONE) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie można zmienić zakończonej wizyty.");
             return "redirect:/barber/dashboard";
         }
 
-        AppointmentStatus appointmentStatus = bookingService.changeStatus(status);
+        try {
+            AppointmentStatus appointmentStatus = bookingService.changeStatus(status);
 
-        appointment.setStatus(appointmentStatus);
-        appointmentRepository.save(appointment);
+            appointment.setStatus(appointmentStatus);
+            appointmentRepository.save(appointment);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Status wizyty został zmieniony na " + status + ".");
+            redirectAttributes.addFlashAttribute("successMessage", "Status wizyty został zmieniony na " + status + ".");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zmienić statusu wizyty");
+            return "redirect:/barber/dashboard";
+        }
 
         return "redirect:/barber/dashboard";
     }
@@ -76,8 +80,12 @@ public class BarberController {
         List<Appointment> appointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
                 barber, start, end);
 
+        List<Appointment> pendingAppointments = appointmentRepository.findAppointmentByStatus(AppointmentStatus.PENDING);
+
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("appointments", appointments);
+        model.addAttribute("pendingAppointments", pendingAppointments);
+        model.addAttribute("appointmentStatuses", AppointmentStatus.values());
 
         return "barber/dashboard";
     }
