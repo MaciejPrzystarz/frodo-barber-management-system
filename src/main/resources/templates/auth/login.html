@@ -21,7 +21,7 @@
             Konto utworzone. Zaloguj się.
         </div>
         <div th:if="${param.error}" class="alert-slim error">
-            Błędny email lub hasło.
+            Błędny e-mail lub hasło.
         </div>
         <div th:if="${param.logout}" class="alert-slim">
             Wylogowano.
@@ -29,7 +29,7 @@
 
         <form th:action="@{/login}" method="post" class="mt-2">
             <div class="mb-3">
-                <label class="form-label" for="username">Email</label>
+                <label class="form-label" for="username">E-mail</label>
                 <input id="username" type="text" name="username" placeholder="jan.kowalski@gmail.com"
                        autocomplete="username" aria-label="email" class="form-control">
             </div>

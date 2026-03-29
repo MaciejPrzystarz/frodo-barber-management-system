@@ -36,6 +36,16 @@ public class BarberController {
         this.bookingService = bookingService;
     }
 
+    @GetMapping("/pending-appointments")
+    public String pendingAppointments(Model model) {
+        List<Appointment> pendingAppointments = appointmentRepository.findAppointmentByStatus(AppointmentStatus.PENDING);
+
+        model.addAttribute("pendingAppointments", pendingAppointments);
+        model.addAttribute("appointmentStatuses", AppointmentStatus.values());
+
+        return "barber/pending-appointments";
+    }
+
     @PostMapping("/appointments/{id}")
     String changeStatus(@PathVariable Long id, @RequestParam String status,
                         Authentication authentication, RedirectAttributes redirectAttributes) {
@@ -48,7 +58,7 @@ public class BarberController {
             return "redirect:/barber/dashboard";
         }
         if (appointment.getStatus() == AppointmentStatus.DONE) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie można zmienić zakończonej wizyty.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie można zmienić statusu zakończonej wizyty.");
             return "redirect:/barber/dashboard";
         }
 
@@ -64,7 +74,7 @@ public class BarberController {
             return "redirect:/barber/dashboard";
         }
 
-        return "redirect:/barber/dashboard";
+        return "redirect:/barber/pending-appointments";
     }
 
     @GetMapping("/dashboard")
@@ -77,14 +87,11 @@ public class BarberController {
         LocalDateTime start = selectedDate.atStartOfDay();
         LocalDateTime end = selectedDate.atTime(LocalTime.MAX);
 
-        List<Appointment> appointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
-                barber, start, end);
-
-        List<Appointment> pendingAppointments = appointmentRepository.findAppointmentByStatus(AppointmentStatus.PENDING);
+        List<Appointment> appointments = appointmentRepository.findAppointmentByBarberAndStatusAndStartTimeBetweenOrderByStartTimeAsc(
+                barber, AppointmentStatus.BOOKED, start, end);
 
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("appointments", appointments);
-        model.addAttribute("pendingAppointments", pendingAppointments);
         model.addAttribute("appointmentStatuses", AppointmentStatus.values());
 
         return "barber/dashboard";
