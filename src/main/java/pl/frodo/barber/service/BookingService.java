@@ -31,7 +31,7 @@ public class BookingService {
         }
     }
 
-    public String checkValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
+    public String checkAppointmentValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
         if (appointments.size() >= 3) {
@@ -110,8 +110,12 @@ public class BookingService {
         LocalDateTime to = date.plusDays(1).atStartOfDay();
 
         List<LocalTime> allSlots = new ArrayList<>();
-        List<Appointment> takenSlots = appointmentRepository.findByBarberAndStatusAndStartTimeBetween(
-                barber, AppointmentStatus.BOOKED, from, to);
+        List<Appointment> takenSlots = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
+                        barber, from, to)
+                .stream()
+                .filter(appointment ->
+                        appointment.getStatus() == AppointmentStatus.BOOKED || appointment.getStatus() == AppointmentStatus.PENDING)
+                .toList();
 
         for (LocalTime time = workStart; time.isBefore(workEnd); time = time.plusMinutes(slotMinutes)) {
             LocalDateTime start = date.atTime(time);
