@@ -2,10 +2,7 @@ package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.frodo.barber.model.Appointment;
-import pl.frodo.barber.model.AppointmentStatus;
-import pl.frodo.barber.model.ServiceItem;
-import pl.frodo.barber.model.User;
+import pl.frodo.barber.model.*;
 import pl.frodo.barber.repository.AppointmentRepository;
 
 import java.time.LocalDate;
@@ -80,6 +77,28 @@ public class BookingService {
 
         return null;
     }
+
+//    public void saveAppointmentForExistingCustomer(ServiceItem serviceItem, Customer customer,
+//                                                   LocalDate date, LocalTime time) {
+//
+//        LocalDateTime endTime = time.plusMinutes()
+//
+//        Appointment appointment = new Appointment();
+//        appointment.setClient(client);
+//        appointment.setBarber(barber);
+//        appointment.setService(service);
+//        appointment.setStartTime(startTime);
+//        appointment.setEndTime(endTime);
+//        appointment.setStatus(AppointmentStatus.BOOKED);
+//
+//        List<Appointment> clientAppointments = appointmentRepository.findAppointmentByClient(client);
+//
+//        if (clientAppointments.isEmpty()) {
+//            appointment.setStatus(AppointmentStatus.PENDING);
+//        }
+//
+//        appointmentRepository.save(appointment);
+//    }
 
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());

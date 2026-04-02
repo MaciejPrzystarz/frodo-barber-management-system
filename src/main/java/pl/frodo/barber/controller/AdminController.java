@@ -20,8 +20,6 @@ import pl.frodo.barber.service.AuthService;
 
 import java.util.List;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {

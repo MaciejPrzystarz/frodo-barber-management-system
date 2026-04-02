@@ -1,14 +1,6 @@
 package pl.frodo.barber.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,19 +17,26 @@ public class Appointment {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "client_id")
     private User client;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "barber_id")
     private User barber;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "service_id")
+    private ServiceItem service;
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
-
-    @ManyToOne(optional = false)
-    private ServiceItem service;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

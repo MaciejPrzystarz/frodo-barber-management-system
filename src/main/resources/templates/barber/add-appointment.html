@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
+    <title>Panel Barbera</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
+          rel="stylesheet">
+</head>
+<body class="dashboard-page">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/flash :: flash}"></div>
+<div th:if="${successMessage}" class="alert alert-success text-center">
+    <span th:text="${successMessage}"></span>
+</div>
+
+<div th:if="${errorMessage}" class="alert alert-danger text-center">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<div class="container mt-4">
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="dashboard-card p-4 h-100">
+                <h3 class="mb-4 text-center">Znajdź istniejącego klienta</h3>
+
+                <form method="get" th:action="@{/barber/add-appointment}" class="mb-4">
+                    <div class="d-flex gap-2">
+                        <input type="text"
+                               name="query"
+                               class="form-control booking-control"
+                               placeholder="Imię, nazwisko lub numer telefonu"
+                               th:value="${query}">
+                        <button type="submit" class="btn btn-gold">Szukaj</button>
+                    </div>
+                </form>
+
+                <div th:if="${customers != null and !#lists.isEmpty(customers)}" class="table-responsive mb-4">
+                    <table class="table table-dark table-sm align-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>Klient</th>
+                            <th>Telefon</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="customer : ${customers}">
+                            <td th:text="${customer.fullName}"></td>
+                            <td th:text="${customer.phoneNumber}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <form th:action="@{/barber/add-appointment/existing}" method="post" th:object="${existingCustomer}">
+                    <div class="mb-3">
+                        <label class="form-label">Klient</label>
+                        <select class="form-select booking-control" th:field="*{customerId}" required>
+                            <option value="">Wybierz klienta</option>
+                            <option th:each="customer : ${customers}"
+                                    th:value="${customer.id}"
+                                    th:text="${customer.fullName + ' | ' + customer.phoneNumber}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Usługa</label>
+                        <select class="form-select booking-control" th:field="*{serviceId}" required>
+                            <option value="">Wybierz usługę</option>
+                            <option th:each="service : ${services}"
+                                    th:value="${service.id}"
+                                    th:text="${service.name + ' - ' + service.price + 'zł(' + service.durationMinutes + 'min)'}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Data</label>
+                            <input type="date" class="form-control booking-control" th:field="*{date}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Godzina</label>
+                            <input type="time" class="form-control booking-control" th:field="*{time}" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-gold">Dodaj wizytę</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a class="btn btn-outline-light" th:href="@{/}">Strona główna</a>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+</body>
+</html>
