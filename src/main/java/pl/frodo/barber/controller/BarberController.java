@@ -56,13 +56,13 @@ public class BarberController {
     @GetMapping("/add-appointment")
     public String addAppointment(@RequestParam(required = false) String query, Model model) {
 
+        List<Customer> allCustomers = customerRepository.findAll();
+
         if (query != null && !query.isEmpty()) {
-            List<Customer> allCustomers = customerRepository.findAll();
 
             List<Customer> customers = allCustomers.stream()
-                    .filter(customer ->
-                            customer.getFullName().toLowerCase().contains(query.toLowerCase()) ||
-                                    customer.getPhoneNumber().contains(query))
+                    .filter(customer -> customer.getFullName().toLowerCase().contains(query.toLowerCase()) ||
+                            customer.getPhoneNumber().contains(query))
                     .toList();
 
             model.addAttribute("customers", customers);
@@ -77,9 +77,19 @@ public class BarberController {
     @PostMapping("/add-appointment/existing")
     public String addAppointmentToExistingCustomer(@ModelAttribute("existingCustomer") AddAppointmentForExistingCustomerDto form,
                                                    Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            String email = authentication.getName();
+            User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
 
+            bookingService.saveAppointmentForExistingCustomer(barber, form.getCustomerId(), form.getServiceId(), form.getDate(), form.getTime());
 
-        return "barber/add-appointment";
+            redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zapisać wizyty.");
+            return "redirect:/barber/add-appointment";
+        }
+
+        return "redirect:/barber/add-appointment";
     }
 
     @GetMapping("/pending-appointments")

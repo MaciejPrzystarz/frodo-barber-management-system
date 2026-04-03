@@ -100,8 +100,10 @@
                 <tbody>
                 <tr th:each="appointment : ${appointments}">
                     <td th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></td>
-                    <td th:text="${appointment.client.fullName}"></td>
-                    <td th:text="'+48 ' + ${appointment.client.phoneNumber}"></td>
+                    <td th:text="${appointment.customer != null ? appointment.customer.fullName :
+                    appointment.client.fullName}"></td>
+                    <td th:text="'+48 ' + ${appointment.customer != null ? appointment.customer.phoneNumber :
+                    appointment.client.phoneNumber}"></td>
                     <td th:text="${appointment.service.name}"></td>
                     <td th:text="${appointment.service.price} + 'zł'"></td>
                     <td th:text="${appointment.service.durationMinutes + 'min'}"></td>

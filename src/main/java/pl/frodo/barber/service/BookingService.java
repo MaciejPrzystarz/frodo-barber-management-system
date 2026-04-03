@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.frodo.barber.model.*;
 import pl.frodo.barber.repository.AppointmentRepository;
+import pl.frodo.barber.repository.CustomerRepository;
+import pl.frodo.barber.repository.ServiceRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,9 +17,13 @@ import java.util.List;
 public class BookingService {
 
     private final AppointmentRepository appointmentRepository;
+    private final ServiceRepository serviceRepository;
+    private final CustomerRepository customerRepository;
 
-    public BookingService(AppointmentRepository appointmentRepository) {
+    public BookingService(AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, CustomerRepository customerRepository) {
         this.appointmentRepository = appointmentRepository;
+        this.serviceRepository = serviceRepository;
+        this.customerRepository = customerRepository;
     }
 
     public AppointmentStatus changeStatus(String status) {
@@ -78,27 +84,41 @@ public class BookingService {
         return null;
     }
 
-//    public void saveAppointmentForExistingCustomer(ServiceItem serviceItem, Customer customer,
-//                                                   LocalDate date, LocalTime time) {
-//
-//        LocalDateTime endTime = time.plusMinutes()
-//
-//        Appointment appointment = new Appointment();
-//        appointment.setClient(client);
-//        appointment.setBarber(barber);
-//        appointment.setService(service);
-//        appointment.setStartTime(startTime);
-//        appointment.setEndTime(endTime);
-//        appointment.setStatus(AppointmentStatus.BOOKED);
-//
-//        List<Appointment> clientAppointments = appointmentRepository.findAppointmentByClient(client);
-//
-//        if (clientAppointments.isEmpty()) {
-//            appointment.setStatus(AppointmentStatus.PENDING);
-//        }
-//
-//        appointmentRepository.save(appointment);
-//    }
+    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId,
+                                                   LocalDate date, LocalTime time) {
+
+        Customer customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new RuntimeException("Nie ma takiego klienta."));
+        ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
+                () -> new RuntimeException("Nie ma takiej usługi."));
+
+        LocalDateTime startTime = date.atTime(time);
+        LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
+
+        List<Appointment> barberAppointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
+                        barber, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+                .stream()
+                .filter(appointment ->
+                        appointment.getStatus() == AppointmentStatus.BOOKED || appointment.getStatus() == AppointmentStatus.PENDING)
+                .toList();
+
+        boolean overlapping = isOverlapping(barberAppointments, startTime, endTime);
+
+        if (overlapping) {
+            throw new RuntimeException("Termin zajęty.");
+        }
+
+        Appointment appointment = new Appointment();
+        appointment.setCustomer(customer);
+        appointment.setBarber(barber);
+        appointment.setService(service);
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
+        appointment.setStatus(AppointmentStatus.BOOKED);
+
+        appointmentRepository.save(appointment);
+
+    }
 
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
