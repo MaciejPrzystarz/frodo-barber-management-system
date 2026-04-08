@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.frodo.barber.dto.AddAppointmentForExistingCustomerDto;
+import pl.frodo.barber.dto.AddAppointmentForNewCustomerDto;
 import pl.frodo.barber.model.*;
 import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.CustomerRepository;
@@ -70,6 +71,7 @@ public class BarberController {
 
         model.addAttribute("services", serviceRepository.findAll());
         model.addAttribute("existingCustomer", new AddAppointmentForExistingCustomerDto());
+        model.addAttribute("newCustomer", new AddAppointmentForNewCustomerDto());
 
         return "barber/add-appointment";
     }
@@ -89,6 +91,24 @@ public class BarberController {
             return "redirect:/barber/add-appointment";
         }
 
+        return "redirect:/barber/add-appointment";
+    }
+
+    @PostMapping("/add-appointment/new")
+    public String addAppointmentToNewCustomer(@ModelAttribute("newCustomer") AddAppointmentForNewCustomerDto form,
+                                                   Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            String email = authentication.getName();
+            User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
+
+            bookingService.saveAppointmentForNewCustomer(barber, form.getFullName(), form.getPhoneNumber(), form.getServiceId(),
+                    form.getDate(), form.getTime());
+
+            redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zapisać wizyty.");
+            return "redirect:/barber/add-appointment";
+        }
         return "redirect:/barber/add-appointment";
     }
 

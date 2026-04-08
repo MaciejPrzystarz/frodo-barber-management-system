@@ -84,60 +84,43 @@ public class BookingService {
         return null;
     }
 
-    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId,
-                                                   LocalDate date, LocalTime time) {
+    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId,
+                                              LocalDate date, LocalTime time) {
 
-        Customer customer = customerRepository.findById(customerId).orElseThrow(
-                () -> new RuntimeException("Nie ma takiego klienta."));
         ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
                 () -> new RuntimeException("Nie ma takiej usługi."));
 
         LocalDateTime startTime = date.atTime(time);
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
 
-        List<Appointment> barberAppointments = appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
-                        barber, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
-                .stream()
-                .filter(appointment ->
-                        appointment.getStatus() == AppointmentStatus.BOOKED || appointment.getStatus() == AppointmentStatus.PENDING)
-                .toList();
+        validateAppointmentSlot(barber, date, startTime, endTime);
 
-        boolean overlapping = isOverlapping(barberAppointments, startTime, endTime);
+        Customer customer = customerRepository.findByPhoneNumber(phoneNumber)
+                .orElseGet(() -> {
+                    Customer newCustomer = new Customer();
+                    newCustomer.setFullName(fullName);
+                    newCustomer.setPhoneNumber(phoneNumber);
+                    return customerRepository.save(newCustomer);
+                });
 
-        if (overlapping) {
-            throw new RuntimeException("Termin zajęty.");
-        }
-
-        Appointment appointment = new Appointment();
-        appointment.setCustomer(customer);
-        appointment.setBarber(barber);
-        appointment.setService(service);
-        appointment.setStartTime(startTime);
-        appointment.setEndTime(endTime);
-        appointment.setStatus(AppointmentStatus.BOOKED);
-
-        appointmentRepository.save(appointment);
-
+        addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
     }
 
-    public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
+    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId,
+                                                   LocalDate date, LocalTime time) {
+
+        Customer customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new RuntimeException("Nie ma takiego klienta."));
+
+        ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
+                () -> new RuntimeException("Nie ma takiej usługi."));
+
+        LocalDateTime startTime = date.atTime(time);
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
 
-        Appointment appointment = new Appointment();
-        appointment.setClient(client);
-        appointment.setBarber(barber);
-        appointment.setService(service);
-        appointment.setStartTime(startTime);
-        appointment.setEndTime(endTime);
-        appointment.setStatus(AppointmentStatus.BOOKED);
+        validateAppointmentSlot(barber, date, startTime, endTime);
 
-        List<Appointment> clientAppointments = appointmentRepository.findAppointmentByClient(client);
-
-        if (clientAppointments.isEmpty()) {
-            appointment.setStatus(AppointmentStatus.PENDING);
-        }
-
-        appointmentRepository.save(appointment);
+        addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
     }
 
     public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date, int durationMinutes) {
@@ -174,6 +157,46 @@ public class BookingService {
         return allSlots;
     }
 
+    private void validateAppointmentSlot(User barber, LocalDate date, LocalDateTime startTime, LocalDateTime endTime) {
+        List<Appointment> barberAppointments = appointmentRepository
+                .findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
+                        barber,
+                        date.atStartOfDay(),
+                        date.plusDays(1).atStartOfDay()
+                )
+                .stream()
+                .filter(appointment ->
+                        appointment.getStatus() == AppointmentStatus.BOOKED
+                                || appointment.getStatus() == AppointmentStatus.PENDING)
+                .toList();
+
+        boolean overlapping = isOverlapping(barberAppointments, startTime, endTime);
+
+        if (overlapping) {
+            throw new RuntimeException("Termin zajęty.");
+        }
+    }
+
+    public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
+        LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
+
+        Appointment appointment = new Appointment();
+        appointment.setClient(client);
+        appointment.setBarber(barber);
+        appointment.setService(service);
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
+        appointment.setStatus(AppointmentStatus.BOOKED);
+
+        List<Appointment> clientAppointments = appointmentRepository.findAppointmentByClient(client);
+
+        if (clientAppointments.isEmpty()) {
+            appointment.setStatus(AppointmentStatus.PENDING);
+        }
+
+        appointmentRepository.save(appointment);
+    }
+
     private static boolean isOverlapping(List<Appointment> takenSlots, LocalDateTime start, LocalDateTime end) {
         for (Appointment takenSlot : takenSlots) {
             if (start.isBefore(takenSlot.getEndTime()) && end.isAfter(takenSlot.getStartTime())) {
@@ -181,5 +204,17 @@ public class BookingService {
             }
         }
         return false;
+    }
+
+    private void addNewAppointmentForCustomer(User barber, Customer customer, ServiceItem service, LocalDateTime startTime, LocalDateTime endTime) {
+        Appointment appointment = new Appointment();
+        appointment.setCustomer(customer);
+        appointment.setBarber(barber);
+        appointment.setService(service);
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
+        appointment.setStatus(AppointmentStatus.BOOKED);
+
+        appointmentRepository.save(appointment);
     }
 }

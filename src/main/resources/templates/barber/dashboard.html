@@ -88,25 +88,25 @@
             <table class="table table-dark table-sm text-center align-middle" th:if="${!#lists.isEmpty(appointments)}">
                 <thead>
                 <tr>
-                    <th>Godzina</th>
+                    <th>Od</th>
+                    <th>Do</th>
                     <th>Klient</th>
                     <th>Numer telefonu</th>
                     <th>Usługa</th>
                     <th>Koszt</th>
-                    <th>Czas</th>
                     <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="appointment : ${appointments}">
                     <td th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></td>
+                    <td th:text="${#temporals.format(appointment.endTime, 'HH:mm')}"></td>
                     <td th:text="${appointment.customer != null ? appointment.customer.fullName :
                     appointment.client.fullName}"></td>
                     <td th:text="'+48 ' + ${appointment.customer != null ? appointment.customer.phoneNumber :
                     appointment.client.phoneNumber}"></td>
                     <td th:text="${appointment.service.name}"></td>
                     <td th:text="${appointment.service.price} + 'zł'"></td>
-                    <td th:text="${appointment.service.durationMinutes + 'min'}"></td>
                     <td>
                         <div class="booking-field">
                             <form th:action="@{'/barber/appointments/' + ${appointment.id}}" method="post"

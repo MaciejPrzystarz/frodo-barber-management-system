@@ -100,57 +100,51 @@
                 </form>
             </div>
         </div>
-        <!--        <div class="col-lg-6">-->
-        <!--            <div class="dashboard-card p-4 h-100">-->
-        <!--                <h3 class="mb-4 text-center">Dodaj nowego klienta i wizytę</h3>-->
+        <div class="col-lg-6">
+            <div class="dashboard-card p-4 h-100">
+                <h3 class="mb-4 text-center">Dodaj nowego klienta i wizytę</h3>
 
-        <!--                <form th:action="@{/barber/add-appointment/new}"-->
-        <!--                      method="post"-->
-        <!--                      th:object="${newCustomerForm}">-->
-        <!--                    <div class="row g-3">-->
-        <!--                        <div class="col-md-6">-->
-        <!--                            <label class="form-label">Imię</label>-->
-        <!--                            <input type="text" class="form-control booking-control" th:field="*{firstName}" required>-->
-        <!--                        </div>-->
-        <!--                        <div class="col-md-6">-->
-        <!--                            <label class="form-label">Nazwisko</label>-->
-        <!--                            <input type="text" class="form-control booking-control" th:field="*{lastName}" required>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
+                <form th:action="@{/barber/add-appointment/new}"
+                      method="post"
+                      th:object="${newCustomer}">
+                    <div class="mt-3">
+                        <label class="form-label">Imię Nazwisko</label>
+                        <input type="text" class="form-control booking-control" th:field="*{fullName}" required>
+                    </div>
 
-        <!--                    <div class="mt-3">-->
-        <!--                        <label class="form-label">Numer telefonu</label>-->
-        <!--                        <input type="text" class="form-control booking-control" th:field="*{phoneNumber}" required>-->
-        <!--                    </div>-->
+                    <div class="mt-3">
+                        <label class="form-label">Numer telefonu</label>
+                        <input type="text" class="form-control booking-control" th:field="*{phoneNumber}" required>
+                    </div>
 
-        <!--                    <div class="mt-3">-->
-        <!--                        <label class="form-label">Usługa</label>-->
-        <!--                        <select class="form-select booking-control" th:field="*{serviceId}" required>-->
-        <!--                            <option value="">Wybierz usługę</option>-->
-        <!--                            <option th:each="service : ${services}"-->
-        <!--                                    th:value="${service.id}"-->
-        <!--                                    th:text="${service.name + ' - ' + service.durationMinutes + ' min'}">-->
-        <!--                            </option>-->
-        <!--                        </select>-->
-        <!--                    </div>-->
+                    <div class="mt-3">
+                        <label class="form-label">Usługa</label>
+                        <select class="form-select booking-control" th:field="*{serviceId}" required>
+                            <option value="">Wybierz usługę</option>
+                            <option th:each="service : ${services}"
+                                    th:value="${service.id}"
+                                    th:text="${service.name + ' - ' + service.price + 'zł(' + service.durationMinutes + 'min)'}">
+                            </option>
+                        </select>
+                    </div>
 
-        <!--                    <div class="row g-3 mt-1">-->
-        <!--                        <div class="col-md-6">-->
-        <!--                            <label class="form-label">Data</label>-->
-        <!--                            <input type="date" class="form-control booking-control" th:field="*{date}" required>-->
-        <!--                        </div>-->
-        <!--                        <div class="col-md-6">-->
-        <!--                            <label class="form-label">Godzina</label>-->
-        <!--                            <input type="time" class="form-control booking-control" th:field="*{time}" required>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <label class="form-label">Data</label>
+                            <input type="date" class="form-control booking-control" th:field="*{date}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Godzina</label>
+                            <input type="time" class="form-control booking-control" th:field="*{time}" required>
+                        </div>
+                    </div>
 
-        <!--                    <div class="mt-4 text-center">-->
-        <!--                        <button type="submit" class="btn btn-gold">Dodaj klienta i wizytę</button>-->
-        <!--                    </div>-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--        </div>-->
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-gold">Dodaj klienta i wizytę</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
