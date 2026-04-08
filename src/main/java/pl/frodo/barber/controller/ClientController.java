@@ -51,7 +51,7 @@ public class ClientController {
 
         ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi."));
 
-        String validationResult = bookingService.checkValidation(date, time, client, redirectAttributes);
+        String validationResult = bookingService.checkAppointmentValidation(date, time, client, redirectAttributes);
 
         if (validationResult != null) {
             return validationResult;

@@ -31,7 +31,7 @@ body {
 }
 
 h1, h2, h3, h4, h5 .navbar-brand {
-    font-family: 'Poppins', serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 800;
     letter-spacing: .02em;
     color: rgba(246, 240, 228, .96);
@@ -316,7 +316,7 @@ h1, h2, h3, h4, h5 .navbar-brand {
 }
 
 .fb-footer-title {
-    font-family: "Poppins", serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 800;
     letter-spacing: .02em;
     color: rgba(246, 240, 228, .96);
@@ -603,7 +603,7 @@ body.login-page {
 }
 
 .login-page .card-title {
-    font-family: "Playfair Display", serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 800;
     letter-spacing: .02em;
     color: #f6f0e4;

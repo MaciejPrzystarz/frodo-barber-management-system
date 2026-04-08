@@ -20,6 +20,11 @@ VALUES ('Client One', '111111111', 'client1@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydD
        ('Client Nine', '999999999', 'client9@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
        ('Client Ten', '101010101', 'client10@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT');
 
+INSERT INTO customers (full_name, phone_number)
+VALUES ('Jan Kowalski', '123456789'),
+       ('Frodo', '456789123'),
+       ('Ireneusz', '789123456');
+
 INSERT INTO services (name, price, duration_minutes)
 VALUES ('strzyżenie maszynką', 60, 40),
        ('strzyżenie nożyczkami + maszynka', 60, 60),
