@@ -3,13 +3,20 @@ package pl.frodo.barber.controller;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.frodo.barber.dto.AddAppointmentForExistingCustomerDto;
 import pl.frodo.barber.dto.AddAppointmentForNewCustomerDto;
-import pl.frodo.barber.model.*;
+import pl.frodo.barber.model.Appointment;
+import pl.frodo.barber.model.AppointmentStatus;
+import pl.frodo.barber.model.Customer;
+import pl.frodo.barber.model.User;
 import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.CustomerRepository;
 import pl.frodo.barber.repository.ServiceRepository;
@@ -19,9 +26,7 @@ import pl.frodo.barber.service.BookingService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/barber")
@@ -96,7 +101,7 @@ public class BarberController {
 
     @PostMapping("/add-appointment/new")
     public String addAppointmentToNewCustomer(@ModelAttribute("newCustomer") AddAppointmentForNewCustomerDto form,
-                                                   Authentication authentication, RedirectAttributes redirectAttributes) {
+                                              Authentication authentication, RedirectAttributes redirectAttributes) {
         try {
             String email = authentication.getName();
             User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));

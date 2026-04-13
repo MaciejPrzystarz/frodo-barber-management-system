@@ -2,7 +2,11 @@ package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.frodo.barber.model.*;
+import pl.frodo.barber.model.AppointmentStatus;
+import pl.frodo.barber.model.User;
+import pl.frodo.barber.model.Appointment;
+import pl.frodo.barber.model.ServiceItem;
+import pl.frodo.barber.model.Customer;
 import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.CustomerRepository;
 import pl.frodo.barber.repository.ServiceRepository;
