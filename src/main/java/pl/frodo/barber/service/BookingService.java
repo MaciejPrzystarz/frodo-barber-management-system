@@ -109,16 +109,26 @@ public class BookingService {
                     appointmentsForDay,
                     appointmentsForDay.size(),
                     dayDoneCount,
-                    dayRevenue + " zł"
+                    dayRevenue + " zł",
+                    false
             );
 
             days.add(dayDto);
         }
 
+        for (MyWeekDayDto day : days) {
+            if (bestDayRevenue > 0 && day.getDate().equals(bestDay)) {
+                day.setBestDay(true);
+            }
+        }
+
         String bestDayLabel = "Brak danych";
         String bestDayDetails = "0 DONE • 0 zł";
+        LocalDate bestDayDate = null;
 
         if (bestDayRevenue > 0) {
+            bestDayDate = bestDay;
+
             bestDayLabel = bestDay.getDayOfWeek()
                     .getDisplayName(TextStyle.FULL, new Locale("pl", "PL"));
 
@@ -131,6 +141,7 @@ public class BookingService {
                 weekStart.minusWeeks(1),
                 weekStart.plusWeeks(1),
                 today,
+                bestDayDate,
                 days,
                 totalDoneAppointments,
                 formatMinutes(totalMinutes),

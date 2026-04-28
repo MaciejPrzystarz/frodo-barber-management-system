@@ -64,6 +64,7 @@ public class BarberController {
         model.addAttribute("previousWeek", myWeek.getPreviousWeek());
         model.addAttribute("nextWeek", myWeek.getNextWeek());
         model.addAttribute("today", myWeek.getToday());
+        model.addAttribute("bestDayDate", myWeek.getBestDayDate());
 
         model.addAttribute("days", myWeek.getDays());
 

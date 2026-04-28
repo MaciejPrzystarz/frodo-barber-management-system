@@ -15,6 +15,7 @@ public class MyWeekDto {
     private LocalDate previousWeek;
     private LocalDate nextWeek;
     private LocalDate today;
+    private LocalDate bestDayDate;
     private List<MyWeekDayDto> days;
     private int doneAppointmentsCount;
     private String workedHoursFormatted;
