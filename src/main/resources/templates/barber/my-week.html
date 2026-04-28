@@ -50,13 +50,13 @@
         <div class="summary-card">
             <div class="summary-label">Wizyty zakończone</div>
             <div class="summary-value" th:text="${doneAppointmentsCount}">12</div>
-            <div class="summary-note">Liczone tylko dla statusu DONE</div>
+            <div class="summary-note">Liczone tylko dla statusu zrealizowanych</div>
         </div>
 
         <div class="summary-card">
             <div class="summary-label">Przepracowane godziny</div>
             <div class="summary-value" th:text="${workedHoursFormatted}">08 h 40 min</div>
-            <div class="summary-note">Suma czasu z wizyt DONE</div>
+            <div class="summary-note">Suma czasu z wizyt zrealizowanych</div>
         </div>
 
         <div class="summary-card">
@@ -68,7 +68,7 @@
         <div class="summary-card">
             <div class="summary-label">Najbardziej produktywny dzień</div>
             <div class="summary-value" th:text="${bestDayLabel}">Piątek</div>
-            <div class="summary-note" th:text="${bestDayDetails}">4 DONE • 380 zł</div>
+            <div class="summary-note" th:text="${bestDayDetails}">4 zrealizowane • 380 zł</div>
         </div>
     </section>
 
