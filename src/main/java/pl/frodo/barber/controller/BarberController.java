@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.frodo.barber.dto.AddAppointmentForExistingCustomerDto;
 import pl.frodo.barber.dto.AddAppointmentForNewCustomerDto;
+import pl.frodo.barber.dto.MyWeekDto;
 import pl.frodo.barber.model.Appointment;
 import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.Customer;
@@ -54,7 +55,23 @@ public class BarberController {
     }
 
     @GetMapping("/my-week")
-    public String myWeek() {
+    public String myWeek(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            Authentication authentication, Model model) {
+        MyWeekDto myWeek = bookingService.getMyWeek(authentication.getName(), date);
+
+        model.addAttribute("weekStart", myWeek.getWeekStart());
+        model.addAttribute("weekEnd", myWeek.getWeekEnd());
+        model.addAttribute("previousWeek", myWeek.getPreviousWeek());
+        model.addAttribute("nextWeek", myWeek.getNextWeek());
+        model.addAttribute("today", myWeek.getToday());
+
+        model.addAttribute("days", myWeek.getDays());
+
+        model.addAttribute("doneAppointmentsCount", myWeek.getDoneAppointmentsCount());
+        model.addAttribute("workedHoursFormatted", myWeek.getWorkedHoursFormatted());
+        model.addAttribute("realizedIncomeFormatted", myWeek.getRealizedIncomeFormatted());
+        model.addAttribute("bestDayLabel", myWeek.getBestDayLabel());
+        model.addAttribute("bestDayDetails", myWeek.getBestDayDetails());
 
         return "barber/my-week";
     }
