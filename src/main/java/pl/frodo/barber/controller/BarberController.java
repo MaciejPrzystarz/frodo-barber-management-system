@@ -24,6 +24,7 @@ import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
 import pl.frodo.barber.service.BookingService;
 import pl.frodo.barber.service.VacationService;
+import pl.frodo.barber.service.WeeklyStatsService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,15 +41,17 @@ public class BarberController {
     private final ServiceRepository serviceRepository;
     private final BookingService bookingService;
     private final VacationService vacationService;
+    private final WeeklyStatsService weeklyStatsService;
 
     public BarberController(AppointmentRepository appointmentRepository, UserRepository userRepository,
-                            CustomerRepository customerRepository, ServiceRepository serviceRepository, BookingService bookingService, VacationService vacationService) {
+                            CustomerRepository customerRepository, ServiceRepository serviceRepository, BookingService bookingService, VacationService vacationService, WeeklyStatsService weeklyStatsService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.serviceRepository = serviceRepository;
         this.bookingService = bookingService;
         this.vacationService = vacationService;
+        this.weeklyStatsService = weeklyStatsService;
     }
 
 
@@ -106,7 +109,7 @@ public class BarberController {
     @GetMapping("/my-week")
     public String myWeek(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                          Authentication authentication, Model model) {
-        MyWeekDto myWeek = bookingService.getMyWeek(authentication.getName(), date);
+        MyWeekDto myWeek = weeklyStatsService.getMyWeek(authentication.getName(), date);
 
         model.addAttribute("weekStart", myWeek.getWeekStart());
         model.addAttribute("weekEnd", myWeek.getWeekEnd());
