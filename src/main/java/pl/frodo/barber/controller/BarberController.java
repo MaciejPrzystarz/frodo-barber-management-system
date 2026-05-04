@@ -159,7 +159,7 @@ public class BarberController {
 
             redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zapisać wizyty.");
+            redirectAttributes.addFlashAttribute("errorMessage", resolveErrorMessage(e));
             return "redirect:/barber/add-appointment";
         }
 
@@ -178,10 +178,18 @@ public class BarberController {
 
             redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zapisać wizyty.");
+            redirectAttributes.addFlashAttribute("errorMessage", resolveErrorMessage(e));
             return "redirect:/barber/add-appointment";
         }
         return "redirect:/barber/add-appointment";
+    }
+
+    private String resolveErrorMessage(Exception e) {
+        String message = e.getMessage();
+        if (message == null || message.isBlank()) {
+            return "Nie udało się zapisać wizyty.";
+        }
+        return message;
     }
 
     @GetMapping("/pending-appointments")
@@ -210,6 +218,8 @@ public class BarberController {
             return "redirect:/barber/dashboard";
         }
 
+        boolean wasPending = appointment.getStatus() == AppointmentStatus.PENDING;
+
         try {
             AppointmentStatus appointmentStatus = bookingService.changeStatus(status);
 
@@ -217,14 +227,13 @@ public class BarberController {
             appointmentRepository.save(appointment);
 
             redirectAttributes.addFlashAttribute("successMessage", "Status wizyty został zmieniony na " + status + ".");
-            List<Appointment> pendingAppointmentsList = appointmentRepository.findAppointmentByStatus(AppointmentStatus.PENDING);
-
-            if (!pendingAppointmentsList.isEmpty()) {
-                return "redirect:/barber/pending-appointments";
-            }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Nie udało się zmienić statusu wizyty");
             return "redirect:/barber/dashboard";
+        }
+
+        if (wasPending) {
+            return "redirect:/barber/pending-appointments";
         }
 
         return "redirect:/barber/dashboard";

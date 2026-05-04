@@ -171,22 +171,27 @@ public class BookingService {
     public String checkAppointmentValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
-        if (appointments.size() >= 3) {
+        List<Appointment> activeAppointments = appointments.stream()
+                .filter(appointment -> appointment.getStatus() == AppointmentStatus.BOOKED
+                        || appointment.getStatus() == AppointmentStatus.PENDING)
+                .toList();
+
+        if (activeAppointments.size() >= 3) {
             redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie umówione 3 wizyty na raz.");
             return "redirect:/client/dashboard";
         }
 
-        for (Appointment appointment : appointments) {
+        for (Appointment appointment : activeAppointments) {
             LocalDate appointmentDate = appointment.getStartTime().toLocalDate();
 
-            if (appointment.getStatus().equals(AppointmentStatus.PENDING)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Poczekaj na zawtwierdzenie pierwszej wizyty, zanim umówisz kolejną.");
+            if (appointment.getStatus() == AppointmentStatus.PENDING) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Poczekaj na zatwierdzenie pierwszej wizyty, zanim umówisz kolejną.");
                 return "redirect:/client/dashboard";
             }
 
             if (!date.isBefore(appointmentDate.minusDays(10))
                     && !date.isAfter(appointmentDate.plusDays(10))) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciagu 10 dni.");
+                redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciągu 10 dni.");
                 return "redirect:/client/dashboard";
             }
         }
@@ -280,11 +285,17 @@ public class BookingService {
                         appointment.getStatus() == AppointmentStatus.BOOKED || appointment.getStatus() == AppointmentStatus.PENDING)
                 .toList();
 
+        LocalDateTime earliestAllowed = LocalDateTime.now().plusMinutes(60);
+
         for (LocalTime time = workStart; time.isBefore(workEnd); time = time.plusMinutes(slotMinutes)) {
             LocalDateTime start = date.atTime(time);
             LocalDateTime end = start.plusMinutes(durationMinutes);
 
             if (end.toLocalTime().isAfter(workEnd)) {
+                continue;
+            }
+
+            if (start.isBefore(earliestAllowed)) {
                 continue;
             }
 
