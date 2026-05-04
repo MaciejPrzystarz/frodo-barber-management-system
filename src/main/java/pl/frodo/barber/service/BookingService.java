@@ -1,7 +1,6 @@
 package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.frodo.barber.dto.MyWeekDayDto;
 import pl.frodo.barber.dto.MyWeekDto;
 import pl.frodo.barber.model.AppointmentStatus;
@@ -23,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -168,7 +168,7 @@ public class BookingService {
         }
     }
 
-    public String checkAppointmentValidation(LocalDate date, LocalTime time, User client, RedirectAttributes redirectAttributes) {
+    public Optional<String> validateClientBooking(LocalDate date, LocalTime time, User client) {
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 
         List<Appointment> activeAppointments = appointments.stream()
@@ -177,50 +177,43 @@ public class BookingService {
                 .toList();
 
         if (activeAppointments.size() >= 3) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie umówione 3 wizyty na raz.");
-            return "redirect:/client/dashboard";
+            return Optional.of("Możesz mieć maksymalnie umówione 3 wizyty na raz.");
         }
 
         for (Appointment appointment : activeAppointments) {
             LocalDate appointmentDate = appointment.getStartTime().toLocalDate();
 
             if (appointment.getStatus() == AppointmentStatus.PENDING) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Poczekaj na zatwierdzenie pierwszej wizyty, zanim umówisz kolejną.");
-                return "redirect:/client/dashboard";
+                return Optional.of("Poczekaj na zatwierdzenie pierwszej wizyty, zanim umówisz kolejną.");
             }
 
             if (!date.isBefore(appointmentDate.minusDays(10))
                     && !date.isAfter(appointmentDate.plusDays(10))) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Możesz mieć maksymalnie jedną wizytę w ciągu 10 dni.");
-                return "redirect:/client/dashboard";
+                return Optional.of("Możesz mieć maksymalnie jedną wizytę w ciągu 10 dni.");
             }
         }
 
         LocalDate maximumAllowedDate = LocalDate.now().plusDays(45);
         if (date.isAfter(maximumAllowedDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj.");
-            return "redirect:/client/dashboard";
+            return Optional.of("Możesz umówić wizytę maksymalnie do 45 dni od dzisiaj.");
         }
 
         if (date.isBefore(LocalDate.now())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówienia wizyty z przeszłości.");
-            return "redirect:/client/dashboard";
+            return Optional.of("Nie ma możliwości umówienia wizyty z przeszłości.");
         }
 
         if (date.equals(LocalDate.now()) && time.isBefore(LocalTime.now())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Nie ma możliwości umówienia wizyty z przeszłości.");
-            return "redirect:/client/dashboard";
+            return Optional.of("Nie ma możliwości umówienia wizyty z przeszłości.");
         }
 
         LocalDateTime requestedDateTime = date.atTime(time);
         LocalDateTime minimumAllowedDateTime = LocalDateTime.now().plusMinutes(60);
 
         if (requestedDateTime.isBefore(minimumAllowedDateTime)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Możesz umówić wizytę najwcześniej 60 minut od teraz.");
-            return "redirect:/client/dashboard";
+            return Optional.of("Możesz umówić wizytę najwcześniej 60 minut od teraz.");
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId, LocalDate date, LocalTime time) {
