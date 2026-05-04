@@ -31,12 +31,14 @@ public class BookingService {
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final VacationService vacationService;
 
-    public BookingService(AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, CustomerRepository customerRepository, UserRepository userRepository) {
+    public BookingService(AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, CustomerRepository customerRepository, UserRepository userRepository, VacationService vacationService) {
         this.appointmentRepository = appointmentRepository;
         this.serviceRepository = serviceRepository;
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.vacationService = vacationService;
     }
 
     public MyWeekDto getMyWeek(String barberEmail, LocalDate selectedDate) {
@@ -123,7 +125,7 @@ public class BookingService {
         }
 
         String bestDayLabel = "Brak danych";
-        String bestDayDetails = "0 DONE • 0 zł";
+        String bestDayDetails = "0 zrealizowane • 0 zł";
         LocalDate bestDayDate = null;
 
         if (bestDayRevenue > 0) {
@@ -132,7 +134,7 @@ public class BookingService {
             bestDayLabel = bestDay.getDayOfWeek()
                     .getDisplayName(TextStyle.FULL, new Locale("pl", "PL"));
 
-            bestDayDetails = bestDayDoneCount + " DONE • " + bestDayRevenue + " zł";
+            bestDayDetails = bestDayDoneCount + " zrealizowane • " + bestDayRevenue + " zł";
         }
 
         return new MyWeekDto(
@@ -216,8 +218,9 @@ public class BookingService {
         return null;
     }
 
-    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId,
-                                              LocalDate date, LocalTime time) {
+    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId, LocalDate date, LocalTime time) {
+
+        validateBarberIsNotOnVacation(barber, date);
 
         ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
                 () -> new RuntimeException("Nie ma takiej usługi."));
@@ -238,8 +241,9 @@ public class BookingService {
         addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
     }
 
-    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId,
-                                                   LocalDate date, LocalTime time) {
+    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId, LocalDate date, LocalTime time) {
+
+        validateBarberIsNotOnVacation(barber, date);
 
         Customer customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new RuntimeException("Nie ma takiego klienta."));
@@ -256,6 +260,11 @@ public class BookingService {
     }
 
     public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date, int durationMinutes) {
+
+        if (vacationService.isBarberOnVacation(barber, date)) {
+            return List.of();
+        }
+
         LocalTime workStart = LocalTime.of(8, 0);
         LocalTime workEnd = LocalTime.of(18, 0);
         int slotMinutes = 10;
@@ -310,6 +319,9 @@ public class BookingService {
     }
 
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
+
+        validateBarberIsNotOnVacation(barber, startTime.toLocalDate());
+
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
 
         Appointment appointment = new Appointment();
@@ -348,5 +360,11 @@ public class BookingService {
         appointment.setStatus(AppointmentStatus.BOOKED);
 
         appointmentRepository.save(appointment);
+    }
+
+    private void validateBarberIsNotOnVacation(User barber, LocalDate date) {
+        if (vacationService.isBarberOnVacation(barber, date)) {
+            throw new IllegalArgumentException("Ten barber ma urlop w wybranym dniu. Wybierz inny termin.");
+        }
     }
 }

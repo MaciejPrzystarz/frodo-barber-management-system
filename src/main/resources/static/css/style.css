@@ -1122,3 +1122,307 @@ body.login-page {
     margin-left: 6px;
     filter: drop-shadow(0 0 8px rgba(199, 168, 107, .45));
 }
+
+.vacation-page {
+    min-height: 100vh;
+    background:
+            radial-gradient(circle at top left, rgba(201, 166, 107, 0.16), transparent 32%),
+            radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.06), transparent 28%),
+            #101010;
+    color: #f5f0e8;
+}
+
+.vacation-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 20px 72px;
+}
+
+.vacation-header {
+    margin-bottom: 32px;
+}
+
+.vacation-eyebrow {
+    margin-bottom: 10px;
+    color: #c9a66b;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.vacation-title {
+    margin-bottom: 12px;
+    color: #ffffff;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.vacation-description {
+    max-width: 720px;
+    color: rgba(245, 240, 232, 0.72);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.vacation-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.vacation-card {
+    border: 1px solid rgba(201, 166, 107, 0.22);
+    border-radius: 24px;
+    background: rgba(24, 24, 24, 0.82);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+}
+
+.vacation-card-body {
+    padding: 28px;
+}
+
+.vacation-card-title {
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.vacation-card-text {
+    margin-bottom: 24px;
+    color: rgba(245, 240, 232, 0.66);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.vacation-form {
+    display: grid;
+    gap: 18px;
+}
+
+.vacation-form-group {
+    display: grid;
+    gap: 8px;
+}
+
+.vacation-label {
+    color: rgba(245, 240, 232, 0.82);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.vacation-input {
+    width: 100%;
+    border: 1px solid rgba(245, 240, 232, 0.16);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    padding: 13px 14px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vacation-input:focus {
+    border-color: rgba(201, 166, 107, 0.72);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 4px rgba(201, 166, 107, 0.14);
+}
+
+.vacation-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+.vacation-button {
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c9a66b, #e2c48b);
+    color: #16120b;
+    padding: 13px 18px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.vacation-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 32px rgba(201, 166, 107, 0.22);
+    filter: brightness(1.03);
+}
+
+.vacation-button:active {
+    transform: translateY(0);
+}
+
+.vacation-list {
+    display: grid;
+    gap: 14px;
+}
+
+.vacation-empty {
+    border: 1px dashed rgba(245, 240, 232, 0.18);
+    border-radius: 18px;
+    padding: 22px;
+    color: rgba(245, 240, 232, 0.62);
+    background: rgba(255, 255, 255, 0.04);
+    text-align: center;
+}
+
+.vacation-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    border: 1px solid rgba(245, 240, 232, 0.1);
+    border-radius: 18px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.vacation-item-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.vacation-date-box {
+    display: grid;
+    gap: 2px;
+}
+
+.vacation-date-label {
+    color: rgba(245, 240, 232, 0.5);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.vacation-date-value {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.vacation-date-separator {
+    color: #c9a66b;
+    font-weight: 700;
+}
+
+.vacation-delete-form {
+    margin: 0;
+}
+
+.vacation-delete-button {
+    border: 1px solid rgba(255, 96, 96, 0.36);
+    border-radius: 999px;
+    background: rgba(255, 96, 96, 0.08);
+    color: #ffb4b4;
+    padding: 9px 14px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.vacation-delete-button:hover {
+    border-color: rgba(255, 96, 96, 0.7);
+    background: rgba(255, 96, 96, 0.14);
+    transform: translateY(-1px);
+}
+
+.vacation-note {
+    margin-top: 18px;
+    border-left: 3px solid #c9a66b;
+    border-radius: 14px;
+    background: rgba(201, 166, 107, 0.08);
+    color: rgba(245, 240, 232, 0.72);
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.vacation-page .alert {
+    border-radius: 18px;
+    border: 1px solid rgba(245, 240, 232, 0.14);
+    margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+    .vacation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vacation-wrapper {
+        padding-top: 36px;
+    }
+}
+
+@media (max-width: 560px) {
+    .vacation-card-body {
+        padding: 22px;
+    }
+
+    .vacation-item {
+        grid-template-columns: 1fr;
+    }
+
+    .vacation-delete-button {
+        width: 100%;
+    }
+}
+
+.client-vacation-alert {
+    margin-bottom: 24px;
+    border: 1px solid rgba(201, 166, 107, 0.28);
+    border-radius: 22px;
+    background: rgba(201, 166, 107, 0.08);
+    padding: 22px 24px;
+    color: #f5f0e8;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+.client-vacation-title {
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.client-vacation-text {
+    margin-bottom: 16px;
+    color: rgba(245, 240, 232, 0.72);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.client-vacation-list {
+    display: grid;
+    gap: 10px;
+}
+
+.client-vacation-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.055);
+    padding: 12px 14px;
+    color: rgba(245, 240, 232, 0.86);
+}
+
+.client-vacation-item strong {
+    color: #c9a66b;
+}

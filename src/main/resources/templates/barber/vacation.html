@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
-    <title>Panel Barbera</title>
+    <title>Moje urlopy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
           rel="stylesheet">
 </head>
-<body class="dashboard-page">
+<body class="vacation-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
@@ -24,6 +24,113 @@
 <div th:if="${errorMessage}" class="alert alert-danger text-center">
     <span th:text="${errorMessage}"></span>
 </div>
+
+<main class="vacation-wrapper">
+
+    <section class="vacation-header">
+        <div class="vacation-eyebrow">Panel barbera</div>
+        <h1 class="vacation-title">Moje urlopy</h1>
+        <p class="vacation-description">
+            Dodaj termin, w którym nie przyjmujesz klientów. W wybrane dni system automatycznie zablokuje możliwość rezerwacji wizyty.
+        </p>
+    </section>
+
+    <div th:replace="~{fragments/flash :: flash}"></div>
+
+    <section class="vacation-grid">
+
+        <div class="vacation-card">
+            <div class="vacation-card-body">
+                <h2 class="vacation-card-title">Dodaj urlop</h2>
+                <p class="vacation-card-text">
+                    Wybierz datę rozpoczęcia i zakończenia urlopu.
+                </p>
+
+                <form th:action="@{/barber/vacation}" method="post" class="vacation-form">
+
+                    <div class="vacation-form-group">
+                        <label for="startDate" class="vacation-label">Od kiedy?</label>
+                        <input type="date"
+                               id="startDate"
+                               name="startDate"
+                               class="vacation-input"
+                               required>
+                    </div>
+
+                    <div class="vacation-form-group">
+                        <label for="endDate" class="vacation-label">Do kiedy?</label>
+                        <input type="date"
+                               id="endDate"
+                               name="endDate"
+                               class="vacation-input"
+                               required>
+                    </div>
+
+                    <button type="submit" class="vacation-button">
+                        Dodaj urlop
+                    </button>
+
+                </form>
+
+                <div class="vacation-note">
+                    Jeśli masz już zaplanowaną wizytę w wybranym terminie, system nie pozwoli dodać urlopu.
+                </div>
+            </div>
+        </div>
+
+        <div class="vacation-card">
+            <div class="vacation-card-body">
+                <h2 class="vacation-card-title">Zaplanowane urlopy</h2>
+                <p class="vacation-card-text">
+                    Lista terminów, w których klienci nie będą mogli umówić wizyty.
+                </p>
+
+                <div class="vacation-empty" th:if="${#lists.isEmpty(vacations)}">
+                    Nie masz jeszcze żadnych zaplanowanych urlopów.
+                </div>
+
+                <div class="vacation-list" th:if="${!#lists.isEmpty(vacations)}">
+                    <div class="vacation-item" th:each="vacation : ${vacations}">
+
+                        <div class="vacation-item-dates">
+                            <div class="vacation-date-box">
+                                <span class="vacation-date-label">Od</span>
+                                <span class="vacation-date-value"
+                                      th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">
+                                    01.06.2026
+                                </span>
+                            </div>
+
+                            <span class="vacation-date-separator">→</span>
+
+                            <div class="vacation-date-box">
+                                <span class="vacation-date-label">Do</span>
+                                <span class="vacation-date-value"
+                                      th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">
+                                    07.06.2026
+                                </span>
+                            </div>
+                        </div>
+
+                        <form th:action="@{/barber/vacation/{id}/delete(id=${vacation.id})}"
+                              method="post"
+                              class="vacation-delete-form">
+                            <button type="submit"
+                                    class="vacation-delete-button"
+                                    onclick="return confirm('Czy na pewno chcesz usunąć ten urlop?')">
+                                Usuń
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</main>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 

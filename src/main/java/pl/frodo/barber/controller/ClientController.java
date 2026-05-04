@@ -17,6 +17,7 @@ import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
 import pl.frodo.barber.service.BookingService;
+import pl.frodo.barber.service.VacationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,13 +32,15 @@ public class ClientController {
     private final BookingService bookingService;
     private final AppointmentRepository appointmentRepository;
     private final ServiceRepository serviceRepository;
+    private final VacationService vacationService;
 
     public ClientController(UserRepository userRepository, BookingService bookingService,
-                            AppointmentRepository appointmentRepository, ServiceRepository serviceRepository) {
+                            AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, VacationService vacationService) {
         this.userRepository = userRepository;
         this.bookingService = bookingService;
         this.appointmentRepository = appointmentRepository;
         this.serviceRepository = serviceRepository;
+        this.vacationService = vacationService;
     }
 
     @PostMapping("/book")
@@ -93,6 +96,8 @@ public class ClientController {
         model.addAttribute("services", services);
         model.addAttribute("selectedServiceId", serviceId);
         model.addAttribute("availableSlots", availableSlots);
+
+        model.addAttribute("barberVacations", vacationService.getCurrentAndFutureVacations());
 
         return "client/dashboard";
     }
