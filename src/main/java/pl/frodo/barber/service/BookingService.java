@@ -5,10 +5,7 @@ import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.User;
 import pl.frodo.barber.model.Appointment;
 import pl.frodo.barber.model.ServiceItem;
-import pl.frodo.barber.model.Customer;
 import pl.frodo.barber.repository.AppointmentRepository;
-import pl.frodo.barber.repository.CustomerRepository;
-import pl.frodo.barber.repository.ServiceRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,23 +18,11 @@ import java.util.Optional;
 public class BookingService {
 
     private final AppointmentRepository appointmentRepository;
-    private final ServiceRepository serviceRepository;
-    private final CustomerRepository customerRepository;
     private final VacationService vacationService;
 
-    public BookingService(AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, CustomerRepository customerRepository, VacationService vacationService) {
+    public BookingService(AppointmentRepository appointmentRepository, VacationService vacationService) {
         this.appointmentRepository = appointmentRepository;
-        this.serviceRepository = serviceRepository;
-        this.customerRepository = customerRepository;
         this.vacationService = vacationService;
-    }
-
-    public AppointmentStatus changeStatus(String status) {
-        try {
-            return AppointmentStatus.valueOf(status.toUpperCase());
-        } catch (Exception e) {
-            throw new IllegalStateException("Nieprawidłowy status: " + status);
-        }
     }
 
     public Optional<String> validateClientBooking(LocalDate date, LocalTime time, User client) {
@@ -88,47 +73,6 @@ public class BookingService {
         return Optional.empty();
     }
 
-    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId, LocalDate date, LocalTime time) {
-
-        validateBarberIsNotOnVacation(barber, date);
-
-        ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
-                () -> new RuntimeException("Nie ma takiej usługi."));
-
-        LocalDateTime startTime = date.atTime(time);
-        LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
-
-        validateAppointmentSlot(barber, date, startTime, endTime);
-
-        Customer customer = customerRepository.findByPhoneNumber(phoneNumber)
-                .orElseGet(() -> {
-                    Customer newCustomer = new Customer();
-                    newCustomer.setFullName(fullName);
-                    newCustomer.setPhoneNumber(phoneNumber);
-                    return customerRepository.save(newCustomer);
-                });
-
-        addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
-    }
-
-    public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId, LocalDate date, LocalTime time) {
-
-        validateBarberIsNotOnVacation(barber, date);
-
-        Customer customer = customerRepository.findById(customerId).orElseThrow(
-                () -> new RuntimeException("Nie ma takiego klienta."));
-
-        ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
-                () -> new RuntimeException("Nie ma takiej usługi."));
-
-        LocalDateTime startTime = date.atTime(time);
-        LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
-
-        validateAppointmentSlot(barber, date, startTime, endTime);
-
-        addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
-    }
-
     public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date, int durationMinutes) {
 
         if (vacationService.isBarberOnVacation(barber, date)) {
@@ -174,26 +118,6 @@ public class BookingService {
         return allSlots;
     }
 
-    private void validateAppointmentSlot(User barber, LocalDate date, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Appointment> barberAppointments = appointmentRepository
-                .findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
-                        barber,
-                        date.atStartOfDay(),
-                        date.plusDays(1).atStartOfDay()
-                )
-                .stream()
-                .filter(appointment ->
-                        appointment.getStatus() == AppointmentStatus.BOOKED
-                                || appointment.getStatus() == AppointmentStatus.PENDING)
-                .toList();
-
-        boolean overlapping = isOverlapping(barberAppointments, startTime, endTime);
-
-        if (overlapping) {
-            throw new RuntimeException("Termin zajęty.");
-        }
-    }
-
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
 
         validateBarberIsNotOnVacation(barber, startTime.toLocalDate());
@@ -224,18 +148,6 @@ public class BookingService {
             }
         }
         return false;
-    }
-
-    private void addNewAppointmentForCustomer(User barber, Customer customer, ServiceItem service, LocalDateTime startTime, LocalDateTime endTime) {
-        Appointment appointment = new Appointment();
-        appointment.setCustomer(customer);
-        appointment.setBarber(barber);
-        appointment.setService(service);
-        appointment.setStartTime(startTime);
-        appointment.setEndTime(endTime);
-        appointment.setStatus(AppointmentStatus.BOOKED);
-
-        appointmentRepository.save(appointment);
     }
 
     private void validateBarberIsNotOnVacation(User barber, LocalDate date) {

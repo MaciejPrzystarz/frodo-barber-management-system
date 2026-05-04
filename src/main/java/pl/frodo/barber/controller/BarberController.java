@@ -22,7 +22,7 @@ import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.CustomerRepository;
 import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
-import pl.frodo.barber.service.BookingService;
+import pl.frodo.barber.service.AppointmentService;
 import pl.frodo.barber.service.VacationService;
 import pl.frodo.barber.service.WeeklyStatsService;
 
@@ -39,19 +39,19 @@ public class BarberController {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final ServiceRepository serviceRepository;
-    private final BookingService bookingService;
     private final VacationService vacationService;
     private final WeeklyStatsService weeklyStatsService;
+    private final AppointmentService appointmentService;
 
     public BarberController(AppointmentRepository appointmentRepository, UserRepository userRepository,
-                            CustomerRepository customerRepository, ServiceRepository serviceRepository, BookingService bookingService, VacationService vacationService, WeeklyStatsService weeklyStatsService) {
+                            CustomerRepository customerRepository, ServiceRepository serviceRepository, VacationService vacationService, WeeklyStatsService weeklyStatsService, AppointmentService appointmentService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.serviceRepository = serviceRepository;
-        this.bookingService = bookingService;
         this.vacationService = vacationService;
         this.weeklyStatsService = weeklyStatsService;
+        this.appointmentService = appointmentService;
     }
 
 
@@ -158,7 +158,7 @@ public class BarberController {
             String email = authentication.getName();
             User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
 
-            bookingService.saveAppointmentForExistingCustomer(barber, form.getCustomerId(), form.getServiceId(), form.getDate(), form.getTime());
+            appointmentService.saveAppointmentForExistingCustomer(barber, form.getCustomerId(), form.getServiceId(), form.getDate(), form.getTime());
 
             redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class BarberController {
             String email = authentication.getName();
             User barber = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
 
-            bookingService.saveAppointmentForNewCustomer(barber, form.getFullName(), form.getPhoneNumber(), form.getServiceId(),
+            appointmentService.saveAppointmentForNewCustomer(barber, form.getFullName(), form.getPhoneNumber(), form.getServiceId(),
                     form.getDate(), form.getTime());
 
             redirectAttributes.addFlashAttribute("successMessage", "Wizyta została dodana.");
@@ -224,7 +224,7 @@ public class BarberController {
         boolean wasPending = appointment.getStatus() == AppointmentStatus.PENDING;
 
         try {
-            AppointmentStatus appointmentStatus = bookingService.changeStatus(status);
+            AppointmentStatus appointmentStatus = appointmentService.changeStatus(status);
 
             appointment.setStatus(appointmentStatus);
             appointmentRepository.save(appointment);
