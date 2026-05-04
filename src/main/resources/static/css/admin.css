@@ -1,0 +1,4 @@
+/* Admin views currently reuse .dashboard-card, .table and .login-page
+   (for user-edit). This file is intentionally minimal and exists as a
+   landing place for future admin-only tweaks (e.g. wider tables,
+   admin badges) without touching shared component styles. */

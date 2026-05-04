@@ -1,0 +1,68 @@
+:root {
+    --ink: #0b0c0f;
+    --ink2: #11141a;
+    --card: rgba(15, 17, 20, .78);
+    --card2: rgba(10, 12, 14, .72);
+    --line: rgba(255, 255, 255, .10);
+
+    --brass: #c7a86b;
+    --brass2: #b08d4f;
+
+    --text: rgba(246, 240, 228, .92);
+    --muted: rgba(233, 230, 223, .82);
+
+    --r18: 18px;
+    --r14: 14px;
+    --r12: 12px;
+
+    --shadow-lg: 0 18px 55px rgba(0, 0, 0, .55);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, .32);
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333
+}
+
+h1, h2, h3, h4, h5 .navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    letter-spacing: .02em;
+    color: rgba(246, 240, 228, .96);
+}
+
+.dashboard-page,
+.home-page {
+    min-height: 100vh;
+    color: var(--text);
+    background: radial-gradient(1200px 700px at 15% 18%, rgba(199, 168, 107, .16), transparent 58%),
+    radial-gradient(900px 600px at 88% 20%, rgba(14, 58, 102, .18), transparent 56%),
+    radial-gradient(900px 650px at 55% 92%, rgba(122, 31, 43, .16), transparent 58%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, .02) 0 10px, rgba(0, 0, 0, .02) 10px 20px),
+    linear-gradient(135deg, var(--ink), var(--ink2) 48%, var(--ink));
+}
+
+.home-page {
+    background-attachment: fixed;
+}
+
+@media (max-width: 992px) {
+    .home-page {
+        background-attachment: scroll;
+    }
+}
+
+.dashboard-page p, .dashboard-page label, .dashboard-page small,
+.home-page p, .home-page label, .home-page small {
+    color: var(--muted);
+}
+
+.glass {
+    background: rgba(10, 12, 14, .88);
+}
