@@ -62,6 +62,36 @@
             <h1 style="text-align: center" class="booking-title">Wybierz usługę i datę</h1>
         </div>
 
+        <div class="client-vacation-alert"
+             th:if="${barberVacations != null and !#lists.isEmpty(barberVacations)}">
+
+            <h3 class="client-vacation-title">Niedostępność barbera</h3>
+
+            <p class="client-vacation-text">
+                W poniższych terminach przebywam na urlopie. W tych dniach rezerwacja wizyty nie
+                będzie możliwa.
+            </p>
+
+            <div class="client-vacation-list">
+                <div class="client-vacation-item" th:each="vacation : ${barberVacations}">
+                    <strong th:text="${vacation.barber.fullName}">
+                        FRODO Krzysztof
+                    </strong>
+
+                    <span>
+                od
+                <span th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">
+                    10.06.2026
+                </span>
+                do
+                <span th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">
+                    16.06.2026
+                </span>
+            </span>
+                </div>
+            </div>
+        </div>
+
         <form method="get" th:action="@{/client/dashboard}" class="booking-form">
             <div class="booking-grid">
 
@@ -119,10 +149,6 @@
         </div>
 
     </div>
-</div>
-
-<div class="text-center mt-4">
-    <a class="btn btn-outline-light" th:href="@{/}">Strona główna</a>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

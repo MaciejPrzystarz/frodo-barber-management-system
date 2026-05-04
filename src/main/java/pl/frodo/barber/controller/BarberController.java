@@ -23,6 +23,7 @@ import pl.frodo.barber.repository.CustomerRepository;
 import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
 import pl.frodo.barber.service.BookingService;
+import pl.frodo.barber.service.VacationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,25 +39,73 @@ public class BarberController {
     private final CustomerRepository customerRepository;
     private final ServiceRepository serviceRepository;
     private final BookingService bookingService;
+    private final VacationService vacationService;
 
     public BarberController(AppointmentRepository appointmentRepository, UserRepository userRepository,
-                            CustomerRepository customerRepository, ServiceRepository serviceRepository, BookingService bookingService) {
+                            CustomerRepository customerRepository, ServiceRepository serviceRepository, BookingService bookingService, VacationService vacationService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.serviceRepository = serviceRepository;
         this.bookingService = bookingService;
+        this.vacationService = vacationService;
     }
 
+
     @GetMapping("/vacation")
-    public String vacation() {
+    public String vacation(Authentication authentication, Model model) {
+        String email = authentication.getName();
+
+        User barber = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
+
+        model.addAttribute("vacations", vacationService.getVacationsForBarber(barber));
 
         return "barber/vacation";
     }
 
+    @PostMapping("/vacation")
+    public String addVacation(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+                              Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            String email = authentication.getName();
+
+            User barber = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
+
+            vacationService.addVacation(barber, startDate, endDate);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Urlop został dodany.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/barber/vacation";
+    }
+
+    @PostMapping("/vacation/{id}/delete")
+    public String deleteVacation(@PathVariable Long id,
+                                 Authentication authentication,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            String email = authentication.getName();
+
+            User barber = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Nie ma takiego barbera."));
+
+            vacationService.deleteVacation(id, barber);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Urlop został usunięty.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/barber/vacation";
+    }
+
     @GetMapping("/my-week")
     public String myWeek(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            Authentication authentication, Model model) {
+                         Authentication authentication, Model model) {
         MyWeekDto myWeek = bookingService.getMyWeek(authentication.getName(), date);
 
         model.addAttribute("weekStart", myWeek.getWeekStart());
