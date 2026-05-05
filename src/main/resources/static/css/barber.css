@@ -691,3 +691,62 @@
         width: 100%;
     }
 }
+
+.appointment-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 12px 12px;
+}
+
+.appointment-card {
+    border: 1px solid rgba(201, 160, 74, 0.45);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.appointment-card-time {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #c9a04a;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.appointment-card-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+.appointment-card-row:last-of-type {
+    border-bottom: none;
+}
+
+.appointment-card-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.appointment-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.appointment-card-form .form-select {
+    width: 100%;
+}
+
+.appointment-card-form .btn {
+    width: 100%;
+}

@@ -12,81 +12,102 @@
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
                 <h4 style="text-align: center">Lista wszystkich zarejestrowanych użytkowników</h4>
-                <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(allUsers)}">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Imię Nazwisko</th>
-                        <th>Numer telefonu</th>
-                        <th>E-mail</th>
-                        <th>Rola</th>
-                        <th>Edycja</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user : ${allUsers}">
-                        <td th:text="${user.id}"></td>
-                        <td th:text="${user.fullName}"></td>
-                        <td th:text="'+48 ' + ${user.phoneNumber}"></td>
-                        <td th:text="${user.email}"></td>
-                        <td th:text="${user.role}"></td>
-                        <td>
-                            <a class="btn btn-sm btn-outline-warning"
-                               th:href="@{/admin/users/{id}/edit(id=${user.id})}">Edytuj</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allUsers)}">
+                    Brak zarejestrowanych użytkowników.
+                </div>
+
+                <div class="table-responsive" th:if="${!#lists.isEmpty(allUsers)}">
+                    <table class="table table-dark">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imię Nazwisko</th>
+                            <th>Numer telefonu</th>
+                            <th>E-mail</th>
+                            <th>Rola</th>
+                            <th>Edycja</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${allUsers}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.fullName}"></td>
+                            <td th:text="'+48 ' + ${user.phoneNumber}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.role}"></td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-warning"
+                                   th:href="@{/admin/users/{id}/edit(id=${user.id})}">Edytuj</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
                 <h4 style="text-align: center">Lista wszystkich wizyt</h4>
-                <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(allAppointments)}">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Client</th>
-                        <th>Barber</th>
-                        <th>Data</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="appointment : ${allAppointments}">
-                        <td th:text="${appointment.id}"></td>
-                        <td th:text="${appointment.client.fullName}"></td>
-                        <td th:text="${appointment.barber.fullName}"></td>
-                        <td th:text="${#temporals.format(appointment.startTime,'dd.MM.yyyy HH:mm')}"></td>
-                        <td th:text="${appointment.status}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allAppointments)}">
+                    Brak wizyt w systemie.
+                </div>
+
+                <div class="table-responsive" th:if="${!#lists.isEmpty(allAppointments)}">
+                    <table class="table table-dark">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Barber</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="appointment : ${allAppointments}">
+                            <td th:text="${appointment.id}"></td>
+                            <td th:text="${appointment.client.fullName}"></td>
+                            <td th:text="${appointment.barber.fullName}"></td>
+                            <td th:text="${#temporals.format(appointment.startTime,'dd.MM.yyyy HH:mm')}"></td>
+                            <td th:text="${appointment.status}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
                 <h4 style="text-align: center">Lista wszystkich usług</h4>
-                <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(allServices)}">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nazwa</th>
-                        <th>cena</th>
-                        <th>ilość minut</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="serviceItem : ${allServices}">
-                        <td th:text="${serviceItem.id}"></td>
-                        <td th:text="${serviceItem.name}"></td>
-                        <td th:text="${serviceItem.price} + 'zł'"></td>
-                        <td th:text="${serviceItem.durationMinutes} + 'min'"></td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allServices)}">
+                    Brak zdefiniowanych usług.
+                </div>
+
+                <div class="table-responsive" th:if="${!#lists.isEmpty(allServices)}">
+                    <table class="table table-dark">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>cena</th>
+                            <th>ilość minut</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="serviceItem : ${allServices}">
+                            <td th:text="${serviceItem.id}"></td>
+                            <td th:text="${serviceItem.name}"></td>
+                            <td th:text="${serviceItem.price} + 'zł'"></td>
+                            <td th:text="${serviceItem.durationMinutes} + 'min'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
