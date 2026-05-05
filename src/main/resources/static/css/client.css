@@ -430,6 +430,31 @@
     border-color: rgba(255, 255, 255, 0.10);
 }
 
+.bk-status--rejected {
+    background: rgba(177, 31, 42, 0.14);
+    color: #ffb1b1;
+    border-color: rgba(177, 31, 42, 0.45);
+}
+
+.bk-status--didnt_show_up {
+    background: rgba(140, 100, 60, 0.14);
+    color: #d6b58a;
+    border-color: rgba(140, 100, 60, 0.45);
+}
+
+.bk-slots-hint {
+    margin: 0 0 0.75rem;
+    font-size: 0.85rem;
+    color: var(--bk-text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.bk-slots-hint i {
+    color: var(--bk-gold);
+}
+
 @media (max-width: 640px) {
     .bk-appt {
         grid-template-columns: auto 1fr;
@@ -454,6 +479,16 @@
     }
 
     .bk-slots {
-        grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 0.6rem;
+    }
+
+    .bk-slot {
+        padding: 1rem 0.5rem;
+        min-height: 64px;
+    }
+
+    .bk-slot__time {
+        font-size: 1.15rem;
     }
 }

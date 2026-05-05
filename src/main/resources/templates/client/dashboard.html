@@ -36,11 +36,38 @@
                     <div class="bk-appt__status">
             <span class="bk-status"
                   th:classappend="' bk-status--' + ${#strings.toLowerCase(appointment.status)}"
-                  th:text="${appointment.status}">BOOKED</span>
+                  th:text="${appointment.status.plTranslation}">BOOKED</span>
                     </div>
                 </li>
             </ul>
         </div>
+    </div>
+</div>
+
+<div class="container-fluid my-4 dashboard-wide"
+     th:if="${barberVacations != null and !#lists.isEmpty(barberVacations)}">
+    <div class="client-vacation-alert">
+
+        <h3 class="client-vacation-title">Niedostępność barbera</h3>
+
+        <p class="client-vacation-text">
+            W poniższych terminach przebywam na urlopie. W tych dniach rezerwacja wizyty nie
+            będzie możliwa.
+        </p>
+
+        <div class="client-vacation-list">
+            <div class="client-vacation-item" th:each="vacation : ${barberVacations}">
+                <strong th:text="${vacation.barber.fullName}">FRODO Krzysztof</strong>
+
+                <span>
+                    od
+                    <span th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">10.06.2026</span>
+                    do
+                    <span th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">16.06.2026</span>
+                </span>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -105,6 +132,15 @@
 
                 <div class="bk-summary">
                     <div class="bk-summary__item">
+                        <span>Usługa</span>
+                        <strong>
+                            <th:block th:if="${selectedServiceId == null}">—</th:block>
+                            <th:block th:each="s : ${services}"
+                                      th:if="${s.id == selectedServiceId}"
+                                      th:text="${s.name}"></th:block>
+                        </strong>
+                    </div>
+                    <div class="bk-summary__item">
                         <span>Wybrany dzień</span>
                         <strong th:text="${selectedDate != null ? #temporals.format(selectedDate, 'dd.MM.yyyy') : '—'}">—</strong>
                     </div>
@@ -131,65 +167,58 @@
                 Najpierw wybierz usługę, aby zobaczyć dostępne godziny.
             </div>
 
-            <div th:if="${selectedServiceId != null and #lists.isEmpty(availableSlots)}"
+            <div th:if="${selectedServiceId != null and selectedDate == null}" class="bk-info">
+                <i class="far fa-calendar"></i>
+                Wybierz dzień, aby zobaczyć dostępne godziny.
+            </div>
+
+            <div th:if="${selectedServiceId != null and selectedDate != null and #lists.isEmpty(availableSlots)}"
                  class="bk-info bk-info--warn">
                 <i class="fas fa-triangle-exclamation"></i>
                 Brak wolnych terminów na wybrany dzień.
             </div>
 
-            <div th:if="${selectedServiceId != null and !#lists.isEmpty(availableSlots)}"
-                 class="bk-slots">
-                <form th:each="time : ${availableSlots}"
-                      method="post"
-                      th:action="@{/client/book}"
-                      class="bk-slot-form">
-                    <input type="hidden" name="date"
-                           th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
-                    <input type="hidden" name="time"
-                           th:value="${#temporals.format(time, 'HH:mm')}">
-                    <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <div th:if="${selectedServiceId != null and selectedDate != null and !#lists.isEmpty(availableSlots)}">
+                <p class="bk-slots-hint">
+                    <i class="far fa-hand-pointer"></i>
+                    Kliknij godzinę, aby zarezerwować — pojawi się okno potwierdzenia.
+                </p>
 
-                    <button type="submit" class="bk-slot">
-                        <span class="bk-slot__time" th:text="${#temporals.format(time, 'HH:mm')}">10:00</span>
-                        <span class="bk-slot__cta">Zarezerwuj</span>
-                    </button>
-                </form>
-            </div>
-        </div>
+                <div class="bk-slots">
+                    <form th:each="time : ${availableSlots}"
+                          method="post"
+                          th:action="@{/client/book}"
+                          class="bk-slot-form">
+                        <input type="hidden" name="date"
+                               th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
+                        <input type="hidden" name="time"
+                               th:value="${#temporals.format(time, 'HH:mm')}">
+                        <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-        <div class="client-vacation-alert"
-             th:if="${barberVacations != null and !#lists.isEmpty(barberVacations)}">
-
-            <h3 class="client-vacation-title">Niedostępność barbera</h3>
-
-            <p class="client-vacation-text">
-                W poniższych terminach przebywam na urlopie. W tych dniach rezerwacja wizyty nie
-                będzie możliwa.
-            </p>
-
-            <div class="client-vacation-list">
-                <div class="client-vacation-item" th:each="vacation : ${barberVacations}">
-                    <strong th:text="${vacation.barber.fullName}">
-                        FRODO Krzysztof
-                    </strong>
-
-                    <span>
-                od
-                <span th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">
-                    10.06.2026
-                </span>
-                do
-                <span th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">
-                    16.06.2026
-                </span>
-            </span>
+                        <button type="submit" class="bk-slot">
+                            <span class="bk-slot__time" th:text="${#temporals.format(time, 'HH:mm')}">10:00</span>
+                            <span class="bk-slot__cta">Zarezerwuj</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
 
     </section>
 </div>
+
+<script>
+    document.querySelectorAll('.bk-slot-form').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            var time = this.querySelector('input[name="time"]').value;
+            var date = this.querySelector('input[name="date"]').value;
+            if (!confirm('Zarezerwować wizytę na ' + date + ' o ' + time + '?')) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
