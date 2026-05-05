@@ -5,13 +5,6 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
-<div th:if="${successMessage}" class="alert alert-success text-center">
-    <span th:text="${successMessage}"></span>
-</div>
-
-<div th:if="${errorMessage}" class="alert alert-danger text-center">
-    <span th:text="${errorMessage}"></span>
-</div>
 
 <div class="container mt-4">
     <div class="dashboard-card p-4">

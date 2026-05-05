@@ -6,10 +6,6 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
 
-<div th:if="${errorMessage}" class="alert alert-danger text-center">
-    <span th:text="${errorMessage}"></span>
-</div>
-
 <div class="container-fluid my-5 dashboard-wide">
     <div class="row g-4 align-items-stretch">
         <h3 style="text-align: center" class="mb-3">Moje wizyty</h3>
