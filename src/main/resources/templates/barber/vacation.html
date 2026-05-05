@@ -1,29 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
-    <title>Moje urlopy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
-          rel="stylesheet">
-</head>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Moje urlopy – Frodo Barber')}"></head>
 <body class="vacation-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
-<div th:if="${successMessage}" class="alert alert-success text-center">
-    <span th:text="${successMessage}"></span>
-</div>
-
-<div th:if="${errorMessage}" class="alert alert-danger text-center">
-    <span th:text="${errorMessage}"></span>
-</div>
 
 <main class="vacation-wrapper">
 
@@ -34,8 +15,6 @@
             Dodaj termin, w którym nie przyjmujesz klientów. W wybrane dni system automatycznie zablokuje możliwość rezerwacji wizyty.
         </p>
     </section>
-
-    <div th:replace="~{fragments/flash :: flash}"></div>
 
     <section class="vacation-grid">
 

@@ -1,0 +1,24 @@
+.booking-control {
+    border-radius: var(--r12);
+    border: 1px solid rgba(199, 168, 107, .35) !important;
+    background: rgba(0, 0, 0, .28) !important;
+    color: #f6f0e4;
+    padding: 12px;
+}
+
+.booking-control:focus {
+    border-color: rgba(199, 168, 107, .55);
+    box-shadow: 0 0 0 .25rem rgba(199, 168, 107, .18);
+    background: rgba(10, 10, 12, .62);
+}
+
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+    filter: invert(75%) sepia(35%) saturate(600%) hue-rotate(5deg) brightness(150%);
+}

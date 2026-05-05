@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/client")
@@ -54,10 +55,11 @@ public class ClientController {
 
         ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi."));
 
-        String validationResult = bookingService.checkAppointmentValidation(date, time, client, redirectAttributes);
+        Optional<String> validationError = bookingService.validateClientBooking(date, time, client);
 
-        if (validationResult != null) {
-            return validationResult;
+        if (validationError.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", validationError.get());
+            return "redirect:/client/dashboard";
         }
 
         bookingService.saveAppointment(barber, client, startTime, serviceItem);

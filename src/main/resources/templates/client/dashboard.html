@@ -1,155 +1,232 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
-    <title>Panel Klienta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
-          rel="stylesheet">
-</head>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Panel klienta – Frodo Barber')}"></head>
 <body class="dashboard-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
 
-<div th:if="${errorMessage}" class="alert alert-danger text-center">
-    <span th:text="${errorMessage}"></span>
+<div class="container-fluid my-4 dashboard-wide">
+    <div class="bk-wrap">
+        <section class="bk-card">
+
+            <header class="bk-header">
+                <span class="bk-eyebrow">Twoje wizyty</span>
+                <h1 class="bk-title">Moje wizyty</h1>
+                <p class="bk-sub">Sprawdź status swoich nadchodzących i wcześniejszych wizyt.</p>
+            </header>
+
+            <div th:if="${#lists.isEmpty(appointments)}" class="bk-empty">
+                <i class="far fa-calendar"></i>
+                <span>Nie masz jeszcze żadnych wizyt. Wybierz usługę i zarezerwuj dogodny termin.</span>
+            </div>
+
+            <ul th:if="${!#lists.isEmpty(appointments)}" class="bk-appt-list">
+                <li th:each="appointment : ${appointments}" class="bk-appt">
+                    <div class="bk-appt__date">
+                        <span class="bk-appt__day"
+                              th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy')}">01.01.2026</span>
+                        <span class="bk-appt__time"
+                              th:text="${#temporals.format(appointment.startTime, 'HH:mm')}">10:00</span>
+                    </div>
+
+                    <div class="bk-appt__info">
+                        <div class="bk-appt__service" th:text="${appointment.service.name}">Strzyżenie</div>
+                        <div class="bk-appt__meta">
+                            <span><i class="fas fa-coins"></i> <span th:text="${appointment.service.price} + ' zł'">60 zł</span></span>
+                            <span><i class="far fa-clock"></i> <span th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
+                            <span><i class="far fa-user"></i> <span th:text="${appointment.barber.fullName}">Frodo</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bk-appt__status">
+                        <span class="bk-status"
+                              th:classappend="' bk-status--' + ${#strings.toLowerCase(appointment.status)}"
+                              th:text="${appointment.status.plTranslation}">BOOKED</span>
+                    </div>
+                </li>
+            </ul>
+
+        </section>
+    </div>
 </div>
 
-<div class="container-fluid my-5 dashboard-wide">
-    <div class="row g-4 align-items-stretch">
-        <h3 style="text-align: center">Moje wizyty</h3>
-        <div class="dashboard-card">
-            <span th:if="${#lists.isEmpty(appointments)}">Nie masz jeszcze żadnej umówionej wizyty.</span>
-            <table class="table table-dark table-responsive" th:if="${!#lists.isEmpty(appointments)}">
-                <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Godzina</th>
-                    <th>Usługa</th>
-                    <th>Koszt</th>
-                    <th>Czas</th>
-                    <th>Barber</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="appointment : ${appointments}">
-                    <td th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy')}"></td>
-                    <td th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></td>
-                    <td th:text="${appointment.service.name}"></td>
-                    <td th:text="${appointment.service.price} + 'zł'"></td>
-                    <td th:text="${appointment.service.durationMinutes} + 'min'"></td>
-                    <td th:text="${appointment.barber.fullName}"></td>
-                    <td th:text="${appointment.status}"></td>
-                </tr>
-                </tbody>
-            </table>
+<div class="container-fluid my-4 dashboard-wide"
+     th:if="${barberVacations != null and !#lists.isEmpty(barberVacations)}">
+    <div class="client-vacation-alert">
+
+        <h3 class="client-vacation-title">Niedostępność barbera</h3>
+
+        <p class="client-vacation-text">
+            W poniższych terminach przebywam na urlopie. W tych dniach rezerwacja wizyty nie
+            będzie możliwa.
+        </p>
+
+        <div class="client-vacation-list">
+            <div class="client-vacation-item" th:each="vacation : ${barberVacations}">
+                <strong th:text="${vacation.barber.fullName}">FRODO Krzysztof</strong>
+
+                <span>
+                    od
+                    <span th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">10.06.2026</span>
+                    do
+                    <span th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">16.06.2026</span>
+                </span>
+            </div>
         </div>
+
     </div>
 </div>
 
 <div class="container-fluid my-4 dashboard-wide">
-    <div class="booking-card">
+    <div class="bk-wrap">
+        <section class="bk-card">
 
-        <div class="booking-head">
-            <h1 style="text-align: center" class="booking-title">Wybierz usługę i datę</h1>
-        </div>
+            <header class="bk-header">
+                <span class="bk-eyebrow">Rezerwacja</span>
+                <h1 class="bk-title">Umów wizytę</h1>
+                <p class="bk-sub">Wybierz usługę, dzień i dogodną godzinę</p>
+            </header>
 
-        <div class="client-vacation-alert"
-             th:if="${barberVacations != null and !#lists.isEmpty(barberVacations)}">
+            <section class="bk-section">
+                <h2 class="bk-section-title">Usługa</h2>
 
-            <h3 class="client-vacation-title">Niedostępność barbera</h3>
-
-            <p class="client-vacation-text">
-                W poniższych terminach przebywam na urlopie. W tych dniach rezerwacja wizyty nie
-                będzie możliwa.
-            </p>
-
-            <div class="client-vacation-list">
-                <div class="client-vacation-item" th:each="vacation : ${barberVacations}">
-                    <strong th:text="${vacation.barber.fullName}">
-                        FRODO Krzysztof
-                    </strong>
-
-                    <span>
-                od
-                <span th:text="${#temporals.format(vacation.startDate, 'dd.MM.yyyy')}">
-                    10.06.2026
-                </span>
-                do
-                <span th:text="${#temporals.format(vacation.endDate, 'dd.MM.yyyy')}">
-                    16.06.2026
-                </span>
-            </span>
-                </div>
-            </div>
-        </div>
-
-        <form method="get" th:action="@{/client/dashboard}" class="booking-form">
-            <div class="booking-grid">
-
-                <div class="booking-field">
-                    <label class="pick-label">Usługa</label>
-                    <select class="form-select booking-control" name="serviceId" required>
-                        <option value="" disabled hidden th:selected="${selectedServiceId == null}">
-                            Wybierz na jaką usługę chcesz się zapisać...
-                        </option>
-                        <option th:each="service : ${services}"
-                                th:value="${service.id}"
-                                th:selected="${service.id == selectedServiceId}"
-                                th:text="${service.name + ' - ' + service.price + ' zł (' + service.durationMinutes + ' min)'}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="booking-field">
-                    <label class="pick-label" for="dateInput">Data</label>
-                    <input id="dateInput"
-                           class="form-control booking-control"
-                           type="date"
-                           name="date"
+                <form method="get" th:action="@{/client/dashboard}" class="bk-service-form">
+                    <input type="hidden" name="date"
                            th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
-                </div>
 
-                <div class="booking-actions">
-                    <button type="submit" class="btn btn-gold w-100">Pokaż wolne godziny</button>
-                </div>
+                    <div class="bk-service-grid">
+                        <button type="submit"
+                                th:each="service : ${services}"
+                                name="serviceId"
+                                th:value="${service.id}"
+                                class="bk-service"
+                                th:classappend="${service.id == selectedServiceId} ? ' is-active' : ''">
+                            <span class="bk-service__check" aria-hidden="true">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="bk-service__name" th:text="${service.name}">Strzyżenie</span>
+                            <span class="bk-service__meta">
+                                <span class="bk-service__duration">
+                                    <i class="far fa-clock"></i>
+                                    <span th:text="${service.durationMinutes} + ' min'">30 min</span>
+                                </span>
+                                <span class="bk-service__price" th:text="${service.price} + ' zł'">60 zł</span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </section>
 
+            <section class="bk-section">
+                <h2 class="bk-section-title">Data</h2>
+
+                <form method="get" th:action="@{/client/dashboard}" class="bk-date-form">
+                    <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
+
+                    <div class="bk-date-row">
+                        <label class="bk-date-field">
+                            <span class="bk-date-label">
+                                <i class="far fa-calendar"></i> Wybierz dzień
+                            </span>
+                            <input type="date"
+                                   name="date"
+                                   class="bk-date-input"
+                                   th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
+                        </label>
+                        <button type="submit" class="btn btn-gold bk-date-submit">
+                            <i class="far fa-calendar-check"></i>
+                            <span>Pokaż terminy</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="bk-summary-bar">
+                <div class="bk-summary__item">
+                    <span class="bk-summary__label">Usługa</span>
+                    <strong class="bk-summary__value">
+                        <th:block th:if="${selectedServiceId == null}">—</th:block>
+                        <th:block th:each="s : ${services}"
+                                  th:if="${s.id == selectedServiceId}"
+                                  th:text="${s.name}"></th:block>
+                    </strong>
+                </div>
+                <div class="bk-summary__item">
+                    <span class="bk-summary__label">Dzień</span>
+                    <strong class="bk-summary__value"
+                            th:text="${selectedDate != null ? #temporals.format(selectedDate, 'dd.MM.yyyy') : '—'}">—</strong>
+                </div>
+                <div class="bk-summary__item">
+                    <span class="bk-summary__label">Barber</span>
+                    <strong class="bk-summary__value" th:text="${barberName != null ? barberName : '—'}">—</strong>
+                </div>
+                <div class="bk-summary__item">
+                    <span class="bk-summary__label">Godziny</span>
+                    <strong class="bk-summary__value">08:00 – 18:00</strong>
+                </div>
             </div>
-        </form>
 
-        <div class="alert booking-alert" th:if="${selectedServiceId != null and #lists.isEmpty(availableSlots)}">
-            Brak wolnych terminów na ten dzień.
-        </div>
+            <section class="bk-section">
+                <h2 class="bk-section-title">Godzina</h2>
 
-        <div class="slots" th:if="${!#lists.isEmpty(availableSlots)}">
-            <div style="text-align: center" class="slots-title">Dostępne godziny</div>
-
-            <div class="slots-grid">
-                <div class="slot" th:each="time : ${availableSlots}">
-                    <div class="slot-time" th:text="${time}"></div>
-
-                    <form method="post" th:action="@{/client/book}">
-                        <input type="hidden" name="date" th:value="${selectedDate}">
-                        <input type="hidden" name="time" th:value="${time}">
-                        <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
-                        <button type="submit" class="btn btn-ink btn-sm w-100">Zarezerwuj</button>
-                    </form>
+                <div th:if="${selectedServiceId == null}" class="bk-empty">
+                    <i class="far fa-hand-pointer"></i>
+                    <span>Najpierw wybierz usługę, aby zobaczyć dostępne godziny.</span>
                 </div>
-            </div>
-        </div>
 
+                <div th:if="${selectedServiceId != null and selectedDate == null}" class="bk-empty">
+                    <i class="far fa-calendar"></i>
+                    <span>Wybierz dzień, aby zobaczyć dostępne godziny.</span>
+                </div>
+
+                <div th:if="${selectedServiceId != null and selectedDate != null and #lists.isEmpty(availableSlots)}"
+                     class="bk-empty bk-empty--warn">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>Brak wolnych terminów na wybrany dzień.</span>
+                </div>
+
+                <div th:if="${selectedServiceId != null and selectedDate != null and !#lists.isEmpty(availableSlots)}">
+                    <p class="bk-slots-hint">
+                        <i class="far fa-hand-pointer"></i>
+                        Kliknij godzinę, aby zarezerwować — pojawi się okno potwierdzenia.
+                    </p>
+
+                    <div class="bk-slots">
+                        <form th:each="time : ${availableSlots}"
+                              method="post"
+                              th:action="@{/client/book}"
+                              class="bk-slot-form">
+                            <input type="hidden" name="date"
+                                   th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
+                            <input type="hidden" name="time"
+                                   th:value="${#temporals.format(time, 'HH:mm')}">
+                            <input type="hidden" name="serviceId" th:value="${selectedServiceId}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                            <button type="submit" class="bk-slot">
+                                <span class="bk-slot__time" th:text="${#temporals.format(time, 'HH:mm')}">10:00</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </section>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.bk-slot-form').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            var time = this.querySelector('input[name="time"]').value;
+            var date = this.querySelector('input[name="date"]').value;
+            if (!confirm('Zarezerwować wizytę na ' + date + ' o ' + time + '?')) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 

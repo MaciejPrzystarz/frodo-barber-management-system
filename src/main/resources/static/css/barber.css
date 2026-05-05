@@ -1,0 +1,702 @@
+.barber-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.barber-toolbar-title {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.barber-toolbar-form {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.barber-toolbar-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .barber-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .barber-toolbar-title {
+        text-align: center;
+    }
+
+    .barber-toolbar-form {
+        width: 100%;
+    }
+
+    .barber-toolbar-field {
+        flex-wrap: wrap;
+    }
+
+    .barber-toolbar-field .form-control {
+        flex: 1 1 100%;
+    }
+
+    .barber-toolbar-field .btn {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+    }
+}
+
+.barber-tile-btn {
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #f5f5f5;
+    border: 1px solid rgba(201, 160, 74, 0.55);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    font-weight: 700;
+    font-size: 1.15rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.barber-tile-btn i {
+    font-size: 1.9rem;
+    color: #c9a04a;
+}
+
+.barber-tile-btn:hover {
+    transform: translateY(-1px);
+    border-color: #c9a04a;
+    color: #fff;
+}
+
+.barber-tile-btn span {
+    text-align: center;
+    line-height: 1.3;
+}
+
+.my-week-page {
+    max-width: 1600px;
+    margin: 48px auto;
+    padding: 0 20px;
+}
+
+.week-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.week-title-box h1 {
+    color: rgba(246, 240, 228, .96);
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    margin: 0 0 8px;
+}
+
+.week-title-box p {
+    color: var(--muted);
+    margin: 0;
+}
+
+.week-nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.week-nav a {
+    color: var(--brass);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.week-range {
+    color: rgba(246, 240, 228, .95);
+    border: 1px solid rgba(199, 168, 107, .28);
+    border-radius: 999px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, .04);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(199, 168, 107, .18);
+    border-radius: 22px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .22);
+    padding: 26px 20px;
+    text-align: center;
+}
+
+.summary-label {
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.summary-value {
+    color: rgba(246, 240, 228, .96);
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.status-done {
+    background: rgba(34, 197, 94, .12);
+    border: 1px solid rgba(34, 197, 94, .30);
+    color: #86efac;
+}
+
+.status-booked {
+    background: rgba(59, 130, 246, .12);
+    border: 1px solid rgba(59, 130, 246, .30);
+    color: #93c5fd;
+}
+
+.status-cancelled {
+    background: rgba(239, 68, 68, .12);
+    border: 1px solid rgba(239, 68, 68, .30);
+    color: #fca5a5;
+}
+
+@media (max-width: 992px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .week-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.week-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(180px, 1fr));
+    gap: 0;
+    margin-top: 28px;
+    border: 1px solid rgba(199, 168, 107, .22);
+    border-radius: 20px;
+    overflow-x: auto;
+    background: rgba(255, 255, 255, .04);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .25);
+}
+
+.calendar-day {
+    min-width: 180px;
+    min-height: 620px;
+    padding: 18px 10px;
+    border-right: 1px solid rgba(199, 168, 107, .18);
+    background: rgba(255, 255, 255, .035);
+}
+
+.calendar-day:last-child {
+    border-right: none;
+}
+
+.calendar-day.today {
+    background: rgba(199, 168, 107, .08);
+    box-shadow: inset 0 0 0 1px rgba(199, 168, 107, .35);
+}
+
+.calendar-day-header {
+    text-align: center;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(199, 168, 107, .16);
+}
+
+.calendar-day-header h2 {
+    margin: 0 0 6px;
+    color: rgba(246, 240, 228, .96);
+    font-size: .9rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.calendar-day-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.calendar-day-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+    margin-bottom: 18px;
+    color: var(--muted);
+    font-size: .78rem;
+}
+
+.calendar-day-stats strong {
+    color: rgba(246, 240, 228, .94);
+}
+
+.calendar-appointments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.calendar-appointment {
+    padding: 10px;
+    border-radius: 14px;
+    background: rgba(12, 12, 12, .34);
+    border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.calendar-appointment-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.calendar-time {
+    color: rgba(246, 240, 228, .95);
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.calendar-status {
+    padding: 3px 7px;
+    border-radius: 999px;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+}
+
+.calendar-client {
+    color: rgba(246, 240, 228, .96);
+    font-size: .82rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.calendar-service {
+    color: var(--muted);
+    font-size: .76rem;
+    line-height: 1.35;
+}
+
+.calendar-details {
+    color: rgba(233, 230, 223, .52);
+    font-size: .72rem;
+    margin-top: 4px;
+}
+
+.appointment-done {
+    border-color: rgba(34, 197, 94, .22);
+}
+
+.appointment-booked {
+    border-color: rgba(59, 130, 246, .24);
+}
+
+.appointment-cancelled {
+    border-color: rgba(239, 68, 68, .24);
+    opacity: .72;
+}
+
+.calendar-empty {
+    margin-top: 16px;
+    padding: 18px 10px;
+    border-radius: 14px;
+    text-align: center;
+    color: rgba(233, 230, 223, .45);
+    background: rgba(0, 0, 0, .18);
+    font-size: .8rem;
+}
+
+@media (max-width: 1200px) {
+    .week-calendar {
+        grid-template-columns: repeat(7, 210px);
+    }
+}
+
+@media (max-width: 768px) {
+    .week-calendar {
+        display: grid;
+        grid-template-columns: 1fr;
+        overflow-x: visible;
+    }
+
+    .calendar-day {
+        min-width: 0;
+        min-height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(199, 168, 107, .18);
+        padding: 18px 14px;
+    }
+
+    .calendar-day:last-child {
+        border-bottom: none;
+    }
+
+    .calendar-day-header h2 {
+        font-size: 1rem;
+    }
+
+    .calendar-day-stats {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+.best-day-star {
+    color: var(--brass);
+    font-size: .85rem;
+    margin-left: 6px;
+    filter: drop-shadow(0 0 8px rgba(199, 168, 107, .45));
+}
+
+.vacation-page {
+    color: #f5f0e8;
+}
+
+.vacation-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 20px 72px;
+}
+
+.vacation-header {
+    margin-bottom: 32px;
+}
+
+.vacation-eyebrow {
+    margin-bottom: 10px;
+    color: #c9a66b;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.vacation-title {
+    margin-bottom: 12px;
+    color: #ffffff;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.vacation-description {
+    max-width: 720px;
+    color: rgba(245, 240, 232, 0.72);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.vacation-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.vacation-card {
+    border: 1px solid rgba(201, 166, 107, 0.22);
+    border-radius: 24px;
+    background: rgba(24, 24, 24, 0.92);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+}
+
+.vacation-card-body {
+    padding: 28px;
+}
+
+.vacation-card-title {
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.vacation-card-text {
+    margin-bottom: 24px;
+    color: rgba(245, 240, 232, 0.66);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.vacation-form {
+    display: grid;
+    gap: 18px;
+}
+
+.vacation-form-group {
+    display: grid;
+    gap: 8px;
+}
+
+.vacation-label {
+    color: rgba(245, 240, 232, 0.82);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.vacation-input {
+    width: 100%;
+    border: 1px solid rgba(245, 240, 232, 0.16);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    padding: 13px 14px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vacation-input:focus {
+    border-color: rgba(201, 166, 107, 0.72);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 4px rgba(201, 166, 107, 0.14);
+}
+
+.vacation-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+.vacation-button {
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c9a66b, #e2c48b);
+    color: #16120b;
+    padding: 13px 18px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.vacation-button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+.vacation-button:active {
+    transform: translateY(0);
+}
+
+.vacation-list {
+    display: grid;
+    gap: 14px;
+}
+
+.vacation-empty {
+    border: 1px dashed rgba(245, 240, 232, 0.18);
+    border-radius: 18px;
+    padding: 22px;
+    color: rgba(245, 240, 232, 0.62);
+    background: rgba(255, 255, 255, 0.04);
+    text-align: center;
+}
+
+.vacation-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    border: 1px solid rgba(245, 240, 232, 0.1);
+    border-radius: 18px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.vacation-item-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.vacation-date-box {
+    display: grid;
+    gap: 2px;
+}
+
+.vacation-date-label {
+    color: rgba(245, 240, 232, 0.5);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.vacation-date-value {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.vacation-date-separator {
+    color: #c9a66b;
+    font-weight: 700;
+}
+
+.vacation-delete-form {
+    margin: 0;
+}
+
+.vacation-delete-button {
+    border: 1px solid rgba(255, 96, 96, 0.36);
+    border-radius: 999px;
+    background: rgba(255, 96, 96, 0.08);
+    color: #ffb4b4;
+    padding: 9px 14px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.vacation-delete-button:hover {
+    border-color: rgba(255, 96, 96, 0.7);
+    background: rgba(255, 96, 96, 0.14);
+    transform: translateY(-1px);
+}
+
+.vacation-note {
+    margin-top: 18px;
+    border-left: 3px solid #c9a66b;
+    border-radius: 14px;
+    background: rgba(201, 166, 107, 0.08);
+    color: rgba(245, 240, 232, 0.72);
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.vacation-page .alert {
+    border-radius: 18px;
+    border: 1px solid rgba(245, 240, 232, 0.14);
+    margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+    .vacation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vacation-wrapper {
+        padding-top: 36px;
+    }
+}
+
+@media (max-width: 560px) {
+    .vacation-card-body {
+        padding: 22px;
+    }
+
+    .vacation-item {
+        grid-template-columns: 1fr;
+    }
+
+    .vacation-delete-button {
+        width: 100%;
+    }
+}
+
+.appointment-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 12px 12px;
+}
+
+.appointment-card {
+    border: 1px solid rgba(201, 160, 74, 0.45);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.appointment-card-time {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #c9a04a;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.appointment-card-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+.appointment-card-row:last-of-type {
+    border-bottom: none;
+}
+
+.appointment-card-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.appointment-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.appointment-card-form .form-select {
+    width: 100%;
+}
+
+.appointment-card-form .btn {
+    width: 100%;
+}

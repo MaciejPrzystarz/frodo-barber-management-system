@@ -1,29 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpg}">
-    <title>Panel Barbera</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap"
-          rel="stylesheet">
-</head>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Wizyty oczekujące – Frodo Barber')}"></head>
 <body class="dashboard-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/flash :: flash}"></div>
-<div th:if="${successMessage}" class="alert alert-success text-center">
-    <span th:text="${successMessage}"></span>
-</div>
-
-<div th:if="${errorMessage}" class="alert alert-danger text-center">
-    <span th:text="${errorMessage}"></span>
-</div>
 
 
 <div class="container mt-4">
@@ -32,9 +13,13 @@
 
             <div class="dashboard-card text-center mx-auto">
                 <h3 class="p-4">Lista użytkowników oczekujących na potwierdzenie</h3>
-                <div class="d-flex align-items-center mb-4 position-relative">
-                    <table class="table table-dark table-sm text-center align-middle"
-                           th:if="${!#lists.isEmpty(pendingAppointments)}">
+
+                <div class="alert booking-alert text-center mx-3" th:if="${#lists.isEmpty(pendingAppointments)}">
+                    Brak wizyt oczekujących na potwierdzenie.
+                </div>
+
+                <div class="table-responsive d-none d-md-block" th:if="${!#lists.isEmpty(pendingAppointments)}">
+                    <table class="table table-dark table-sm text-center align-middle">
                         <thead>
                         <tr>
                             <th>Imię Nazwisko</th>
@@ -75,6 +60,45 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="appointment-cards d-md-none" th:if="${!#lists.isEmpty(pendingAppointments)}">
+                    <article class="appointment-card" th:each="appointment : ${pendingAppointments}">
+                        <div class="appointment-card-time">
+                            <span th:text="${#temporals.format(appointment.startTime, 'dd.MM')}"></span>
+                            <span> • </span>
+                            <span th:text="${#temporals.format(appointment.startTime, 'HH:mm')}"></span>
+                            <span> – </span>
+                            <span th:text="${#temporals.format(appointment.endTime, 'HH:mm')}"></span>
+                        </div>
+                        <div class="appointment-card-row">
+                            <span class="appointment-card-label">Klient</span>
+                            <span th:text="${appointment.client.fullName}"></span>
+                        </div>
+                        <div class="appointment-card-row">
+                            <span class="appointment-card-label">E-mail</span>
+                            <span th:text="${appointment.client.email}"></span>
+                        </div>
+                        <div class="appointment-card-row">
+                            <span class="appointment-card-label">Telefon</span>
+                            <span th:text="|+48 ${appointment.client.phoneNumber}|"></span>
+                        </div>
+                        <div class="appointment-card-row">
+                            <span class="appointment-card-label">Usługa</span>
+                            <span th:text="${appointment.service.name}"></span>
+                        </div>
+                        <form th:action="@{'/barber/appointments/' + ${appointment.id}}" method="post"
+                              class="appointment-card-form">
+                            <select class="form-select booking-control text-center fw-bold" name="status" required>
+                                <option th:each="status : ${appointmentStatuses}"
+                                        th:value="${status}"
+                                        th:selected="${status == appointment.status}"
+                                        th:text="${status.plTranslation}">
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-gold">Zapisz</button>
+                        </form>
+                    </article>
                 </div>
             </div>
 
