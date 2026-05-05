@@ -46,20 +46,17 @@
     <div class="row justify-content-center">
         <div class="col-xl-12 col-lg-11 col-md-12">
             <div class="dashboard-card text-center mx-auto">
-                <div class="d-flex align-items-center mb-4 position-relative">
-                    <h1 class="position-absolute start-50 translate-middle-x mb-0"
+                <div class="barber-toolbar mb-4">
+                    <h1 class="barber-toolbar-title mb-0"
                         th:text="|${#temporals.format(selectedDate, 'dd.MM')} - ${#temporals.dayOfWeekName(selectedDate)}|"></h1>
-                    <div class="ms-auto">
-                        <form method="get" th:action="@{/barber/dashboard}"
-                              class="d-flex align-items-center gap-1 flex-wrap">
-                            <div class="booking-field">
-                                <input id="date" class="form-control booking-control" type="date" name="date"
-                                       th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
-                                <button type="submit" class="btn btn-gold">Pokaż</button>
-                                <a th:href="@{/barber/dashboard}" class="btn btn-gold">Dziś</a>
-                            </div>
-                        </form>
-                    </div>
+                    <form method="get" th:action="@{/barber/dashboard}" class="barber-toolbar-form">
+                        <div class="booking-field barber-toolbar-field">
+                            <input id="date" class="form-control booking-control" type="date" name="date"
+                                   th:value="${selectedDate != null ? #temporals.format(selectedDate, 'yyyy-MM-dd') : ''}">
+                            <button type="submit" class="btn btn-gold">Pokaż</button>
+                            <a th:href="@{/barber/dashboard}" class="btn btn-gold">Dziś</a>
+                        </div>
+                    </form>
                 </div>
             </div>
 

@@ -1,3 +1,57 @@
+.barber-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.barber-toolbar-title {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.barber-toolbar-form {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.barber-toolbar-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .barber-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .barber-toolbar-title {
+        text-align: center;
+    }
+
+    .barber-toolbar-form {
+        width: 100%;
+    }
+
+    .barber-toolbar-field {
+        flex-wrap: wrap;
+    }
+
+    .barber-toolbar-field .form-control {
+        flex: 1 1 100%;
+    }
+
+    .barber-toolbar-field .btn {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+    }
+}
+
 .barber-tile-btn {
     width: 100%;
     min-height: 120px;
@@ -419,12 +473,32 @@
 
 @media (max-width: 768px) {
     .week-calendar {
-        display: flex;
-        overflow-x: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        overflow-x: visible;
     }
 
     .calendar-day {
-        min-width: 260px;
+        min-width: 0;
+        min-height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(199, 168, 107, .18);
+        padding: 18px 14px;
+    }
+
+    .calendar-day:last-child {
+        border-bottom: none;
+    }
+
+    .calendar-day-header h2 {
+        font-size: 1rem;
+    }
+
+    .calendar-day-stats {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
     }
 }
 
