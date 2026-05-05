@@ -1,19 +1,5 @@
-.card-glass {
-    border-radius: var(--r18);
-    padding: 26px 22px;
-    border: 1px solid var(--line);
-    background: radial-gradient(1200px 400px at 20% 0%, rgba(255, 255, 255, .06), transparent 55%),
-    linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02)),
-    linear-gradient(180deg, var(--card), var(--card2));
-    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, .06);
-}
-
 .dashboard-card {
     position: relative;
-}
-
-.booking-card {
-    padding: 22px;
 }
 
 .hero-shell {
@@ -23,7 +9,6 @@
 }
 
 .dashboard-card,
-.booking-card,
 .hero-shell {
     border-radius: var(--r18);
     border: 1px solid var(--line);
@@ -87,60 +72,3 @@
     background: rgba(199, 168, 107, .06)
 }
 
-.appointments-title {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #f5f5f5;
-}
-
-.slots {
-    margin-top: 16px
-}
-
-.slots-title {
-    color: rgba(233, 230, 223, .82);
-    font-weight: 600;
-    letter-spacing: .02em;
-    margin-bottom: 10px
-}
-
-.slots-grid {
-    display: grid;
-    grid-template-columns:repeat(6, minmax(120px, 1fr));
-    gap: 12px
-}
-
-@media (max-width: 1200px) {
-    .slots-grid {
-        grid-template-columns:repeat(4, minmax(120px, 1fr))
-    }
-}
-
-@media (max-width: 768px) {
-    .slots-grid {
-        grid-template-columns:repeat(2, minmax(120px, 1fr))
-    }
-}
-
-.slot {
-    border-radius: 16px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    background: rgba(0, 0, 0, .20);
-    box-shadow: var(--shadow-md);
-}
-
-.slot-time {
-    display: inline-flex;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-weight: 800;
-    letter-spacing: .04em;
-    color: #151316;
-    background: linear-gradient(180deg, rgba(199, 168, 107, .95), rgba(176, 141, 79, .95));
-    border: 1px solid rgba(199, 168, 107, .55);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, .28);
-    margin-bottom: 10px;
-}

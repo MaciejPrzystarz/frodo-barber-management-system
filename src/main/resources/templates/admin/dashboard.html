@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Panel administratora – Frodo Barber')}"></head>
 <body class="dashboard-page">
 
@@ -11,7 +11,7 @@
 
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
-                <h4 style="text-align: center">Lista wszystkich zarejestrowanych użytkowników</h4>
+                <h4 class="text-center">Lista wszystkich zarejestrowanych użytkowników</h4>
 
                 <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allUsers)}">
                     Brak zarejestrowanych użytkowników.
@@ -49,7 +49,7 @@
 
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
-                <h4 style="text-align: center">Lista wszystkich wizyt</h4>
+                <h4 class="text-center">Lista wszystkich wizyt</h4>
 
                 <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allAppointments)}">
                     Brak wizyt w systemie.
@@ -60,7 +60,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Client</th>
+                            <th>Klient</th>
                             <th>Barber</th>
                             <th>Data</th>
                             <th>Status</th>
@@ -82,7 +82,7 @@
 
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="dashboard-card">
-                <h4 style="text-align: center">Lista wszystkich usług</h4>
+                <h4 class="text-center">Lista wszystkich usług</h4>
 
                 <div class="alert booking-alert text-center" th:if="${#lists.isEmpty(allServices)}">
                     Brak zdefiniowanych usług.
@@ -94,16 +94,16 @@
                         <tr>
                             <th>ID</th>
                             <th>Nazwa</th>
-                            <th>cena</th>
-                            <th>ilość minut</th>
+                            <th>Cena</th>
+                            <th>Ilość minut</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="serviceItem : ${allServices}">
                             <td th:text="${serviceItem.id}"></td>
                             <td th:text="${serviceItem.name}"></td>
-                            <td th:text="${serviceItem.price} + 'zł'"></td>
-                            <td th:text="${serviceItem.durationMinutes} + 'min'"></td>
+                            <td th:text="${serviceItem.price} + ' zł'"></td>
+                            <td th:text="${serviceItem.durationMinutes} + ' min'"></td>
                         </tr>
                         </tbody>
                     </table>

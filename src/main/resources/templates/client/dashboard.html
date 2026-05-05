@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Panel klienta – Frodo Barber')}"></head>
 <body class="dashboard-page">
 
@@ -8,7 +8,7 @@
 
 <div class="container-fluid my-5 dashboard-wide">
     <div class="row g-4 align-items-stretch">
-        <h3 style="text-align: center" class="mb-3">Moje wizyty</h3>
+        <h3 class="mb-3 text-center">Moje wizyty</h3>
 
         <div class="dashboard-card">
             <div th:if="${#lists.isEmpty(appointments)}" class="bk-info">
