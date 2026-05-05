@@ -27,12 +27,12 @@ VALUES ('Jan Kowalski', '123456789'),
 
 INSERT INTO services (name, price, duration_minutes)
 VALUES ('strzyżenie maszynką', 60, 40),
-       ('strzyżenie nożyczkami + maszynka', 60, 60),
+       ('strzyżenie nożyczki + maszynka', 60, 60),
        ('strzyżenie włosów shaverem', 30, 20),
        ('strzyżenie brody', 50, 30),
-       ('combo - (maszynką + broda)', 100, 70),
-       ('combo v1 - (nożyczkami + broda)', 100, 90),
-       ('combo v2 - (włosy shaverem + strzyżenie broda)', 75, 60);
+       ('combo - maszynką + broda', 100, 70),
+       ('combo v1 - nożyczkami + broda', 100, 90),
+       ('combo v2 - włosy shaverem + strzyżenie broda', 75, 60);
 
 INSERT INTO appointments (client_id, barber_id, start_time, end_time, service_id, status)
 VALUES (3, 2, '2026-04-05T14:00:00', '2026-04-05T14:40:00', 1, 'BOOKED'),
