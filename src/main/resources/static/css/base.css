@@ -38,14 +38,14 @@ h1, h2, h3, h4, h5 .navbar-brand {
 }
 
 .dashboard-page,
-.home-page {
+.home-page,
+.vacation-page {
     min-height: 100vh;
     color: var(--text);
-    background: radial-gradient(1200px 700px at 15% 18%, rgba(199, 168, 107, .16), transparent 58%),
-    radial-gradient(900px 600px at 88% 20%, rgba(14, 58, 102, .18), transparent 56%),
-    radial-gradient(900px 650px at 55% 92%, rgba(122, 31, 43, .16), transparent 58%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, .02) 0 10px, rgba(0, 0, 0, .02) 10px 20px),
-    linear-gradient(135deg, var(--ink), var(--ink2) 48%, var(--ink));
+    background: radial-gradient(1200px 700px at 15% 20%, rgba(199, 168, 107, .25), transparent 55%),
+    radial-gradient(900px 600px at 85% 25%, rgba(14, 58, 102, .25), transparent 55%),
+    radial-gradient(800px 600px at 55% 85%, rgba(177, 31, 42, .18), transparent 55%),
+    linear-gradient(135deg, #0b0c0f, #14161b 45%, #0b0c0f);
 }
 
 .home-page {
@@ -59,7 +59,8 @@ h1, h2, h3, h4, h5 .navbar-brand {
 }
 
 .dashboard-page p, .dashboard-page label, .dashboard-page small,
-.home-page p, .home-page label, .home-page small {
+.home-page p, .home-page label, .home-page small,
+.vacation-page p, .vacation-page label, .vacation-page small {
     color: var(--muted);
 }
 
