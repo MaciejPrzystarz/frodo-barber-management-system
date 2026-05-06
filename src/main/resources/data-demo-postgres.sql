@@ -19,3 +19,12 @@ VALUES
     ('Client Nine', '999999999', 'client9@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW', 'CLIENT'),
     ('Client Ten', '101010101', 'client10@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW', 'CLIENT')
     ON CONFLICT (email) DO NOTHING;
+
+INSERT INTO services (name, price, duration_minutes)
+VALUES ('strzyżenie maszynką', 60, 40),
+       ('strzyżenie nożyczki + maszynka', 60, 60),
+       ('strzyżenie włosów shaverem', 30, 20),
+       ('strzyżenie brody', 50, 30),
+       ('combo - maszynką + broda', 100, 70),
+       ('combo v1 - nożyczkami + broda', 100, 90),
+       ('combo v2 - włosy shaverem + strzyżenie broda', 75, 60);
