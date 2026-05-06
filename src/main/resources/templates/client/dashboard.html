@@ -146,7 +146,7 @@
                 <div class="bk-summary__item">
                     <span class="bk-summary__label">Usługa</span>
                     <strong class="bk-summary__value">
-                        <th:block th:if="${selectedServiceId == null}">—</th:block>
+                        <th:block th:if="${selectedServiceId == null}">-</th:block>
                         <th:block th:each="s : ${services}"
                                   th:if="${s.id == selectedServiceId}"
                                   th:text="${s.name}"></th:block>
@@ -155,11 +155,11 @@
                 <div class="bk-summary__item">
                     <span class="bk-summary__label">Dzień</span>
                     <strong class="bk-summary__value"
-                            th:text="${selectedDate != null ? #temporals.format(selectedDate, 'dd.MM.yyyy') : '—'}">—</strong>
+                            th:text="${selectedDate != null ? #temporals.format(selectedDate, 'dd.MM.yyyy') : '-'}">-</strong>
                 </div>
                 <div class="bk-summary__item">
                     <span class="bk-summary__label">Barber</span>
-                    <strong class="bk-summary__value" th:text="${barberName != null ? barberName : '—'}">—</strong>
+                    <strong class="bk-summary__value" th:text="${barberName != null ? barberName : '-'}">-</strong>
                 </div>
                 <div class="bk-summary__item">
                     <span class="bk-summary__label">Godziny</span>
@@ -189,7 +189,7 @@
                 <div th:if="${selectedServiceId != null and selectedDate != null and !#lists.isEmpty(availableSlots)}">
                     <p class="bk-slots-hint">
                         <i class="far fa-hand-pointer"></i>
-                        Kliknij godzinę, aby zarezerwować — pojawi się okno potwierdzenia.
+                        Kliknij godzinę, aby zarezerwować - pojawi się okno potwierdzenia.
                     </p>
 
                     <div class="bk-slots">

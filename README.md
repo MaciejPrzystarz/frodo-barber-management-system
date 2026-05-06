@@ -10,11 +10,11 @@ Projekt typu MVP / portfolio, przygotowany pod deployment w kontenerze.
 
 - **Aplikacja:** https://frodo-barber-management-system.onrender.com
 - **Konta demo:**
-  - Admin — `admin1@demo.pl` / `admin123`
-  - Barber — `barber1@demo.pl` / `barber123`
-  - Klient — `client1@demo.pl` / `client123`
+  - Admin - `admin1@demo.pl` / `admin123`
+  - Barber - `barber1@demo.pl` / `barber123`
+  - Klient - `client1@demo.pl` / `client123`
 
-> Instancja na Renderze (free tier) usypia po okresie bezczynności — pierwsze żądanie po przerwie może uruchamiać się kilkadziesiąt sekund.
+> Instancja na Renderze (free tier) usypia po okresie bezczynności - pierwsze żądanie po przerwie może uruchamiać się kilkadziesiąt sekund.
 
 ---
 
@@ -36,13 +36,13 @@ Projekt typu MVP / portfolio, przygotowany pod deployment w kontenerze.
 ## Stack
 
 - **Java 21**
-- **Spring Boot 4.0.1** — Spring MVC, Spring Data JPA, Spring Security, Validation
-- **Thymeleaf** + `thymeleaf-extras-springsecurity6` — widoki SSR
+- **Spring Boot 4.0.1** - Spring MVC, Spring Data JPA, Spring Security, Validation
+- **Thymeleaf** + `thymeleaf-extras-springsecurity6` - widoki SSR
 - **PostgreSQL** (prod) / **H2** (dev, test)
 - **Bootstrap** + własne style CSS
 - **Lombok**
 - **Maven** + plugin Checkstyle (faza `validate`)
-- **JUnit 5 + Mockito + AssertJ** — testy jednostkowe wybranych reguł biznesowych w warstwie serwisowej
+- **JUnit 5 + Mockito + AssertJ** - testy jednostkowe wybranych reguł biznesowych w warstwie serwisowej
 - **Docker** (multi-stage: `maven:3.9-eclipse-temurin-21` → `eclipse-temurin:21-jre`)
 
 ---
@@ -51,9 +51,9 @@ Projekt typu MVP / portfolio, przygotowany pod deployment w kontenerze.
 
 Logika rezerwacji znajduje się w `BookingService`:
 
-- **Pierwsza wizyta klienta zapisywana jest ze statusem `PENDING`** — wymaga akceptacji barbera. Kolejne (po realizacji pierwszej) trafiają od razu jako `BOOKED`.
+- **Pierwsza wizyta klienta zapisywana jest ze statusem `PENDING`** - wymaga akceptacji barbera. Kolejne (po realizacji pierwszej) trafiają od razu jako `BOOKED`.
 - **Aktywne wizyty (`BOOKED`, `PENDING`) blokują sloty czasowe** w terminarzu barbera.
-- Wizyty w stanie `CANCELLED`, `REJECTED`, `DONE`, `DIDNT_SHOW_UP` **nie blokują dostępności** — czas znów jest wolny.
+- Wizyty w stanie `CANCELLED`, `REJECTED`, `DONE`, `DIDNT_SHOW_UP` **nie blokują dostępności** - czas znów jest wolny.
 - Klient może mieć maksymalnie **3 aktywne wizyty** jednocześnie.
 - Pomiędzy aktywnymi wizytami klienta wymagany jest odstęp **co najmniej 10 dni**.
 - Wizytę można umówić **najwcześniej 60 minut** od bieżącej chwili i **najpóźniej 45 dni** naprzód; rezerwacje wstecz są odrzucane.
@@ -96,7 +96,7 @@ src
 
 Wymagania: **JDK 21**, **Maven 3.9+** (lub wrapper).
 
-### Profil `dev` (domyślny) — H2 in-memory
+### Profil `dev` (domyślny) - H2 in-memory
 
 ```bash
 mvn spring-boot:run
@@ -108,7 +108,7 @@ mvn spring-boot:run
   - Użytkownik: `sa`, hasło: puste
 - Dane testowe ładowane z `src/main/resources/data-dev.sql`.
 
-### Profil `prod` — PostgreSQL
+### Profil `prod` - PostgreSQL
 
 Wymagane zmienne środowiskowe:
 
@@ -126,7 +126,7 @@ mvn clean package -DskipTests
 java -Dspring.profiles.active=prod -jar target/frodo-barber-management-system-0.0.1-SNAPSHOT.jar
 ```
 
-W profilu prod `ddl-auto=update` — schemat zarządzany przez Hibernate (planowana migracja na Flyway/Liquibase, patrz „Status projektu”).
+W profilu prod `ddl-auto=update` - schemat zarządzany przez Hibernate (planowana migracja na Flyway/Liquibase, patrz „Status projektu”).
 
 ### Docker
 
@@ -148,9 +148,9 @@ docker run --rm -p 8080:8080 \
 mvn test
 ```
 
-- **JUnit 5 + Mockito + AssertJ** — unit testy wybranych reguł biznesowych w warstwie serwisowej (`BookingServiceTest`, `AppointmentServiceTest`, `VacationServiceTest`, `WeeklyStatsServiceTest`).
-- Repozytoria są mockowane — testy nie wymagają działającej bazy.
-- Dodatkowo jeden test podnosi kontekst Springa (`FrodoBarberManagementSystemApplicationTests`) — używa profilu `test` (H2 w trybie PostgreSQL).
+- **JUnit 5 + Mockito + AssertJ** - unit testy wybranych reguł biznesowych w warstwie serwisowej (`BookingServiceTest`, `AppointmentServiceTest`, `VacationServiceTest`, `WeeklyStatsServiceTest`).
+- Repozytoria są mockowane - testy nie wymagają działającej bazy.
+- Dodatkowo jeden test podnosi kontekst Springa (`FrodoBarberManagementSystemApplicationTests`) - używa profilu `test` (H2 w trybie PostgreSQL).
 - Testy integracyjne end-to-end są w planach (patrz „Status projektu”).
 
 ---
@@ -166,11 +166,11 @@ mvn test
 
 ## Status projektu
 
-- **MVP / portfolio project** — aplikacja przygotowana pod deployment, zawiera kluczową logikę domenową i podstawowe testy jednostkowe.
+- **MVP / portfolio project** - aplikacja przygotowana pod deployment, zawiera kluczową logikę domenową i podstawowe testy jednostkowe.
 - Stabilne: rezerwacje, role, statusy wizyt, urlopy, podsumowania tygodniowe, dwuprofilowa konfiguracja bazy.
 - Planowane:
   - powiadomienia mailowe (potwierdzenie/odrzucenie wizyty),
   - lepszy widok kalendarza dla barbera i klienta,
-  - więcej testów — w szczególności **testy integracyjne** (Spring Boot Test + Testcontainers/PostgreSQL),
+  - więcej testów - w szczególności **testy integracyjne** (Spring Boot Test + Testcontainers/PostgreSQL),
   - migracje schematu przez **Flyway** lub **Liquibase** zamiast `ddl-auto=update`,
   - dalsze porządkowanie kodu i rozbudowa walidacji biznesowej
