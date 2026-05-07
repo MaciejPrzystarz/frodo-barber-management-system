@@ -52,20 +52,20 @@ public class AdminController {
     public String editUser(@PathVariable Long id, Model model) {
         AdminUserEditDto userEditDto = authService.adminUserToDto(id);
         model.addAttribute("userForm", userEditDto);
-        return "/admin/user-edit";
+        return "admin/user-edit";
     }
 
     @PostMapping("/users/edit")
     public String editUserForm(@Valid @ModelAttribute("userForm") AdminUserEditDto adminUserEditDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "/admin/user-edit";
+            return "admin/user-edit";
         }
         try {
             authService.updateUser(adminUserEditDto);
         } catch (IllegalStateException e) {
             bindingResult.rejectValue("email", "email.taken", e.getMessage());
-            return "/admin/user-edit";
+            return "admin/user-edit";
         }
 
         return "redirect:/admin/dashboard";

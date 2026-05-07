@@ -31,7 +31,7 @@ public class AuthController {
     @GetMapping("/register")
     String register(Model model) {
         model.addAttribute("userForm", new UserFormDto());
-        return "/auth/register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
@@ -42,7 +42,7 @@ public class AuthController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/auth/register";
+            return "auth/register";
         }
 
         User user = authService.dtoToUser(userFormDto);
