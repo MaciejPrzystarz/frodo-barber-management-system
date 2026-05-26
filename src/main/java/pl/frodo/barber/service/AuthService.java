@@ -39,7 +39,6 @@ public class AuthService {
         dto.setFullName(user.getFullName());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setEmail(user.getEmail());
-        dto.setNewPassword(user.getPassword());
         return dto;
     }
 
