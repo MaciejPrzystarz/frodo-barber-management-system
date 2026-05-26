@@ -36,6 +36,8 @@ public class AdminController {
         this.serviceRepository = serviceRepository;
     }
 
+    /* !!! Wrócić i zrobić porządny panel admina, póki co ogarnąć rzeczy ważniejsze !!! */
+
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         List<User> allUsers = userRepository.findAll();

@@ -54,7 +54,6 @@ public class BarberController {
         this.appointmentService = appointmentService;
     }
 
-
     @GetMapping("/vacation")
     public String vacation(Authentication authentication, Model model) {
         String email = authentication.getName();
