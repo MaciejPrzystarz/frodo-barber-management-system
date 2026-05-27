@@ -13,7 +13,7 @@
             <header class="bk-header">
                 <span class="bk-eyebrow">Twoje wizyty</span>
                 <h1 class="bk-title">Moje wizyty</h1>
-                <p class="bk-sub">Sprawdź status swoich nadchodzących i wcześniejszych wizyt.</p>
+                <p class="bk-sub">Sprawdź status swoich nadchodzących wizyt.</p>
             </header>
 
             <div th:if="${#lists.isEmpty(appointments)}" class="bk-empty">
@@ -34,8 +34,10 @@
                         <div class="bk-appt__service" th:text="${appointment.service.name}">Strzyżenie</div>
                         <div class="bk-appt__meta">
                             <span><i class="fas fa-coins"></i> <span th:text="${appointment.service.price} + ' zł'">60 zł</span></span>
-                            <span><i class="far fa-clock"></i> <span th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
-                            <span><i class="far fa-user"></i> <span th:text="${appointment.barber.fullName}">Frodo</span></span>
+                            <span><i class="far fa-clock"></i> <span
+                                    th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
+                            <span><i class="far fa-user"></i> <span
+                                    th:text="${appointment.barber.fullName}">Frodo</span></span>
                         </div>
                     </div>
 
@@ -126,9 +128,6 @@
 
                     <div class="bk-date-row">
                         <label class="bk-date-field">
-                            <span class="bk-date-label">
-                                <i class="far fa-calendar"></i> Wybierz dzień
-                            </span>
                             <input type="date"
                                    name="date"
                                    class="bk-date-input"
@@ -183,7 +182,7 @@
                 <div th:if="${selectedServiceId != null and selectedDate != null and #lists.isEmpty(availableSlots)}"
                      class="bk-empty bk-empty--warn">
                     <i class="fas fa-triangle-exclamation"></i>
-                    <span>Brak wolnych terminów na wybrany dzień.</span>
+                    <span th:text="'Brak wolnych terminów na ' + ${#temporals.format(selectedDate)}"></span>
                 </div>
 
                 <div th:if="${selectedServiceId != null and selectedDate != null and !#lists.isEmpty(availableSlots)}">

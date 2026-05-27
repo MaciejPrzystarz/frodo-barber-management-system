@@ -22,6 +22,7 @@ import pl.frodo.barber.service.VacationService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,13 +68,32 @@ public class ClientController {
         return "redirect:/client/dashboard?date=" + date;
     }
 
+    @GetMapping("/my-profile")
+    public String profile(Authentication authentication, Model model) {
+
+        String email = authentication.getName();
+        User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
+        List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeDesc(client);
+
+        model.addAttribute("appointments", appointments);
+
+        return "client/my-profile";
+    }
+
     @GetMapping("/dashboard")
     public String dashboard(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                             @RequestParam(required = false) Long serviceId, Model model, Authentication authentication) {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika."));
-        List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
+        List<Appointment> allAppointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
+        List<Appointment> appointments = new ArrayList<>();
+
+        for (Appointment appointment : allAppointments) {
+            if (appointment.getStartTime().isAfter(LocalDateTime.now())) {
+                appointments.add(appointment);
+            }
+        }
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
 
