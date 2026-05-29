@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head('Panel klienta – Frodo Barber')}"></head>
+<head th:replace="~{fragments/head :: head('Panel klienta - Frodo Barber')}"></head>
 <body class="dashboard-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -11,18 +11,17 @@
         <section class="bk-card">
 
             <header class="bk-header">
-                <span class="bk-eyebrow">Twoje wizyty</span>
                 <h1 class="bk-title">Moje wizyty</h1>
                 <p class="bk-sub">Sprawdź status swoich nadchodzących wizyt.</p>
             </header>
 
-            <div th:if="${#lists.isEmpty(appointments)}" class="bk-empty">
+            <div th:if="${#lists.isEmpty(upcomingAppointments)}" class="bk-empty">
                 <i class="far fa-calendar"></i>
                 <span>Nie masz jeszcze żadnych wizyt. Wybierz usługę i zarezerwuj dogodny termin.</span>
             </div>
 
-            <ul th:if="${!#lists.isEmpty(appointments)}" class="bk-appt-list">
-                <li th:each="appointment : ${appointments}" class="bk-appt">
+            <ul th:if="${!#lists.isEmpty(upcomingAppointments)}" class="bk-appt-list">
+                <li th:each="appointment : ${upcomingAppointments}" class="bk-appt">
                     <div class="bk-appt__date">
                         <span class="bk-appt__day"
                               th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy')}">01.01.2026</span>
@@ -162,7 +161,7 @@
                 </div>
                 <div class="bk-summary__item">
                     <span class="bk-summary__label">Godziny</span>
-                    <strong class="bk-summary__value">08:00 – 18:00</strong>
+                    <strong class="bk-summary__value">08:00 - 18:00</strong>
                 </div>
             </div>
 

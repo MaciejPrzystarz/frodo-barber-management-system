@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.frodo.barber.model.Appointment;
-import pl.frodo.barber.model.Role;
-import pl.frodo.barber.model.ServiceItem;
-import pl.frodo.barber.model.User;
+import pl.frodo.barber.model.*;
 import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
@@ -73,9 +70,15 @@ public class ClientController {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika"));
-        List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeDesc(client);
 
-        model.addAttribute("appointments", appointments);
+        List<Appointment> allAppointments = appointmentRepository.findAppointmentByClientOrderByStartTimeDesc(client);
+        List<Appointment> upcomingAppointments = bookingService.getUpcomingAppointments(allAppointments);
+
+        List<Appointment> appointmentsHistory = appointmentRepository.findAppointmentByClientAndStatusOrderByStartTimeDesc(client,
+                AppointmentStatus.DONE, AppointmentStatus.CANCELLED, AppointmentStatus.DIDNT_SHOW_UP);
+
+        model.addAttribute("appointmentsHistory", appointmentsHistory);
+        model.addAttribute("upcomingAppointments", upcomingAppointments);
 
         return "client/my-profile";
     }
@@ -86,14 +89,10 @@ public class ClientController {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie ma takiego użytkownika."));
-        List<Appointment> allAppointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
-        List<Appointment> appointments = new ArrayList<>();
 
-        for (Appointment appointment : allAppointments) {
-            if (appointment.getStartTime().isAfter(LocalDateTime.now())) {
-                appointments.add(appointment);
-            }
-        }
+        List<Appointment> allAppointments = appointmentRepository.findAppointmentByClientOrderByStartTimeDesc(client);
+
+        List<Appointment> upcomingAppointments = bookingService.getUpcomingAppointments(allAppointments);
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
 
@@ -111,7 +110,7 @@ public class ClientController {
                     (barber, selectedDate, selectedService.getDurationMinutes());
         }
 
-        model.addAttribute("appointments", appointments);
+        model.addAttribute("upcomingAppointments", upcomingAppointments);
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("barberName", barber.getFullName());
 

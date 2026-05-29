@@ -59,7 +59,7 @@ Logika rezerwacji znajduje się w `BookingService`:
 - Wizytę można umówić **najwcześniej 60 minut** od bieżącej chwili i **najpóźniej 45 dni** naprzód; rezerwacje wstecz są odrzucane.
 - Jeżeli klient ma wizytę w stanie `PENDING`, nie może utworzyć kolejnej do czasu jej akceptacji.
 - **Urlop barbera blokuje rezerwacje** w danych dniach (`VacationService.isBarberOnVacation`).
-- Sloty generowane są w przedziale **08:00–18:00** w 10-minutowych krokach, z uwzględnieniem czasu trwania wybranej usługi.
+- Sloty generowane są w przedziale **08:00-18:00** w 10-minutowych krokach, z uwzględnieniem czasu trwania wybranej usługi.
 
 ---
 

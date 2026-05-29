@@ -25,6 +25,17 @@ public class BookingService {
         this.vacationService = vacationService;
     }
 
+    public List<Appointment> getUpcomingAppointments(List<Appointment> allAppointments) {
+        List<Appointment> appointments = new ArrayList<>();
+
+        for (Appointment appointment : allAppointments) {
+            if (appointment.getStartTime().isAfter(LocalDateTime.now())) {
+                appointments.add(appointment);
+            }
+        }
+        return appointments;
+    }
+
     public Optional<String> validateClientBooking(LocalDate date, LocalTime time, User client) {
         List<Appointment> appointments = appointmentRepository.findAppointmentByClientOrderByStartTimeAsc(client);
 

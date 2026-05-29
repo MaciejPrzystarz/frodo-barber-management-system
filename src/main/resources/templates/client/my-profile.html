@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head('Panel klienta – Frodo Barber')}"></head>
+<head th:replace="~{fragments/head :: head('Panel klienta - Frodo Barber')}"></head>
 <body class="dashboard-page">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -8,22 +8,22 @@
 
 <div class="container-fluid my-4 dashboard-wide">
     <div class="bk-wrap">
-        <section class="bk-card">
+        <section class="bk-card container mt-4">
 
             <header class="bk-header">
-                <span class="bk-eyebrow">Twoje wizyty</span>
-                <h1 class="bk-title">Moje wizyty</h1>
-                <p class="bk-sub">Sprawdź status swoich nadchodzących i wcześniejszych wizyt.</p>
+                <h1 class="bk-title">Nadchodzące wizyty</h1>
+                <p class="bk-sub"></p>
             </header>
 
-            <div th:if="${#lists.isEmpty(appointments)}" class="bk-empty">
+            <div th:if="${#lists.isEmpty(upcomingAppointments)}" class="bk-empty">
                 <i class="far fa-calendar"></i>
                 <span>Nie masz jeszcze żadnych wizyt.</span><br>
-                <a class="btn btn-gold w-100 w-md-auto" style="color: black" th:href="@{/client/dashboard}">Wybierz usługę i zarezerwuj dogodny termin.</a>
+                <a class="btn btn-gold w-100 w-md-auto" style="color: black" th:href="@{/client/dashboard}">Wybierz
+                    usługę i zarezerwuj dogodny termin.</a>
             </div>
 
-            <ul th:if="${!#lists.isEmpty(appointments)}" class="bk-appt-list">
-                <li th:each="appointment : ${appointments}" class="bk-appt">
+            <ul th:if="${!#lists.isEmpty(upcomingAppointments)}" class="bk-appt-list">
+                <li th:each="appointment : ${upcomingAppointments}" class="bk-appt">
                     <div class="bk-appt__date">
                         <span class="bk-appt__day"
                               th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy')}">01.01.2026</span>
@@ -35,8 +35,46 @@
                         <div class="bk-appt__service" th:text="${appointment.service.name}">Strzyżenie</div>
                         <div class="bk-appt__meta">
                             <span><i class="fas fa-coins"></i> <span th:text="${appointment.service.price} + ' zł'">60 zł</span></span>
-                            <span><i class="far fa-clock"></i> <span th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
-                            <span><i class="far fa-user"></i> <span th:text="${appointment.barber.fullName}">Frodo</span></span>
+                            <span><i class="far fa-clock"></i> <span
+                                    th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
+                            <span><i class="far fa-user"></i> <span
+                                    th:text="${appointment.barber.fullName}">Frodo</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bk-appt__status">
+                        <span class="bk-status"
+                              th:classappend="' bk-status--' + ${#strings.toLowerCase(appointment.status)}"
+                              th:text="${appointment.status.plTranslation}">BOOKED</span>
+                    </div>
+                </li>
+            </ul>
+
+        </section>
+
+        <section class="bk-card container mt-4">
+
+            <header class="bk-header">
+                <h1 class="bk-title">Historia wizyt</h1>
+            </header>
+
+            <ul th:if="${!#lists.isEmpty(appointmentsHistory)}" class="bk-appt-list">
+                <li th:each="appointment : ${appointmentsHistory}" class="bk-appt">
+                    <div class="bk-appt__date">
+                        <span class="bk-appt__day"
+                              th:text="${#temporals.format(appointment.startTime, 'dd.MM.yyyy')}">01.01.2026</span>
+                        <span class="bk-appt__time"
+                              th:text="${#temporals.format(appointment.startTime, 'HH:mm')}">10:00</span>
+                    </div>
+
+                    <div class="bk-appt__info">
+                        <div class="bk-appt__service" th:text="${appointment.service.name}">Strzyżenie</div>
+                        <div class="bk-appt__meta">
+                            <span><i class="fas fa-coins"></i> <span th:text="${appointment.service.price} + ' zł'">60 zł</span></span>
+                            <span><i class="far fa-clock"></i> <span
+                                    th:text="${appointment.service.durationMinutes} + ' min'">30 min</span></span>
+                            <span><i class="far fa-user"></i> <span
+                                    th:text="${appointment.barber.fullName}">Frodo</span></span>
                         </div>
                     </div>
 
