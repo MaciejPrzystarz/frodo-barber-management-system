@@ -69,7 +69,8 @@
                         <tbody>
                         <tr th:each="appointment : ${allAppointments}">
                             <td th:text="${appointment.id}"></td>
-                            <td th:text="${appointment.client.fullName}"></td>
+                            <td th:text="${appointment.customer != null ? appointment.customer.fullName :
+                                appointment.client.fullName}"></td>
                             <td th:text="${appointment.barber.fullName}"></td>
                             <td th:text="${#temporals.format(appointment.startTime,'dd.MM.yyyy HH:mm')}"></td>
                             <td th:text="${appointment.status}"></td>
