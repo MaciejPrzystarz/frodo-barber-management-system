@@ -41,6 +41,10 @@ public class AuthController {
             bindingResult.rejectValue("confirmPassword", "password.mismatch", "Hasła nie są takie same");
         }
 
+        if (userRepository.findByEmail(userFormDto.getEmail()).isPresent()) {
+            bindingResult.rejectValue("email", "email.taken", "Ten adres email jest już zajęty");
+        }
+
         if (bindingResult.hasErrors()) {
             return "auth/register";
         }
