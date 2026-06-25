@@ -135,6 +135,9 @@ public class BookingService {
 
         LocalDateTime endTime = startTime.plusMinutes(service.getDurationMinutes());
 
+        validateWithinWorkingHours(startTime, endTime);
+        validateSlotIsFree(barber, startTime, endTime);
+
         Appointment appointment = new Appointment();
         appointment.setClient(client);
         appointment.setBarber(barber);
@@ -164,6 +167,31 @@ public class BookingService {
     private void validateBarberIsNotOnVacation(User barber, LocalDate date) {
         if (vacationService.isBarberOnVacation(barber, date)) {
             throw new IllegalArgumentException("Ten barber ma urlop w wybranym dniu. Wybierz inny termin.");
+        }
+    }
+
+    private void validateWithinWorkingHours(LocalDateTime startTime, LocalDateTime endTime) {
+        LocalTime workStart = LocalTime.of(8, 0);
+        LocalTime workEnd = LocalTime.of(18, 0);
+
+        if (startTime.toLocalTime().isBefore(workStart) || endTime.toLocalTime().isAfter(workEnd)) {
+            throw new IllegalArgumentException("Wizytę można umówić tylko w godzinach 08:00-18:00.");
+        }
+    }
+
+    private void validateSlotIsFree(User barber, LocalDateTime startTime, LocalDateTime endTime) {
+        LocalDate date = startTime.toLocalDate();
+
+        List<Appointment> takenSlots = appointmentRepository
+                .findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
+                        barber, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+                .stream()
+                .filter(appointment -> appointment.getStatus() == AppointmentStatus.BOOKED
+                        || appointment.getStatus() == AppointmentStatus.PENDING)
+                .toList();
+
+        if (isOverlapping(takenSlots, startTime, endTime)) {
+            throw new IllegalArgumentException("Wybrany termin jest już zajęty. Wybierz inny.");
         }
     }
 }

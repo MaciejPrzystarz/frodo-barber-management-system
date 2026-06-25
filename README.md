@@ -61,6 +61,8 @@ Logika rezerwacji znajduje się w `BookingService`:
 - **Urlop barbera blokuje rezerwacje** w danych dniach (`VacationService.isBarberOnVacation`).
 - Sloty generowane są w przedziale **08:00-18:00** w 10-minutowych krokach, z uwzględnieniem czasu trwania wybranej usługi.
 
+> **Założenie MVP:** rezerwacja po stronie klienta obsługuje obecnie **jednego barbera** (`findFirstByRole(BARBER)`). Obsługa wielu barberów (wybór barbera przy rezerwacji) jest planowana.
+
 ---
 
 ## Struktura projektu
