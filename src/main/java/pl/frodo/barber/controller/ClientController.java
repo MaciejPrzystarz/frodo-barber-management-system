@@ -52,7 +52,8 @@ public class ClientController {
 
         String email = authentication.getName();
         User client = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Nie znaleziono takiego klienta."));
-        User barber = userRepository.findByRole(Role.BARBER);
+        User barber = userRepository.findFirstByRole(Role.BARBER)
+                .orElseThrow(() -> new RuntimeException("Brak dostępnego barbera w systemie."));
 
         ServiceItem serviceItem = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Nie znaleziono takiej usługi."));
 
@@ -63,7 +64,12 @@ public class ClientController {
             return "redirect:/client/dashboard";
         }
 
-        bookingService.saveAppointment(barber, client, startTime, serviceItem);
+        try {
+            bookingService.saveAppointment(barber, client, startTime, serviceItem);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/client/dashboard";
+        }
 
         return "redirect:/client/dashboard?date=" + date;
     }
@@ -99,7 +105,8 @@ public class ClientController {
 
         LocalDate selectedDate = (date == null) ? LocalDate.now() : date;
 
-        User barber = userRepository.findByRole(Role.BARBER);
+        User barber = userRepository.findFirstByRole(Role.BARBER)
+                .orElseThrow(() -> new RuntimeException("Brak dostępnego barbera w systemie."));
         List<ServiceItem> services = serviceRepository.findAll();
 
         ServiceItem selectedService = null;
