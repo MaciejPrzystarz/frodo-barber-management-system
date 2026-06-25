@@ -26,8 +26,11 @@
                 </li>
 
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-                    <a class="nav-link btn fb-navbtn fb-navbtn ms-lg-3" th:href="@{/client/dashboard}">Umów
-                        wizytę</a>
+                    <a class="nav-link btn fb-navbtn ms-lg-3" th:href="@{/client/dashboard}">Umów wizytę</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link btn fb-navbtn ms-lg-3" th:href="@{/client/my-profile}">Mój profil</a>
                 </li>
 
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
