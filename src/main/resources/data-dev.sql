@@ -1,29 +1,29 @@
 -- admin1@demo.pl admin123 --
 INSERT INTO users (full_name, phone_number, email, password, role)
-VALUES ('Admin Maciej', '234567891', 'admin1@demo.pl', '$2b$10$415NvDFT7GwNFEL7Xgqhm.UcWlSl5U0Hv..SqZ7BRkTUs77lw19YO','ADMIN');
+VALUES ('Admin Maciej', '+48234567891', 'admin1@demo.pl', '$2b$10$415NvDFT7GwNFEL7Xgqhm.UcWlSl5U0Hv..SqZ7BRkTUs77lw19YO','ADMIN');
 
 -- barber1@demo.pl barber123 --
 INSERT INTO users (full_name, phone_number, email, password, role)
-VALUES ('FRODO Krzysztof', '123456789', 'barber1@demo.pl',
+VALUES ('FRODO Krzysztof', '+48123456789', 'barber1@demo.pl',
         '$2b$10$zHyrkS13NMJ.T818GhMgmu/M2TsDh9yMEU4ChU5MeEl5ltQaKZnJy', 'BARBER');
 
 -- client1/2/3/.../10@demo.pl client123 --
 INSERT INTO users (full_name, phone_number, email, password, role)
-VALUES ('Client One', '111111111', 'client1@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Two', '222222222', 'client2@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Three', '333333333', 'client3@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Four', '444444444', 'client4@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Five', '555555555', 'client5@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Six', '666666666', 'client6@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Seven', '777777777', 'client7@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Eight', '888888888', 'client8@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Nine', '999999999', 'client9@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
-       ('Client Ten', '101010101', 'client10@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT');
+VALUES ('Client One', '+48111111111', 'client1@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Two', '+48222222222', 'client2@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Three', '+48333333333', 'client3@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Four', '+48444444444', 'client4@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Five', '+48555555555', 'client5@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Six', '+48666666666', 'client6@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Seven', '+48777777777', 'client7@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Eight', '+48888888888', 'client8@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Nine', '+48999999999', 'client9@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT'),
+       ('Client Ten', '+48101010101', 'client10@demo.pl', '$2b$10$W0Au1b3AIBRDh7qydDusUuAlzUDCSYwWUlbsxrlOjV4zKy0ldIHUW','CLIENT');
 
 INSERT INTO customers (full_name, phone_number)
-VALUES ('Jan Kowalski', '123456789'),
-       ('Frodo', '456789123'),
-       ('Ireneusz', '789123456');
+VALUES ('Jan Kowalski', '+48123456789'),
+       ('Frodo', '+48456789123'),
+       ('Ireneusz', '+48789123456');
 
 INSERT INTO services (name, price, duration_minutes)
 VALUES ('strzyżenie maszynką', 60, 40),

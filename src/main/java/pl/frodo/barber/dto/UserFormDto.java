@@ -16,7 +16,6 @@ public class UserFormDto {
     private String fullName;
 
     @NotBlank(message = "Pole nie może być puste")
-    @Pattern(regexp = "^[0-9]{9}$", message = "Numer telefonu musi składać się z 9 cyfr")
     private String phoneNumber;
 
     @NotBlank(message = "Pole nie może być puste")

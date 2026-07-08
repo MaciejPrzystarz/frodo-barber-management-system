@@ -30,6 +30,9 @@ public class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private PhoneNumberService phoneNumberService;
+
     @InjectMocks
     private AuthService authService;
 
