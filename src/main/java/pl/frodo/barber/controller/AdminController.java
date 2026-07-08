@@ -17,6 +17,7 @@ import pl.frodo.barber.repository.AppointmentRepository;
 import pl.frodo.barber.repository.ServiceRepository;
 import pl.frodo.barber.repository.UserRepository;
 import pl.frodo.barber.service.AuthService;
+import pl.frodo.barber.service.PhoneNumberService;
 
 import java.util.List;
 
@@ -28,15 +29,17 @@ public class AdminController {
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
     private final ServiceRepository serviceRepository;
+    private final PhoneNumberService phoneNumberService;
 
-    public AdminController(AuthService authService, UserRepository userRepository, AppointmentRepository appointmentRepository, ServiceRepository serviceRepository) {
+    public AdminController(AuthService authService, UserRepository userRepository, AppointmentRepository appointmentRepository, ServiceRepository serviceRepository, PhoneNumberService phoneNumberService) {
         this.authService = authService;
         this.userRepository = userRepository;
         this.appointmentRepository = appointmentRepository;
         this.serviceRepository = serviceRepository;
+        this.phoneNumberService = phoneNumberService;
     }
 
-    /* !!! Wrócić i zrobić porządny panel admina, póki co ogarnąć rzeczy ważniejsze !!! */
+    /* !!! Wrócić i zrobić porządny panel admina, póki co ogarnąć ważniejsze rzeczy !!! */
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
@@ -59,6 +62,10 @@ public class AdminController {
 
     @PostMapping("/users/edit")
     public String editUserForm(@Valid @ModelAttribute("userForm") AdminUserEditDto adminUserEditDto, BindingResult bindingResult) {
+
+        if (!phoneNumberService.isValid(adminUserEditDto.getPhoneNumber())) {
+            bindingResult.rejectValue("phoneNumber", "phone.invalid", "Nieprawidłowy numer telefonu");
+        }
 
         if (bindingResult.hasErrors()) {
             return "admin/user-edit";

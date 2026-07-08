@@ -22,13 +22,15 @@ public class AppointmentService {
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
     private final VacationService vacationService;
+    private final PhoneNumberService phoneNumberService;
 
     public AppointmentService(AppointmentRepository appointmentRepository, ServiceRepository serviceRepository,
-                              CustomerRepository customerRepository, VacationService vacationService) {
+                              CustomerRepository customerRepository, VacationService vacationService, PhoneNumberService phoneNumberService) {
         this.appointmentRepository = appointmentRepository;
         this.serviceRepository = serviceRepository;
         this.customerRepository = customerRepository;
         this.vacationService = vacationService;
+        this.phoneNumberService = phoneNumberService;
     }
 
     public AppointmentStatus changeStatus(String status) {
@@ -39,9 +41,12 @@ public class AppointmentService {
         }
     }
 
-    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber, Long serviceId, LocalDate date, LocalTime time) {
+    public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber,
+                                              Long serviceId, LocalDate date, LocalTime time) {
 
         validateBarberIsNotOnVacation(barber, date);
+
+        String normalizedPhone = phoneNumberService.normalize(phoneNumber);
 
         ServiceItem service = serviceRepository.findById(serviceId).orElseThrow(
                 () -> new RuntimeException("Nie ma takiej usługi."));
@@ -51,11 +56,11 @@ public class AppointmentService {
 
         validateAppointmentSlot(barber, date, startTime, endTime);
 
-        Customer customer = customerRepository.findByPhoneNumber(phoneNumber)
+        Customer customer = customerRepository.findByPhoneNumber(normalizedPhone)
                 .orElseGet(() -> {
                     Customer newCustomer = new Customer();
                     newCustomer.setFullName(fullName);
-                    newCustomer.setPhoneNumber(phoneNumber);
+                    newCustomer.setPhoneNumber(normalizedPhone);
                     return customerRepository.save(newCustomer);
                 });
 
