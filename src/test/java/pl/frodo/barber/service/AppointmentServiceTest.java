@@ -46,6 +46,9 @@ class AppointmentServiceTest {
     @Mock
     private VacationService vacationService;
 
+    @Mock
+    private PhoneNumberService phoneNumberService;
+
     @InjectMocks
     private AppointmentService appointmentService;
 
@@ -153,6 +156,7 @@ class AppointmentServiceTest {
         when(appointmentRepository.findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
                 eq(barber), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(List.of());
+        when(phoneNumberService.normalize(phoneNumber)).thenReturn(phoneNumber);
         when(customerRepository.findByPhoneNumber(phoneNumber)).thenReturn(Optional.empty());
         when(customerRepository.save(any(Customer.class))).thenAnswer(inv -> inv.getArgument(0));
 
