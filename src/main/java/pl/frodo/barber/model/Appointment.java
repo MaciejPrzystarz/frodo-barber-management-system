@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "appointments")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Appointment {
 
     @Id
