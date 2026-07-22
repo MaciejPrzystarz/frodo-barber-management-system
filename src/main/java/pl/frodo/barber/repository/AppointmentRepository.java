@@ -6,6 +6,7 @@ import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.User;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -14,7 +15,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findAppointmentByClientOrderByStartTimeDesc(User client);
 
-    List<Appointment> findAppointmentByClientAndStatusOrderByStartTimeDesc(User client, AppointmentStatus appointmentStatus, AppointmentStatus secondAppointmentStatus, AppointmentStatus thirdAppointmentStatus);
+    List<Appointment> findAppointmentByClientAndStatusInOrderByStartTimeDesc(User client, Collection<AppointmentStatus> statuses);
 
     List<Appointment> findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
             User barber, LocalDateTime startTime, LocalDateTime end);
