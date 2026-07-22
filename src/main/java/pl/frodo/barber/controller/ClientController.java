@@ -83,8 +83,8 @@ public class ClientController {
         List<Appointment> allAppointments = appointmentRepository.findAppointmentByClientOrderByStartTimeDesc(client);
         List<Appointment> upcomingAppointments = bookingService.getUpcomingAppointments(allAppointments);
 
-        List<Appointment> appointmentsHistory = appointmentRepository.findAppointmentByClientAndStatusOrderByStartTimeDesc(client,
-                AppointmentStatus.DONE, AppointmentStatus.CANCELLED, AppointmentStatus.DIDNT_SHOW_UP);
+        List<Appointment> appointmentsHistory = appointmentRepository.findAppointmentByClientAndStatusInOrderByStartTimeDesc(client,
+                List.of(AppointmentStatus.DONE, AppointmentStatus.CANCELLED, AppointmentStatus.DIDNT_SHOW_UP));
 
         model.addAttribute("appointmentsHistory", appointmentsHistory);
         model.addAttribute("upcomingAppointments", upcomingAppointments);
