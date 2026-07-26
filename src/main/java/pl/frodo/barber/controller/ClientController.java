@@ -71,7 +71,7 @@ public class ClientController {
             return "redirect:/client/dashboard";
         }
 
-        return "redirect:/client/dashboard?date=" + date;
+        return "redirect:/client/my-profile";
     }
 
     @GetMapping("/my-profile")
