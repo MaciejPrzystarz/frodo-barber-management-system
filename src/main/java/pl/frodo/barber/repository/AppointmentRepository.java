@@ -1,5 +1,6 @@
 package pl.frodo.barber.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.frodo.barber.model.Appointment;
 import pl.frodo.barber.model.AppointmentStatus;
@@ -17,9 +18,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findAppointmentByClientAndStatusInOrderByStartTimeDesc(User client, Collection<AppointmentStatus> statuses);
 
+    @EntityGraph(attributePaths = {"barber", "client", "customer", "service"})
     List<Appointment> findAppointmentByBarberAndStartTimeBetweenOrderByStartTimeAsc(
             User barber, LocalDateTime startTime, LocalDateTime end);
 
+    @EntityGraph(attributePaths = {"barber", "client", "customer", "service"})
     List<Appointment> findAppointmentByBarberAndStatusAndStartTimeBetweenOrderByStartTimeAsc(
             User barber, AppointmentStatus appointmentStatus, LocalDateTime startTime, LocalDateTime end);
 

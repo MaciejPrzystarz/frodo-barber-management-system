@@ -11,7 +11,7 @@ public enum AppointmentStatus {
     CANCELLED("Anulowana"),
     DONE("Zrealizowana");
 
-    private String plTranslation;
+    private final String plTranslation;
 
     AppointmentStatus(String plTranslation) {
         this.plTranslation = plTranslation;
