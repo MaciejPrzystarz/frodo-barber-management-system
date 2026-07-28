@@ -1,6 +1,7 @@
 package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.frodo.barber.dto.MyWeekDayDto;
 import pl.frodo.barber.dto.MyWeekDto;
 import pl.frodo.barber.model.Appointment;
@@ -30,6 +31,7 @@ public class WeeklyStatsService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    @Transactional(readOnly = true)
     public MyWeekDto getMyWeek(String barberEmail, LocalDate selectedDate) {
         User barber = userRepository.findByEmail(barberEmail)
                 .orElseThrow(() -> new RuntimeException("Nie ma takiego barbera"));

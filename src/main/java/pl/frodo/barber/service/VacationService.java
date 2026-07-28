@@ -2,6 +2,7 @@ package pl.frodo.barber.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.frodo.barber.model.User;
 import pl.frodo.barber.model.Vacation;
 import pl.frodo.barber.repository.AppointmentRepository;
@@ -30,6 +31,7 @@ public class VacationService {
         return vacationRepository.existsByBarberAndStartDateLessThanEqualAndEndDateGreaterThanEqual(barber, date, date);
     }
 
+    @Transactional
     public void addVacation(User barber, LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("Wybierz datę rozpoczęcia i zakończenia urlopu.");
@@ -64,6 +66,7 @@ public class VacationService {
         vacationRepository.save(vacation);
     }
 
+    @Transactional
     public void deleteVacation(Long vacationId, User barber) {
         Vacation vacation = vacationRepository.findByIdAndBarber(vacationId, barber)
                 .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono urlopu."));
