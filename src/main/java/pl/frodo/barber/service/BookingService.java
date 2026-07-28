@@ -1,6 +1,7 @@
 package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.User;
 import pl.frodo.barber.model.Appointment;
@@ -84,6 +85,7 @@ public class BookingService {
         return Optional.empty();
     }
 
+    @Transactional(readOnly = true)
     public List<LocalTime> getAvailableSlotsForTheWholeDay(User barber, LocalDate date, int durationMinutes) {
 
         if (vacationService.isBarberOnVacation(barber, date)) {
@@ -129,6 +131,7 @@ public class BookingService {
         return allSlots;
     }
 
+    @Transactional
     public void saveAppointment(User barber, User client, LocalDateTime startTime, ServiceItem service) {
 
         validateBarberIsNotOnVacation(barber, startTime.toLocalDate());

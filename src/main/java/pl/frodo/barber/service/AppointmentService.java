@@ -1,6 +1,7 @@
 package pl.frodo.barber.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.frodo.barber.model.Appointment;
 import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.Customer;
@@ -41,6 +42,7 @@ public class AppointmentService {
         }
     }
 
+    @Transactional
     public void saveAppointmentForNewCustomer(User barber, String fullName, String phoneNumber,
                                               Long serviceId, LocalDate date, LocalTime time) {
 
@@ -67,6 +69,7 @@ public class AppointmentService {
         addNewAppointmentForCustomer(barber, customer, service, startTime, endTime);
     }
 
+    @Transactional
     public void saveAppointmentForExistingCustomer(User barber, Long customerId, Long serviceId, LocalDate date, LocalTime time) {
 
         validateBarberIsNotOnVacation(barber, date);

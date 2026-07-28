@@ -2,6 +2,7 @@ package pl.frodo.barber.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.frodo.barber.dto.AdminUserEditDto;
 import pl.frodo.barber.dto.UserFormDto;
 import pl.frodo.barber.model.Role;
@@ -44,6 +45,7 @@ public class AuthService {
         return dto;
     }
 
+    @Transactional
     public void updateUser(AdminUserEditDto dto) {
         User user = userRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("Nie ma użytkownika o takim id"));
 
