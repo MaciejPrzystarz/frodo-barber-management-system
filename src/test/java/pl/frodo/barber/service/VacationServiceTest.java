@@ -20,6 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -74,8 +75,8 @@ class VacationServiceTest {
         LocalDate endDate = LocalDate.now().plusDays(15);
 
         when(vacationRepository.findByBarberOrderByStartDateAsc(barber)).thenReturn(List.of());
-        when(appointmentRepository.existsByBarberAndStartTimeBetween(
-                eq(barber), any(LocalDateTime.class), any(LocalDateTime.class)))
+        when(appointmentRepository.existsByBarberAndStatusInAndStartTimeBetween(
+                eq(barber), anyCollection(), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(false);
 
         vacationService.addVacation(barber, startDate, endDate);
@@ -107,8 +108,8 @@ class VacationServiceTest {
         LocalDate endDate = LocalDate.now().plusDays(15);
 
         when(vacationRepository.findByBarberOrderByStartDateAsc(barber)).thenReturn(List.of());
-        when(appointmentRepository.existsByBarberAndStartTimeBetween(
-                eq(barber), any(LocalDateTime.class), any(LocalDateTime.class)))
+        when(appointmentRepository.existsByBarberAndStatusInAndStartTimeBetween(
+                eq(barber), anyCollection(), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(true);
 
         assertThatThrownBy(() -> vacationService.addVacation(barber, startDate, endDate))
