@@ -3,6 +3,7 @@ package pl.frodo.barber.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.frodo.barber.model.AppointmentStatus;
 import pl.frodo.barber.model.User;
 import pl.frodo.barber.model.Vacation;
 import pl.frodo.barber.repository.AppointmentRepository;
@@ -52,7 +53,8 @@ public class VacationService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
 
-        boolean hasAppointments = appointmentRepository.existsByBarberAndStartTimeBetween(barber, startDateTime, endDateTime);
+        boolean hasAppointments = appointmentRepository.existsByBarberAndStatusInAndStartTimeBetween(
+                barber, List.of(AppointmentStatus.PENDING, AppointmentStatus.BOOKED), startDateTime, endDateTime);
 
         if (hasAppointments) {
             throw new IllegalArgumentException("Nie możesz dodać urlopu, bo masz już wizyty w tym terminie.");
