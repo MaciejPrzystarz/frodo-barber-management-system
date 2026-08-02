@@ -1,6 +1,6 @@
 # Frodo Barber Management System
 
-Aplikacja webowa do zarządzania rezerwacjami w salonie barberskim. Klienci rezerwują wizyty online, barberzy zarządzają terminarzem i urlopami, a administrator obsługuje użytkowników i usługi. Backend oparty o Spring Boot, warstwa widoku w Thymeleaf, baza PostgreSQL (prod) lub H2 (dev).
+Aplikacja webowa do zarządzania rezerwacjami w salonie barberskim. Klienci rezerwują wizyty online, barber zarządza terminarzem i urlopami, a administrator obsługuje użytkowników i usługi. Backend oparty o Spring Boot, warstwa widoku w Thymeleaf, baza PostgreSQL (prod) lub H2 (dev).
 
 Projekt typu MVP / portfolio, przygotowany pod deployment w kontenerze.
 
@@ -61,7 +61,7 @@ Logika rezerwacji znajduje się w `BookingService`:
 - **Urlop barbera blokuje rezerwacje** w danych dniach (`VacationService.isBarberOnVacation`).
 - Sloty generowane są w przedziale **08:00-18:00** w 10-minutowych krokach, z uwzględnieniem czasu trwania wybranej usługi.
 
-> **Założenie MVP:** rezerwacja po stronie klienta obsługuje obecnie **jednego barbera** (`findFirstByRole(BARBER)`). Obsługa wielu barberów (wybór barbera przy rezerwacji) jest planowana.
+> **Założenie MVP:** rezerwacja po stronie klienta obsługuje obecnie **jednego barbera** (`findFirstByRole(BARBER)`).
 
 ---
 
